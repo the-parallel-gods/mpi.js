@@ -1,0 +1,1 @@
+const MAGIC_NUMBER = 37;

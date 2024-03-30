@@ -9,8 +9,8 @@ class handler(BaseHTTPRequestHandler):
     def do_GET(self):
         root = __file__.replace("server.py", "")
         print(self.path)
-        if "/mpi_core/examples" in self.path:
-            self.path = self.path.replace("mpi_core/examples", "")
+        if "/mpi_core/workspace" in self.path:
+            self.path = self.path.replace("mpi_core/workspace", "")
             filename = root + "../workspace" + self.path
         else:
             self.path = self.path.replace("/%PUBLIC_URL%", "")
