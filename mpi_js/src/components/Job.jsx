@@ -20,8 +20,8 @@ export default function Job(path = "./mpi_core/workspace/sqrt/main.js", num_proc
         }
 
         // create channels:
-        for (let i = 0; i < num_processes; i++) {
-            for (let j = i + 1; j < num_processes; j++) {
+        for (let i = 0; i < num_proc; i++) {
+            for (let j = i + 1; j < num_proc; j++) {
                 const channel = new MessageChannel();
                 workers[i].postMessage({ command: "init_channel", port: channel.port1, portPid: j }, [channel.port1]);
                 workers[j].postMessage({ command: "init_channel", port: channel.port2, portPid: i }, [channel.port2]);
