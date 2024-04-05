@@ -23,11 +23,12 @@ const on_init_message = async (event) => {
     } else if (data.command === 'init_finished') {
         node_router = new NodeRouter(config.my_pid, config.node_partition, config.local_channels, config.global_channel, config.channel_ports);
         config.neighbor_list = config.node_partition.flat().filter((pid) => pid !== config.my_pid);
-        console.log(config);
+        console.log(config.my_pid, "Final config", config);
         node_router.receive_from(-1).then(async (data) => {
-            console.log('INIT', data);
-            if (data === 'start')
+            if (data === 'start') {
+                console.log(config.my_pid, "starting main_fn");
                 await user_main_fn();
+            }
         });
     }
 }
@@ -42,14 +43,15 @@ const MPI_Comm_rank = async (rank_ptr) => {
     rank_ptr.data = config.my_pid;
 }
 
+const MPI_Comm_size = async (size_ptr) => {
+    size_ptr.data = config.num_proc;
+}
 
 const MPI_Bcast = async (data_ptr, root) => {
-    if (config.my_pid === root) {
+    if (config.my_pid === root)
         node_router.send(config.neighbor_list, data_ptr.data);
-    } else {
+    else
         data_ptr.data = await node_router.receive_from(root);
-        console.log('MPI_Bcast SUCCESS!', data_ptr.data);
-    }
 }
 
 const alloc = (data) => {

@@ -32,7 +32,7 @@ class NodeRouter {
 
         // bfs on local_edges to populate hops_table
         // Write all shortest paths from every node to every other node
-        this.buffer = new ProducerConsumer(my_pid);
+        this.buffer = new ProducerConsumer();
         this.global_channel.onmessage = (event) => { this.buffer.produce(event.data); }
         this.local_channels.forEach((channel) => {
             channel.onmessage = (event) => { this.buffer.produce(event.data); }
@@ -51,7 +51,6 @@ class NodeRouter {
             else
                 this.local_channels[dest_pid].postMessage(packet);
         }));
-        console.log("send complete")
     }
 
     receive_any = async () => {
@@ -59,10 +58,7 @@ class NodeRouter {
     }
 
     receive_from = async (src_pid) => {
-        console.log(this.my_pid, "waiting for messsage from", src_pid);
-        const result = await this.buffer.consume(src_pid);
-        console.log(this.my_pid, "received from", src_pid, "data", result, "recv complete");
-        return result;
+        return await this.buffer.consume(src_pid);
     }
 
     bcast = async (data) => {
@@ -71,15 +67,13 @@ class NodeRouter {
 }
 
 class ProducerConsumer {
-    constructor(my_pid) {
+    constructor() {
         this.buffer = [];
         this.consumer_callbacks = [];
-        this.my_pid = my_pid;
     }
 
     async produce(object) {
-        navigator.locks.request("buffer_lock", async (lock) => {
-            console.log(this.my_pid, "PRODUCING", object, "for", "consumer_callbacks", this.consumer_callbacks);
+        navigator.locks.request("buffer_lock", (lock) => {
             let someone_took_it = false;
             for (let i = 0; i < this.consumer_callbacks.length; i++) {
                 if (this.consumer_callbacks[i](object)) {
@@ -97,22 +91,20 @@ class ProducerConsumer {
         // first go through buffer and see if src_pid is in any of them
         // TODO: use hash table for faster lookup
         return await new Promise((resolve) => {
-            navigator.locks.request("buffer_lock", async (lock) => {
-                console.log(this.my_pid, "checking buffer for", src_pid, "buffer", this.buffer);
+            navigator.locks.request("buffer_lock", (lock) => {
                 for (let i = 0; i < this.buffer.length; i++) {
                     if (this.buffer[i].src_pid === src_pid) {
-                        resolve(this.buffer.splice(i, 1).data);
+                        const result = this.buffer.splice(i, 1)[0];
+                        return resolve(result.data);
                     }
                 }
 
                 // if not, wait for a new message
                 this.consumer_callbacks.push((packet) => { // protected by producer lock
-                    console.log(this.my_pid, "checking packet", packet, "for target =", src_pid);
                     const is_correct_pid = src_pid === null || packet.src_pid === src_pid;
                     is_correct_pid && resolve(packet.data);
                     return is_correct_pid; // if not correct pid, try other consumer
                 });
-                console.log(this.my_pid, "I need pid", src_pid, "added myself to consumer_callbacks", this.consumer_callbacks);
             });
         });
     }
