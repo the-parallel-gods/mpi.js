@@ -73,17 +73,17 @@ class ProducerConsumer {
     }
 
     async produce(object) {
-        navigator.locks.request("buffer_lock", (lock) => {
-            let someone_took_it = false;
-            for (let i = 0; i < this.consumer_callbacks.length; i++) {
-                if (this.consumer_callbacks[i](object)) {
-                    someone_took_it = true;
-                    this.consumer_callbacks.splice(i, 1);
-                    break;
-                }
+        // navigator.locks.request("buffer_lock", (lock) => {
+        let someone_took_it = false;
+        for (let i = 0; i < this.consumer_callbacks.length; i++) {
+            if (this.consumer_callbacks[i](object)) {
+                someone_took_it = true;
+                this.consumer_callbacks.splice(i, 1);
+                break;
             }
-            if (!someone_took_it) this.buffer.push(object);
-        });
+        }
+        if (!someone_took_it) this.buffer.push(object);
+        // });
     }
 
 
@@ -91,21 +91,21 @@ class ProducerConsumer {
         // first go through buffer and see if src_pid is in any of them
         // TODO: use hash table for faster lookup
         return await new Promise((resolve) => {
-            navigator.locks.request("buffer_lock", (lock) => {
-                for (let i = 0; i < this.buffer.length; i++) {
-                    if (this.buffer[i].src_pid === src_pid) {
-                        const result = this.buffer.splice(i, 1)[0];
-                        return resolve(result.data);
-                    }
+            // navigator.locks.request("buffer_lock", (lock) => {
+            for (let i = 0; i < this.buffer.length; i++) {
+                if (this.buffer[i].src_pid === src_pid) {
+                    const result = this.buffer.splice(i, 1)[0];
+                    return resolve(result.data);
                 }
+            }
 
-                // if not, wait for a new message
-                this.consumer_callbacks.push((packet) => { // protected by producer lock
-                    const is_correct_pid = src_pid === null || packet.src_pid === src_pid;
-                    is_correct_pid && resolve(packet.data);
-                    return is_correct_pid; // if not correct pid, try other consumer
-                });
+            // if not, wait for a new message
+            this.consumer_callbacks.push((packet) => { // protected by producer lock
+                const is_correct_pid = src_pid === null || packet.src_pid === src_pid;
+                is_correct_pid && resolve(packet.data);
+                return is_correct_pid; // if not correct pid, try other consumer
             });
         });
+        // });
     }
 }

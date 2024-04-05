@@ -1,4 +1,3 @@
-importScripts('/mpi_core/barrier.js');
 importScripts('/mpi_core/node_router.js');
 
 let config = {
@@ -52,6 +51,17 @@ const MPI_Bcast = async (data_ptr, root) => {
         node_router.send(config.neighbor_list, data_ptr.data);
     else
         data_ptr.data = await node_router.receive_from(root);
+}
+
+const MPI_Barrier = async () => {
+    if (config.my_pid === 0) {
+        await Promise.all(config.neighbor_list.map(async (pid) => {
+            await node_router.receive_from(pid);
+        }));
+    } else {
+        await node_router.send([0], "barrier");
+        await node_router.receive_from(0);
+    }
 }
 
 const alloc = (data) => {
