@@ -15,7 +15,7 @@
 // };
 
 export class Job {
-    constructor(path = "./mpi_core/workspace/sqrt/main.js", num_proc = 20) {
+    constructor(path = "./mpi_core/workspace/sqrt/main.js", num_proc = 8) {
         console.log("Setting up job");
         let workers = []
         const node_list = Array.from({ length: num_proc }, (_, i) => [i]).flat();

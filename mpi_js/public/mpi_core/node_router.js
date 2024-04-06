@@ -75,12 +75,13 @@ class ProducerConsumer {
     }
 
     async produce(object) {
+        // console.log("PRODUCE", object);
         const src_pid = object.src_pid + 1;
         if (this.consumer_callbacks[src_pid].length > 0)
             return this.consumer_callbacks[src_pid].shift()(object);
         else if (this.consumer_callbacks[this.num_proc + 1].length > 0)
             return this.consumer_callbacks[this.num_proc + 1].shift()(object);
-        this.buffer.push(object);
+        this.buffer[src_pid].push(object);
     }
 
 

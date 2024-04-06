@@ -46,11 +46,30 @@ const MPI_Comm_size = async (size_ptr) => {
     size_ptr.data = config.num_proc;
 }
 
+const MPI_Send = async (data_ptr, dest_pid, start = null, count = null) => {
+    let data = data_ptr.data;
+    if (count !== null) {
+        start = start || 0;
+        data = data.slice(start, start + count);
+    }
+    await node_router.send([dest_pid], data);
+}
+
+const MPI_Recv = async (data_ptr, src_pid, start = null, count = null) => {
+    const data = (await node_router.receive_from(src_pid)).data;
+    if (count !== null) {
+        start = start || 0;
+        data_ptr.data.splice(start, count, ...data);
+    } else {
+        data_ptr.data = data;
+    }
+}
+
 const MPI_Bcast = async (data_ptr, root) => {
     if (config.my_pid === root)
         node_router.send(config.neighbor_list, data_ptr.data);
     else
-        data_ptr.data = await node_router.receive_from(root).data;
+        data_ptr.data = (await node_router.receive_from(root)).data;
 }
 
 const MPI_Barrier = async () => {
@@ -58,12 +77,13 @@ const MPI_Barrier = async () => {
         await Promise.all(config.neighbor_list.map(async (pid) => {
             await node_router.receive_from(pid);
         }));
+        await node_router.send(config.neighbor_list, "barrier");
     } else {
         await node_router.send([0], "barrier");
         await node_router.receive_from(0);
     }
 }
 
-const alloc = (data) => {
+const box = (data) => {
     return { data };
 }
