@@ -9,19 +9,16 @@ class Packet {
 
 class NodeRouter {
     /**
-     * my_pid is a number
-     * node_partition is a list of list of numbers [[machine 1's node_pids], [machine 2's node_pids], ...]
-     * local_channels is a list MessagePort objects (things you can send messages to other machines with)
-     * local_edges is a list of [port 1, port 2] pairs (a adjacency list of this machine's channels)
-     * on_system_message is a callback function that takes a Packet object
      * 
+     * @param {number} num_proc number of workers
      * @param {number} my_pid the pid of this worker
      * @param {number[][]} node_partition partition of workers on each node
      * @param {MessagePort[]} local_channels channels to peers on the my local node
      * @param {WorkerGlobalScope} global_channel channel to main manager on this node
      * @param {number[][]} local_edges adjacency list of local channels
      */
-    constructor(my_pid, node_partition, local_channels, global_channel, local_edges) {
+    constructor(num_proc, my_pid, node_partition, local_channels, global_channel, local_edges) {
+        this.num_proc = num_proc;
         this.my_pid = my_pid;
         this.node_partition = node_partition;
         this.local_channels = local_channels;
@@ -32,7 +29,7 @@ class NodeRouter {
 
         // bfs on local_edges to populate hops_table
         // Write all shortest paths from every node to every other node
-        this.buffer = new ProducerConsumer();
+        this.buffer = new ProducerConsumer(num_proc);
         this.global_channel.onmessage = (event) => { this.buffer.produce(event.data); }
         this.local_channels.forEach((channel) => {
             channel.onmessage = (event) => { this.buffer.produce(event.data); }
@@ -67,45 +64,39 @@ class NodeRouter {
 }
 
 class ProducerConsumer {
-    constructor() {
-        this.buffer = [];
+    constructor(num_proc) {
+        this.num_proc = num_proc;
         this.consumer_callbacks = [];
+        this.buffer = [];
+        for (let i = 0; i < num_proc + 1; i++) // for -1 (global)
+            this.buffer.push([]);
+        for (let i = 0; i < num_proc + 2; i++) // for -1 (global) and num_proc (any_pid)
+            this.consumer_callbacks.push([]);
     }
 
     async produce(object) {
-        // navigator.locks.request("buffer_lock", (lock) => {
-        let someone_took_it = false;
-        for (let i = 0; i < this.consumer_callbacks.length; i++) {
-            if (this.consumer_callbacks[i](object)) {
-                someone_took_it = true;
-                this.consumer_callbacks.splice(i, 1);
-                break;
-            }
-        }
-        if (!someone_took_it) this.buffer.push(object);
-        // });
+        const src_pid = object.src_pid + 1;
+        if (this.consumer_callbacks[src_pid].length > 0)
+            return this.consumer_callbacks[src_pid].shift()(object);
+        else if (this.consumer_callbacks[this.num_proc + 1].length > 0)
+            return this.consumer_callbacks[this.num_proc + 1].shift()(object);
+        this.buffer.push(object);
     }
 
 
     async consume(src_pid = null) {
-        // first go through buffer and see if src_pid is in any of them
-        // TODO: use hash table for faster lookup
         return await new Promise((resolve) => {
-            // navigator.locks.request("buffer_lock", (lock) => {
-            for (let i = 0; i < this.buffer.length; i++) {
-                if (this.buffer[i].src_pid === src_pid) {
-                    const result = this.buffer.splice(i, 1)[0];
-                    return resolve(result.data);
-                }
+            if (src_pid === null) {
+                for (let i = 0; i < this.buffer.length; i++)
+                    if (this.buffer[i].length > 0)
+                        return resolve(this.buffer[i].shift());
+                this.consumer_callbacks[this.num_proc + 1].push(resolve);
+            } else {
+                src_pid = src_pid + 1;
+                if (this.buffer[src_pid].length > 0)
+                    return resolve(this.buffer[src_pid].shift());
+                this.consumer_callbacks[src_pid].push(resolve);
             }
-
-            // if not, wait for a new message
-            this.consumer_callbacks.push((packet) => { // protected by producer lock
-                const is_correct_pid = src_pid === null || packet.src_pid === src_pid;
-                is_correct_pid && resolve(packet.data);
-                return is_correct_pid; // if not correct pid, try other consumer
-            });
         });
-        // });
     }
 }
