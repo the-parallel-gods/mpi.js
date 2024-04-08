@@ -1,7 +1,8 @@
 class Packet {
-    constructor(src_pid, dest_pid_arr, data) {
+    constructor(src_pid, dest_pid_arr, tag, data) {
         this.src_pid = src_pid;
         this.dest_pid_arr = dest_pid_arr;
+        this.tag = tag;
         this.data = data;
     }
 }
@@ -40,9 +41,9 @@ class NodeRouter {
         return this.hops_table[dest_pid];
     }
 
-    send = async (dest_pid_arr, data) => {
+    send = async (dest_pid_arr, tag = "NA", data = "") => {
         await Promise.all(dest_pid_arr.map((dest_pid) => {
-            const packet = new Packet(this.my_pid, dest_pid_arr, data);
+            const packet = new Packet(this.my_pid, dest_pid_arr, tag, data);
             if (dest_pid === -1)
                 this.global_channel.postMessage(packet);
             else
@@ -50,12 +51,8 @@ class NodeRouter {
         }));
     }
 
-    receive_any = async () => {
-        return await this.buffer.consume(null);
-    }
-
-    receive_from = async (src_pid) => {
-        return await this.buffer.consume(src_pid);
+    receive_from = async (src_pid = null, tag = null) => {
+        return await this.buffer.consume(src_pid, tag);
     }
 
     bcast = async (data) => {
@@ -63,41 +60,83 @@ class NodeRouter {
     }
 }
 
+class TwoDimensionalMap {
+    constructor() {
+        this.ab_map = {};
+        this.ba_map = {};
+    }
+
+    add(a, b, value) {
+        if (!this.ab_map[a]) this.ab_map[a] = {};
+        if (!this.ba_map[b]) this.ba_map[b] = {};
+        if (!this.ab_map[a][b]) this.ab_map[a][b] = [];
+        if (!this.ba_map[b][a]) this.ba_map[b][a] = [];
+        this.ab_map[a][b].push(value);
+        this.ba_map[b][a].push(value);
+    }
+
+    get(a = null, b = null) { // null means wildcard, return one such value
+        if (a !== null && b !== null) {
+            if (this.ab_map[a] && this.ab_map[a][b])
+                return this.ab_map[a][b][0];
+        } else if (a !== null) {
+            if (this.ab_map[a])
+                for (const b in this.ab_map[a])
+                    return this.ab_map[a][b][0];
+        } else if (b !== null) {
+            if (this.ba_map[b])
+                for (const a in this.ba_map[b])
+                    return this.ba_map[b][a][0];
+        } else {
+            for (const a in this.ab_map)
+                for (const b in this.ab_map[a])
+                    return this.ab_map[a][b][0];
+        }
+        return null;
+    }
+
+    pop(a = null, b = null) {
+        const result = this.get(a, b);
+        if (!result) return null;
+
+        this.ab_map[a][b].shift();
+        this.ba_map[b][a].shift();
+        if (this.ab_map[a][b].length === 0) delete this.ab_map[a][b];
+        if (this.ba_map[b][a].length === 0) delete this.ba_map[b][a];
+        if (Object.keys(this.ab_map[a]).length === 0) delete this.ab_map[a];
+        if (Object.keys(this.ba_map[b]).length === 0) delete this.ba_map[b];
+        return result;
+    }
+}
+
 class ProducerConsumer {
     constructor(num_proc) {
         this.num_proc = num_proc;
-        this.consumer_callbacks = [];
-        this.buffer = [];
-        for (let i = 0; i < num_proc + 1; i++) // for -1 (global)
-            this.buffer.push([]);
-        for (let i = 0; i < num_proc + 2; i++) // for -1 (global) and num_proc (any_pid)
-            this.consumer_callbacks.push([]);
+        this.buffer = new TwoDimensionalMap();
+        this.callbacks = new TwoDimensionalMap();
     }
 
     async produce(object) {
-        // console.log("PRODUCE", object);
-        const src_pid = object.src_pid + 1;
-        if (this.consumer_callbacks[src_pid].length > 0)
-            return this.consumer_callbacks[src_pid].shift()(object);
-        else if (this.consumer_callbacks[this.num_proc + 1].length > 0)
-            return this.consumer_callbacks[this.num_proc + 1].shift()(object);
-        this.buffer[src_pid].push(object);
+        const pid = object.src_pid, tag = object.tag;
+        // if (pid === -1 && tag === "flush_telemetry") {
+        //     return console.log(config.my_pid.toString(), "buffer", JSON.stringify(this.buffer.ab_map), "callbacks", JSON.stringify(this.callbacks.ab_map));
+        // }
+        const callback =
+            this.callbacks.pop(pid, tag) ||
+            this.callbacks.pop("*", tag) ||
+            this.callbacks.pop(pid, "*");
+
+        if (callback) callback(object);
+        else this.buffer.add(pid, tag, object)
     }
 
 
-    async consume(src_pid = null) {
+    async consume(src_pid = null, tag = null) {
         return await new Promise((resolve) => {
-            if (src_pid === null) {
-                for (let i = 0; i < this.buffer.length; i++)
-                    if (this.buffer[i].length > 0)
-                        return resolve(this.buffer[i].shift());
-                this.consumer_callbacks[this.num_proc + 1].push(resolve);
-            } else {
-                src_pid = src_pid + 1;
-                if (this.buffer[src_pid].length > 0)
-                    return resolve(this.buffer[src_pid].shift());
-                this.consumer_callbacks[src_pid].push(resolve);
-            }
+            const src_pid_sign = src_pid !== null ? src_pid : "*", tag_sign = tag !== null ? tag : "*";
+            let result = this.buffer.pop(src_pid, tag);
+            if (result) return resolve(result);
+            this.callbacks.add(src_pid_sign, tag_sign, resolve);
         });
     }
 }

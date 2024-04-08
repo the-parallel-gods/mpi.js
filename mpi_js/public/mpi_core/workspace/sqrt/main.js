@@ -72,6 +72,7 @@ run(async () => {
                 console.log("Error: ", Math.abs(sqrt3 - outputs.data[iteration_idx]));
             }
         }
+        console.log("All tests passed");
     }
 
 }, self);
