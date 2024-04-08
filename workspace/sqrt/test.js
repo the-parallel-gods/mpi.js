@@ -16,7 +16,7 @@ run(async () => {
 
     const start_time = performance.now();
     console.log("start_time", start_time, "rank", rank_ptr.data)
-    for (let i = 0; i < 10; i++) {
+    for (let i = 0; i < 100; i++) {
         const data_ptr = box(rank_ptr.data);
         for (let i = 0; i < size_ptr.data; i++) {
             data_ptr.data = rank_ptr.data;

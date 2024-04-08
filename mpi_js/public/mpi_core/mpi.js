@@ -36,7 +36,7 @@ const finish_setup = async () => {
 
     console.warn(`[${config.my_pid}] MPI core ready`);
     await MPI_Barrier();
-    node_router.receive_from(-1, "start").then(async (_) => {
+    node_router.receive(-1, "start").then(async (_) => {
         config.my_pid === 0 && console.log("STARTING USER PROGRAM");
         await user_main_fn();
     });
@@ -83,7 +83,7 @@ let MPI_Send = async (data_ptr, dest_pid, start = null, count = null) => {
 
 
 let MPI_Recv = async (data_ptr, src_pid = null, start = null, count = null) => {
-    const data = (await node_router.receive_from(src_pid, "MPI_Send")).data;
+    const data = (await node_router.receive(src_pid, "MPI_Send")).data;
     if (count !== null) {
         start = start || 0;
         data_ptr.data.splice(start, count, ...data);
@@ -96,18 +96,18 @@ let MPI_Bcast = async (data_ptr, root) => {
     if (config.my_pid === root)
         node_router.send(config.neighbor_list, "MPI_Bcast", data_ptr.data);
     else
-        data_ptr.data = (await node_router.receive_from(root, "MPI_Bcast")).data;
+        data_ptr.data = (await node_router.receive(root, "MPI_Bcast")).data;
 }
 
 let MPI_Barrier = async () => {
     if (config.my_pid === 0) {
         await Promise.all(config.neighbor_list.map(async (pid) => {
-            await node_router.receive_from(pid, "MPI_Barrier_1");
+            await node_router.receive(pid, "MPI_Barrier_1");
         }));
         await node_router.send(config.neighbor_list, "MPI_Barrier_2", "");
     } else {
         await node_router.send([0], "MPI_Barrier_1", "");
-        await node_router.receive_from(0, "MPI_Barrier_2");
+        await node_router.receive(0, "MPI_Barrier_2");
     }
 }
 

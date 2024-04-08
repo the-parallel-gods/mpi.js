@@ -30,7 +30,7 @@ class NodeRouter {
 
         // bfs on local_edges to populate hops_table
         // Write all shortest paths from every node to every other node
-        this.buffer = new ProducerConsumer(num_proc);
+        this.buffer = new ProducerConsumer();
         this.global_channel.onmessage = (event) => { this.buffer.produce(event.data); }
         this.local_channels.forEach((channel) => {
             channel.onmessage = (event) => { this.buffer.produce(event.data); }
@@ -44,14 +44,12 @@ class NodeRouter {
     send = async (dest_pid_arr, tag = "NA", data = "") => {
         await Promise.all(dest_pid_arr.map((dest_pid) => {
             const packet = new Packet(this.my_pid, dest_pid_arr, tag, data);
-            if (dest_pid === -1)
-                this.global_channel.postMessage(packet);
-            else
-                this.local_channels[dest_pid].postMessage(packet);
+            if (dest_pid === -1) this.global_channel.postMessage(packet);
+            else this.local_channels[dest_pid].postMessage(packet);
         }));
     }
 
-    receive_from = async (src_pid = null, tag = null) => {
+    receive = async (src_pid = null, tag = null) => {
         return await this.buffer.consume(src_pid, tag);
     }
 
@@ -60,17 +58,17 @@ class NodeRouter {
     }
 }
 
-class TwoDimensionalMap {
+class Map2D {
     constructor() {
         this.ab_map = {};
         this.ba_map = {};
     }
 
     add(a, b, value) {
-        if (!this.ab_map[a]) this.ab_map[a] = {};
-        if (!this.ba_map[b]) this.ba_map[b] = {};
-        if (!this.ab_map[a][b]) this.ab_map[a][b] = [];
-        if (!this.ba_map[b][a]) this.ba_map[b][a] = [];
+        this.ab_map[a] || (this.ab_map[a] = {});
+        this.ba_map[b] || (this.ba_map[b] = {});
+        this.ab_map[a][b] || (this.ab_map[a][b] = []);
+        this.ba_map[b][a] || (this.ba_map[b][a] = []);
         this.ab_map[a][b].push(value);
         this.ba_map[b][a].push(value);
     }
@@ -101,26 +99,22 @@ class TwoDimensionalMap {
 
         this.ab_map[a][b].shift();
         this.ba_map[b][a].shift();
-        if (this.ab_map[a][b].length === 0) delete this.ab_map[a][b];
-        if (this.ba_map[b][a].length === 0) delete this.ba_map[b][a];
-        if (Object.keys(this.ab_map[a]).length === 0) delete this.ab_map[a];
-        if (Object.keys(this.ba_map[b]).length === 0) delete this.ba_map[b];
+        this.ab_map[a][b].length === 0 && delete this.ab_map[a][b];
+        this.ba_map[b][a].length === 0 && delete this.ba_map[b][a];
+        Object.keys(this.ab_map[a]).length === 0 && delete this.ab_map[a];
+        Object.keys(this.ba_map[b]).length === 0 && delete this.ba_map[b];
         return result;
     }
 }
 
 class ProducerConsumer {
-    constructor(num_proc) {
-        this.num_proc = num_proc;
-        this.buffer = new TwoDimensionalMap();
-        this.callbacks = new TwoDimensionalMap();
+    constructor() {
+        this.buffer = new Map2D();
+        this.callbacks = new Map2D();
     }
 
     async produce(object) {
         const pid = object.src_pid, tag = object.tag;
-        // if (pid === -1 && tag === "flush_telemetry") {
-        //     return console.log(config.my_pid.toString(), "buffer", JSON.stringify(this.buffer.ab_map), "callbacks", JSON.stringify(this.callbacks.ab_map));
-        // }
         const callback =
             this.callbacks.pop(pid, tag) ||
             this.callbacks.pop("*", tag) ||
@@ -134,7 +128,7 @@ class ProducerConsumer {
     async consume(src_pid = null, tag = null) {
         return await new Promise((resolve) => {
             const src_pid_sign = src_pid !== null ? src_pid : "*", tag_sign = tag !== null ? tag : "*";
-            let result = this.buffer.pop(src_pid, tag);
+            const result = this.buffer.pop(src_pid, tag);
             if (result) return resolve(result);
             this.callbacks.add(src_pid_sign, tag_sign, resolve);
         });
