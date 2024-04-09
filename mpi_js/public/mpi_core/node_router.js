@@ -26,10 +26,26 @@ class NodeRouter {
         this.global_channel = global_channel;
         this.local_edges = local_edges;
         this.hops_table = []
-        // populate hops table in constructor? 
+        
+        visited = new Array(num_proc).fill(false);
+        queue = [my_pid];
+        visited[my_pid] = true;
+        let hops = 0;
+        while (queue.length > 0) {
+            const size = queue.length;
+            for (let i = 0; i < size; i++) {
+                const pid = queue.shift();
+                this.hops_table[pid] = hops;
+                this.local_edges[pid].forEach((neighbor) => {
+                    if (!visited[neighbor]) {
+                        visited[neighbor] = true;
+                        queue.push(neighbor);
+                    }
+                });
+            }
+            hops++;
+        }
 
-        // bfs on local_edges to populate hops_table
-        // Write all shortest paths from every node to every other node
         this.buffer = new ProducerConsumer();
         this.global_channel.onmessage = (event) => { this.buffer.produce(event.data); }
         this.local_channels.forEach((channel) => {
