@@ -4,10 +4,6 @@ on:
     push:
         branches:
             - "**"
-    pull_request:
-        # The branches below must be a subset of the branches above
-        branches:
-            - "**"
 
 jobs:
     eslint:
@@ -23,10 +19,10 @@ jobs:
 
             - name: Install ESLint
               run: |
-                  cd mpi_js && npm i
+                  cd mpi_js/client && npm i
 
             - name: Run ESLint
-              run: cd mpi_js && npm run lint
+              run: cd mpi_js/client && npm run lint
               continue-on-error: false
 
     black:

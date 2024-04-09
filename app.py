@@ -1,5 +1,5 @@
 import argparse
-from mpi_js import server
+from mpi_js.server import server
 
 parser = argparse.ArgumentParser(description="Launch MPI.js")
 parser.add_argument("-n", "--no_browser", action="store_true", help="Don't open browser by default.")
