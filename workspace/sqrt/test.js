@@ -1,7 +1,7 @@
 importScripts('/mpi_core/mpi.js');
 importScripts('./magic_number.js');
 
-run(async () => {
+main(async () => {
     const size_ptr = box(0);
     await MPI_Comm_size(size_ptr);
 

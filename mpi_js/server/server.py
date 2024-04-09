@@ -7,14 +7,14 @@ from threading import Thread
 
 class handler(BaseHTTPRequestHandler):
     def do_GET(self):
-        root = __file__.replace("server.py", "")
         print(self.path)
+        root = __file__.replace("server.py", "")
         if "/mpi_core/workspace" in self.path:
             self.path = self.path.replace("mpi_core/workspace", "")
-            filename = root + "../workspace" + self.path
+            filename = root + "../../workspace" + self.path
         else:
             self.path = self.path.replace("/%PUBLIC_URL%", "")
-            filename = root + "build" + self.path
+            filename = root + "../client/build" + self.path
         if self.path.endswith("/"):
             filename += "/index.html"
         print(f"GET ", filename)
@@ -38,7 +38,7 @@ class handler(BaseHTTPRequestHandler):
                 html = fh.read()
                 self.wfile.write(html)
         except:
-            with open(root + "/build/index.html", "rb") as fh:
+            with open(root + "../client/build/index.html", "rb") as fh:
                 html = fh.read()
                 self.wfile.write(html)
 

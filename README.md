@@ -4,8 +4,9 @@
 
 ## Develop locally
 ```bash
+cd mpi_js/client
 npm install
-cd mpi_js && npm start
+npm start
 ```
 
 ## Build and Release

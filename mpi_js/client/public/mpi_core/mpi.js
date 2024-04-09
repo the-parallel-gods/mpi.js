@@ -54,7 +54,7 @@ const on_init_message = async (event) => {
     }
 }
 
-const run = (main_fn, worker_self) => {
+const main = (main_fn, worker_self) => {
     config.global_channel = worker_self;
     config.global_channel.onmessage = on_init_message;
     user_main_fn = main_fn;
@@ -110,8 +110,6 @@ let MPI_Barrier = async () => {
         await node_router.receive(0, "MPI_Barrier_2");
     }
 }
-
-
 
 const box = (data) => {
     return { data };

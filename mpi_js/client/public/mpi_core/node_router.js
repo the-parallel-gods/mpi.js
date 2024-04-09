@@ -7,7 +7,6 @@ class Packet {
     }
 }
 
-
 class NodeRouter {
     /**
      * 
@@ -123,7 +122,6 @@ class ProducerConsumer {
         if (callback) callback(object);
         else this.buffer.add(pid, tag, object)
     }
-
 
     async consume(src_pid = null, tag = null) {
         return await new Promise((resolve) => {
