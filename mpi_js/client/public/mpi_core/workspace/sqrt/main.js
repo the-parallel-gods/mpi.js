@@ -2,6 +2,7 @@ importScripts('/mpi_core/mpi.js');
 
 
 main(async () => {
+    await MPI_Init();
     const size_ptr = box(0);
     const rank_ptr = box(0);
     await MPI_Comm_size(size_ptr);
@@ -36,7 +37,7 @@ main(async () => {
     const start_time = performance.now();
 
     await MPI_Bcast(inputs, root);
-    // console.log(pid, "inputs", inputs.data);
+    // console.log(pid, "passed bcast");
 
     span = Math.floor((num_iterations + nproc - 1) / nproc);
     start_idx = Math.min(num_iterations, pid * span);
@@ -50,9 +51,11 @@ main(async () => {
 
     // Send data to root process
     if (pid != root) {
+        // console.log(pid, "SENDING TO", root);
         await MPI_Send(outputs, root, start_idx, end_idx - start_idx);
     } else {
         for (source = 1; source < nproc; source++) {
+            // console.log("RECEIVING FROM", source);
             start_idx = Math.min(num_iterations, source * span);
             end_idx = Math.min(num_iterations, start_idx + span);
             await MPI_Recv(outputs, source, start_idx, end_idx - start_idx);

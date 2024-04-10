@@ -47,7 +47,7 @@ export class Job {
         console.log("Main UI Sending start message to worker")
         // workers.forEach((worker, idx) => worker.postMessage({ src_pid: -1, dest_pid_arr: [idx], data: "start" }));
         workers.forEach((worker, idx) => worker.postMessage(new Packet(-1, [idx], "start", null)));
-
+        this.workers = workers;
         // smartdashboard flush signal every "smartdashboard_period" seconds
         // if (enable_smartdashboard) {
         //     setInterval(() => {
@@ -60,6 +60,10 @@ export class Job {
     on_message = async (msg) => {
         msg = msg.data;
         console.log("Main UI received msg", msg, "from worker", msg.src_pid);
+        if (msg.tag === "reschedule")
+            msg.dest_pid_arr.forEach((idx) => this.workers[idx].postMessage(new Packet(msg.src_pid, [idx], "reschedule", null)));
+
+
     }
 }
 
