@@ -43,13 +43,21 @@ class NodeRouter {
     send = async (dest_pid_arr, tag = "NA", data = "") => {
         await Promise.all(dest_pid_arr.map((dest_pid) => {
             const packet = new Packet(this.my_pid, dest_pid_arr, tag, data);
-            if (dest_pid === -1) this.global_channel.postMessage(packet);
+            if (dest_pid === -1 || dest_pid === this.my_pid) this.global_channel.postMessage(packet);
             else this.local_channels[dest_pid].postMessage(packet);
         }));
     }
 
     receive = async (src_pid = null, tag = null) => {
         return await this.buffer.consume(src_pid, tag);
+    }
+
+    receive_if_available = async (src_pid = null, tag = null) => {
+        return await this.buffer.consume_if_available(src_pid, tag);
+    }
+
+    peek = async (src_pid = null, tag = null) => {
+        return this.buffer.peek(src_pid, tag);
     }
 
     bcast = async (data) => {
@@ -130,5 +138,13 @@ class ProducerConsumer {
             if (result) return resolve(result);
             this.callbacks.add(src_pid_sign, tag_sign, resolve);
         });
+    }
+
+    async consume_if_available(src_pid = null, tag = null) {
+        return this.buffer.pop(src_pid, tag);
+    }
+
+    async peek(src_pid = null, tag = null) {
+        return this.buffer.get(src_pid, tag);
     }
 }

@@ -1,6 +1,9 @@
 importScripts('/mpi_core/node_router.js');
 importScripts('/mpi_core/smartdashboard.js');
 importScripts('/mpi_core/diagnostics.js');
+importScripts('/mpi_core/mpi_request.js');
+
+importScripts('/mpi_core/basics.js');
 
 let config = {
     // num_workers
@@ -12,8 +15,17 @@ let config = {
     // enable_smartdashboard
     // enable_diagnostics
 };
-let node_router, smartdashboard, diagnostics;
+let node_router, smartdashboard;
 let user_main_fn;
+
+const reschedule = (callback) => {
+    console.log("reschedule requested");
+    node_router.send([config.my_pid], "reschedule", "");
+    node_router.receive(config.my_pid, "reschedule").then(async (_) => {
+        console.log("reschedule finished");
+        await callback();
+    });
+}
 
 const flush_telemetry = async () => {
     diagnostics.flush();
@@ -28,16 +40,12 @@ const finish_setup = async () => {
         await node_router.send([-1], "MPI_Smartdashboard", delta);
     });
 
-    diagnostics = new Diagnostics(smartdashboard, config.enable_diagnostics);
-    MPI_Send = diagnostics.profile(MPI_Send);
-    MPI_Recv = diagnostics.profile(MPI_Recv);
-    MPI_Bcast = diagnostics.profile(MPI_Bcast);
-    MPI_Barrier = diagnostics.profile(MPI_Barrier);
+    diagnostics.configure(smartdashboard, config.enable_diagnostics);
 
     console.warn(`[${config.my_pid}] MPI core ready`);
     await MPI_Barrier();
     node_router.receive(-1, "start").then(async (_) => {
-        config.my_pid === 0 && console.log("STARTING USER PROGRAM");
+        config.my_pid === 0 && console.warn("STARTING USER PROGRAM");
         await user_main_fn();
     });
 }
@@ -68,47 +76,12 @@ const MPI_Comm_size = async (size_ptr) => {
     size_ptr.data = config.num_proc;
 }
 
+const MPI_Init = async () => {
+    await MPI_Barrier();
+}
+
 const MPI_Finalize = async () => {
     await flush_telemetry();
-}
-
-let MPI_Send = async (data_ptr, dest_pid, start = null, count = null) => {
-    let data = data_ptr.data;
-    if (count !== null) {
-        start = start || 0;
-        data = data.slice(start, start + count);
-    }
-    await node_router.send([dest_pid], "MPI_Send", data);
-}
-
-
-let MPI_Recv = async (data_ptr, src_pid = null, start = null, count = null) => {
-    const data = (await node_router.receive(src_pid, "MPI_Send")).data;
-    if (count !== null) {
-        start = start || 0;
-        data_ptr.data.splice(start, count, ...data);
-    } else {
-        data_ptr.data = data;
-    }
-}
-
-let MPI_Bcast = async (data_ptr, root) => {
-    if (config.my_pid === root)
-        node_router.send(config.neighbor_list, "MPI_Bcast", data_ptr.data);
-    else
-        data_ptr.data = (await node_router.receive(root, "MPI_Bcast")).data;
-}
-
-let MPI_Barrier = async () => {
-    if (config.my_pid === 0) {
-        await Promise.all(config.neighbor_list.map(async (pid) => {
-            await node_router.receive(pid, "MPI_Barrier_1");
-        }));
-        await node_router.send(config.neighbor_list, "MPI_Barrier_2", "");
-    } else {
-        await node_router.send([0], "MPI_Barrier_1", "");
-        await node_router.receive(0, "MPI_Barrier_2");
-    }
 }
 
 const box = (data) => {

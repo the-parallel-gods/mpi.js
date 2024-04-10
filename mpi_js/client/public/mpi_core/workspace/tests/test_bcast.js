@@ -2,6 +2,7 @@ importScripts('/mpi_core/mpi.js');
 importScripts('./magic_number.js');
 
 main(async () => {
+    await MPI_Init();
     const size_ptr = box(0);
     await MPI_Comm_size(size_ptr);
 
@@ -16,7 +17,7 @@ main(async () => {
 
     const start_time = performance.now();
     console.log("start_time", start_time, "rank", rank_ptr.data)
-    for (let i = 0; i < 100; i++) {
+    for (let j = 0; j < 1000; j++) {
         const data_ptr = box(rank_ptr.data);
         for (let i = 0; i < size_ptr.data; i++) {
             data_ptr.data = rank_ptr.data;

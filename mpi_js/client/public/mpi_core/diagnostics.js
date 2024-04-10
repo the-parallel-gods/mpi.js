@@ -1,5 +1,7 @@
 class Diagnostics {
-    constructor(smartdashboard, period = 250) {
+    constructor() { }
+    configure(smartdashboard, enabled, period = 250) {
+        this.enabled = enabled;
         this.period = period;
         this.last_flush = performance.now();
         this.smartdashboard = smartdashboard;
@@ -21,6 +23,7 @@ class Diagnostics {
 
     profile = (fn) => {
         return async (...args) => {
+            if (!this.enabled) return await fn(...args);
             this.#start_timer(fn.name);
             const result = await fn(...args);
             this.#end_timer(fn.name);
@@ -48,5 +51,6 @@ class Diagnostics {
         this.delta_time_used = {};
         this.delta_start_time = now;
     }
-
 }
+
+const diagnostics = new Diagnostics();
