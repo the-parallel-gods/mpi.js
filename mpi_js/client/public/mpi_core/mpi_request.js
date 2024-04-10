@@ -4,10 +4,12 @@
  */
 class MPI_Request {
     /**
-     * @constructor for the MPI_Request class. It initializes the done variable to false.
+     * @constructor for the MPI_Request class.
+     * 
+     * @param {boolean} done Whether the request is done or not.
      */
-    constructor() {
-        this.done = false;
+    constructor(done = false) {
+        this.done = done;
         this.test_callback = async () => this.done;
         this.wait_callback = async () => null;
     }
