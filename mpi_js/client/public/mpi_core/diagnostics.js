@@ -1,11 +1,9 @@
 /**
- *  @classdesc Class that handles the diagnostics for the MPI Core. 
- * It is used to profile the time taken by different functions in the MPI Core.
+ * Class that handles the diagnostics for the MPI Core. It is used to profile the time taken by different functions in the MPI Core.
  */
 class Diagnostics {
     /**
-     * @constructor for the Diagnostics class. Nothing is done here because the 
-     * configuration is done by the configure function.
+     * Nothing is done here because the configuration is done by the configure function.
      */
     constructor() { }
 
