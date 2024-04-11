@@ -1,5 +1,5 @@
 site_name: MPI.js
-site_url: https://example.com
+site_url: https://the-parallel-gods.github.io
 
 theme:
   font:
@@ -18,10 +18,14 @@ extra:
     description: >-
       We don't use cookies, is that okay?
 
+markdown_extensions:
+  - pymdownx.tasklist:
+      custom_checkbox: true
+
 copyright: >
   Copyright &copy; 2024 the-parallel-gods
 
 nav:
-  - Home: index.md
-  - About: about.md
+  - Home: home.md
+  - Proposal: proposal.md
   - Docs: docs.md
