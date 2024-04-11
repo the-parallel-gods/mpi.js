@@ -8,9 +8,8 @@ _MPI, now on the web._
 
 ## For developers
 
-[Get Started](get-started)
+[Get Started](/docs)
 
-<!-- {% embed url="https://github.com/the-parallel-gods/mpi.js" %} -->
 [Github](https://github.com/the-parallel-gods/mpi.js)
 
 ## About us
