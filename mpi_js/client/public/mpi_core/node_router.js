@@ -1,9 +1,8 @@
 /**
- * @classdesc Class for representing a packet that can be sent between NodeRouter instances.
+ * Class for representing a packet that can be sent between NodeRouter instances.
  */
 class Packet {
     /**
-     * @constructor for the Packet class.
      * @param {number} src_pid The source pid of the packet.
      * @param {number[]} dest_pid_arr The destination pids of the packet.
      * @param {string} tag The tag of the packet.
@@ -17,14 +16,12 @@ class Packet {
     }
 }
 
+
 /**
- * @classdesc Class for representing a NodeRouter that can be used to send and 
- * receive packets between workers on this browser tab.
+ * Class for a NodeRouter can be used to send and receive packets between workers on this browser tab.
  */
 class NodeRouter {
     /**
-     * @constructor for the NodeRouter class.
-     * 
      * @param {number} num_proc number of workers
      * @param {number} my_pid the pid of this worker
      * @param {number[][]} node_partition partition of workers on each node
@@ -129,14 +126,13 @@ class NodeRouter {
 }
 
 /**
- * @classdesc Class for a map that can be accessed by two keys. Searching by either key will be O(1).
+ * Class for a map that can be accessed by two keys. All operations are O(1).
  */
 class Map2D {
     /**
-     * @constructor 
-     * Constructor for the Map2D class. 
      * 
      * The ab_map sorts values by a, then by b. ab_map: a -> b -> [value_arr]
+     * 
      * The ba_map sorts values by b, then by a. ba_map: b -> a -> [value_arr]
      * 
      * When adding a value, it is added to both maps.
@@ -152,8 +148,11 @@ class Map2D {
     }
 
     /**
-     * @typedef {any} A
-     * @typedef {any} B
+     * @typedef {any} Key_A
+     */
+
+    /**
+     * @typedef {any} Key_B
      */
 
     /**
@@ -161,8 +160,8 @@ class Map2D {
      * 
      * Complexity: O(1)
      * 
-     * @param {A} a The first key.
-     * @param {B} b The second key.
+     * @param {Key_A} a The first key.
+     * @param {Key_B} b The second key.
      * @param {any} value The value to add.
      */
     add(a, b, value) {
@@ -181,8 +180,8 @@ class Map2D {
      * 
      * Complexity: O(1)
      * 
-     * @param {A} a The first key. Default is null, which means wildcard.
-     * @param {B} b The second key. Default is null, which means wildcard.
+     * @param {Key_A} a The first key. Default is null, which means wildcard.
+     * @param {Key_B} b The second key. Default is null, which means wildcard.
      * @returns {any} The value found. If no value is found, it returns null.
      */
     get(a = null, b = null) { // null means wildcard, return one such value
@@ -214,8 +213,8 @@ class Map2D {
      * 
      * Complexity: O(1)
      * 
-     * @param {A} a The first key. Default is null, which means wildcard.
-     * @param {B} b The second key. Default is null, which means wildcard.
+     * @param {Key_A} a The first key. Default is null, which means wildcard.
+     * @param {Key_B} b The second key. Default is null, which means wildcard.
      * @returns {any} The value found. If no value is found, it returns null.
      */
     pop(a = null, b = null) {
@@ -233,12 +232,10 @@ class Map2D {
 }
 
 /**
- * @classdesc Class for a producer-consumer buffer that can be used to send and receive objects between workers.
+ * Class for a producer-consumer buffer that can be used to send and receive objects between workers.
  */
 class ProducerConsumer {
     /**
-     * @constructor for the ProducerConsumer class.
-     * 
      * Uses two Map2D objects to store the buffer and the callbacks.
      * This way, each call to produce and consume is O(1).
      * 

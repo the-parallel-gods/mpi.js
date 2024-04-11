@@ -1,0 +1,27 @@
+site_name: MPI.js
+site_url: https://example.com
+
+theme:
+  font:
+    text: Roboto
+  name: material
+  features:
+    - navigation.instant
+    - navigation.tracking
+    # - toc.integrate
+    - navigation.expand
+    - navigation.top
+
+extra:
+  consent:
+    title: Cookie consent
+    description: >-
+      We don't use cookies, is that okay?
+
+copyright: >
+  Copyright &copy; 2024 the-parallel-gods
+
+nav:
+  - Home: index.md
+  - About: about.md
+  - Docs: docs.md

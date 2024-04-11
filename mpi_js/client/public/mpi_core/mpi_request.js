@@ -1,11 +1,9 @@
 /**
- * @classdesc This is the MPI_Request class. It is returned by the non-blocking functions in the MPI Core.
+ * Class that is returned by the non-blocking functions in the MPI Core.
  * It can be used to test if the request is done or to wait for the request to be done.
  */
 class MPI_Request {
     /**
-     * @constructor for the MPI_Request class.
-     * 
      * @param {boolean} done Whether the request is done or not.
      */
     constructor(done = false) {

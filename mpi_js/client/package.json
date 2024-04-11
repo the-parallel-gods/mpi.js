@@ -18,7 +18,8 @@
     "build": "react-scripts build",
     "test": "react-scripts test",
     "eject": "react-scripts eject",
-    "lint": "eslint ./src --fix --ext .js,.jsx,.ts,.tsx"
+    "lint": "eslint ./src --fix --ext .js,.jsx,.ts,.tsx",
+    "docs": "npx jsdoc2md '!(node_modules|build)/**/*.js' > ../../docs/docs.md"
   },
   "eslintConfig": {
     "extends": [
@@ -39,6 +40,7 @@
     ]
   },
   "devDependencies": {
-    "@babel/plugin-proposal-private-property-in-object": "^7.21.11"
+    "@babel/plugin-proposal-private-property-in-object": "^7.21.11",
+    "jsdoc-to-markdown": "^8.0.1"
   }
 }

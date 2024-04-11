@@ -1,8 +1,10 @@
-/**
- * @classdesc Class that handles the SmartDashboard for the MPI Core.
- * SmartDashboard is used to send real-time telemetry data to the main UI process.
- */
 class SmartDashboard {
+    /**
+     * @class SmartDashboard
+     * @classdesc Class that handles the SmartDashboard for the MPI Core.
+     * SmartDashboard is used to send real-time telemetry data to the main UI process.
+     */
+
     /**
      * @typedef {'pie' | 'progress' | 'graph' | 'string'} SmartDashboardType
      */

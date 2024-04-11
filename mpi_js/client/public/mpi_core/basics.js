@@ -2,6 +2,7 @@
  * MPI_Test tests if the request is done. Regardless of whether the request is done or not,
  * the callback should immediately return a boolean.
  * 
+ * @function
  * @param {MPI_Request} request The request to test.
  * @returns {Promise<boolean>} A promise that resolves when the test is done, indicating whether the request is done.
  */
@@ -15,6 +16,7 @@ const MPI_Test = diagnostics.profile(async (request) => {
  * MPI_Wait waits for the request to be done. The callback should return a promise that resolves
  * when the request is done.
  * 
+ * @function
  * @param {MPI_Request} request The request to wait for.
  * @returns {Promise<void>} A promise that resolves when the request is done.
  */
@@ -23,12 +25,14 @@ const MPI_Wait = diagnostics.profile(async (request) => {
 });
 
 /**
+ * 
  * MPI_Send sends data to another process. This function is blocking, and it will only return
  * after the receiver confirms that it has received the data.
  * 
  * start and count are optional parameters that allow the user to specify a slice of the array
  * to send. Only use these parameters if the data is an array.
  * 
+ * @function
  * @param {Box} data_ptr The data to send.
  * @param {number} dest_pid The destination process ID.
  * @param {number} start The start index of the data to send. Default is 0 if only count is specified.
@@ -53,6 +57,7 @@ const MPI_Send = diagnostics.profile(async (data_ptr, dest_pid, start = null, co
  * start and count are optional parameters that allow the user to specify a slice of the array
  * to send. Only use these parameters if the data is an array.
  * 
+ * @function
  * @param {Box} data_ptr The data to send.
  * @param {number} dest_pid The destination process ID.
  * @param {number} start The start index of the data to send. Default is 0 if only count is specified.
@@ -76,6 +81,7 @@ const MPI_ISend = diagnostics.profile(async (data_ptr, dest_pid, start = null, c
  * start and count are optional parameters that allow the user to specify a slice of the array
  * to receive. Only use these parameters if the data is an array.
  * 
+ * @function
  * @param {Box} data_ptr The box to store the received data.
  * @param {number} src_pid The source process ID. Default is null to receive from any process.
  * @param {number} start The start index of the data to receive. Default is 0 if only count is specified.
@@ -98,6 +104,7 @@ const MPI_Recv = diagnostics.profile(async (data_ptr, src_pid = null, start = nu
  * start and count are optional parameters that allow the user to specify a slice of the array
  * to receive. Only use these parameters if the data is an array.
  * 
+ * @function
  * @param {Box} data_ptr The box to store the received data.
  * @param {number} src_pid The source process ID. Default is null to receive from any process.
  * @param {number} start The start index of the data to receive. Default is 0 if only count is specified.
@@ -132,6 +139,7 @@ const MPI_IRecv = diagnostics.profile(async (data_ptr, src_pid = null, start = n
  * MPI_Bcast broadcasts data from the root process to all other processes. This function is blocking,
  * and it will only return after all the processes have received the data.
  * 
+ * @function
  * @param {Box} data_ptr The data to broadcast.
  * @param {number} root The root process ID.
  * @returns {Promise<void>} A promise that resolves when the data has been broadcasted.
@@ -148,6 +156,7 @@ const MPI_Bcast = diagnostics.profile(async (data_ptr, root) => {
  * the barrier. This function is blocking, and it will only return after all the processes have reached
  * the barrier.
  * 
+ * @function
  * @returns {Promise<void>} A promise that resolves when all the processes have reached the barrier.
  */
 const MPI_Barrier = diagnostics.profile(async () => {
