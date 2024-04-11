@@ -8,7 +8,7 @@ _MPI, now on the web._
 
 ## For developers
 
-[Get Started](/docs)
+[Get Started](/mpi.js/docs)
 
 [Github](https://github.com/the-parallel-gods/mpi.js)
 
