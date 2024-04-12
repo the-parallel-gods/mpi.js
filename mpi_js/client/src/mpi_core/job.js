@@ -11,11 +11,13 @@
 import { Packet } from "./packet.js";
 
 export class Job {
-    constructor(path = "./mpi_core/workspace/sqrt/main.js",
-        num_proc = 8,
+    constructor(smartdashboard_callback_box,
+        path,
+        num_proc,
         enable_smartdashboard = true,
         enable_diagnostics = true,
     ) {
+        this.smartdashboard_callback = smartdashboard_callback_box.callback;
         enable_diagnostics &= enable_smartdashboard;
         console.log("Setting up job");
         let workers = []
@@ -59,10 +61,11 @@ export class Job {
 
     on_message = async (msg) => {
         msg = msg.data;
-        console.log("Main UI received msg", msg, "from worker", msg.src_pid);
+        // console.log("Main UI received msg", msg, "from worker", msg.src_pid, JSON.stringify(msg));
         if (msg.tag === "reschedule")
             msg.dest_pid_arr.forEach((idx) => this.workers[idx].postMessage(new Packet(msg.src_pid, [idx], "reschedule", null)));
-
+        if (msg.tag === "MPI_Smartdashboard")
+            this.smartdashboard_callback({ pid: msg.src_pid, data: msg.data });
 
     }
 }

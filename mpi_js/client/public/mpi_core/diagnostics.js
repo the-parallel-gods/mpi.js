@@ -53,12 +53,12 @@ class Diagnostics {
      * @param {function} fn The function to profile.
      * @returns {function} A new function that profiles the time taken by the original function.
      */
-    profile = (fn) => {
+    profile = (name, fn) => {
         return async (...args) => {
             if (!this.enabled) return await fn(...args);
-            this.#start_timer(fn.name);
+            this.#start_timer(name);
             const result = await fn(...args);
-            this.#end_timer(fn.name);
+            this.#end_timer(name);
             if (performance.now() - this.last_flush > this.period) {
                 this.last_flush = performance.now();
                 await this.flush();
@@ -81,8 +81,8 @@ class Diagnostics {
             delta_other_time -= this.delta_time_used[key];
         }
 
-        this.smartdashboard.putPie("Total Time", { ...this.total_time_used, "Other": total_other_time });
-        this.smartdashboard.putPie("Delta Time", { ...this.delta_time_used, "Other": delta_other_time });
+        this.smartdashboard.putPie("Time (ms)", { ...this.total_time_used, "Computation": total_other_time });
+        // this.smartdashboard.putPie("Delta Time", { ...this.delta_time_used, "Other": delta_other_time });
         // console.log("total time", now - this.total_start_time, "delta time", now - this.delta_start_time);
         this.delta_time_used = {};
         this.delta_start_time = now;

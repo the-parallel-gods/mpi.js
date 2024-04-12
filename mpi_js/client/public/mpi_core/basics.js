@@ -6,7 +6,7 @@
  * @param {MPI_Request} request The request to test.
  * @returns {Promise<boolean>} A promise that resolves when the test is done, indicating whether the request is done.
  */
-const MPI_Test = diagnostics.profile(async (request) => {
+const MPI_Test = diagnostics.profile("MPI_Test", async (request) => {
     return await new Promise((resolve) => {
         reschedule(async () => { resolve(await request.test()); });
     });
@@ -20,7 +20,7 @@ const MPI_Test = diagnostics.profile(async (request) => {
  * @param {MPI_Request} request The request to wait for.
  * @returns {Promise<void>} A promise that resolves when the request is done.
  */
-const MPI_Wait = diagnostics.profile(async (request) => {
+const MPI_Wait = diagnostics.profile("MPI_Wait", async (request) => {
     await request.wait();
 });
 
@@ -39,7 +39,7 @@ const MPI_Wait = diagnostics.profile(async (request) => {
  * @param {number} count The number of elements to send. Only use if data is an array.
  * @returns {Promise<void>} A promise that resolves when the data has been sent.
  */
-const MPI_Send = diagnostics.profile(async (data_ptr, dest_pid, start = null, count = null) => {
+const MPI_Send = diagnostics.profile("MPI_Send", async (data_ptr, dest_pid, start = null, count = null) => {
     let data = data_ptr.data;
     if (count !== null) {
         start = start || 0;
@@ -64,7 +64,7 @@ const MPI_Send = diagnostics.profile(async (data_ptr, dest_pid, start = null, co
  * @param {number} count The number of elements to send. Only use if data is an array.
  * @returns {Promise<MPI_Request>} A promise that indicates that the data has been sent.
  */
-const MPI_ISend = diagnostics.profile(async (data_ptr, dest_pid, start = null, count = null) => {
+const MPI_ISend = diagnostics.profile("MPI_ISend", async (data_ptr, dest_pid, start = null, count = null) => {
     let data = data_ptr.data;
     if (count !== null) {
         start = start || 0;
@@ -88,7 +88,7 @@ const MPI_ISend = diagnostics.profile(async (data_ptr, dest_pid, start = null, c
  * @param {number} count The number of elements to receive. Only use if data is an array.
  * @returns {Promise<void>} A promise that resolves when the data has been received.
  */
-const MPI_Recv = diagnostics.profile(async (data_ptr, src_pid = null, start = null, count = null) => {
+const MPI_Recv = diagnostics.profile("MPI_Recv", async (data_ptr, src_pid = null, start = null, count = null) => {
     const packet = await node_router.receive(src_pid, "MPI_Send");
     const data = packet.data.data;
     if (count !== null) data_ptr.data.splice(start || 0, count, ...data);
@@ -111,7 +111,7 @@ const MPI_Recv = diagnostics.profile(async (data_ptr, src_pid = null, start = nu
  * @param {number} count The number of elements to receive. Only use if data is an array.
  * @returns {Promise<MPI_Request>} A promise that indicates that the data has been received.
  */
-const MPI_IRecv = diagnostics.profile(async (data_ptr, src_pid = null, start = null, count = null) => {
+const MPI_IRecv = diagnostics.profile("MPI_IRecv", async (data_ptr, src_pid = null, start = null, count = null) => {
     const process_data = (packet) => {
         console.log("packet", packet);
         const data = packet.data.data;
@@ -144,7 +144,7 @@ const MPI_IRecv = diagnostics.profile(async (data_ptr, src_pid = null, start = n
  * @param {number} root The root process ID.
  * @returns {Promise<void>} A promise that resolves when the data has been broadcasted.
  */
-const MPI_Bcast = diagnostics.profile(async (data_ptr, root) => {
+const MPI_Bcast = diagnostics.profile("MPI_Bcast", async (data_ptr, root) => {
     if (config.my_pid === root)
         node_router.send(config.neighbor_list, "MPI_Bcast", data_ptr.data);
     else
@@ -159,7 +159,7 @@ const MPI_Bcast = diagnostics.profile(async (data_ptr, root) => {
  * @function
  * @returns {Promise<void>} A promise that resolves when all the processes have reached the barrier.
  */
-const MPI_Barrier = diagnostics.profile(async () => {
+const MPI_Barrier = diagnostics.profile("MPI_Barrier", async () => {
     if (config.my_pid === 0) {
         await Promise.all(config.neighbor_list.map(async (pid) => {
             await node_router.receive(pid, "MPI_Barrier_1");
