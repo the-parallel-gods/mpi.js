@@ -1,6 +1,6 @@
+importScripts('/mpi_core/diagnostics.js');
 importScripts('/mpi_core/node_router.js');
 importScripts('/mpi_core/smartdashboard.js');
-importScripts('/mpi_core/diagnostics.js');
 importScripts('/mpi_core/mpi_request.js');
 
 importScripts('/mpi_core/basics.js');

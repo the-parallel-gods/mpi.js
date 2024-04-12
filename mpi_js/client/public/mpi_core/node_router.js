@@ -42,9 +42,15 @@ class NodeRouter {
         // bfs on local_edges to populate hops_table
         // Write all shortest paths from every node to every other node
         this.buffer = new ProducerConsumer();
-        this.global_channel.onmessage = (event) => { this.buffer.produce(event.data); }
+        this.global_channel.onmessage = (event) => {
+            diagnostics.add_recv();
+            this.buffer.produce(event.data);
+        }
         this.local_channels.forEach((channel) => {
-            channel.onmessage = (event) => { this.buffer.produce(event.data); }
+            channel.onmessage = (event) => {
+                diagnostics.add_recv();
+                this.buffer.produce(event.data);
+            }
         });
     }
 
@@ -68,6 +74,7 @@ class NodeRouter {
     send = async (dest_pid_arr, tag = "NA", data = "") => {
         await Promise.all(dest_pid_arr.map((dest_pid) => {
             const packet = new Packet(this.my_pid, dest_pid_arr, tag, data);
+            diagnostics.add_send();
             if (dest_pid === -1 || dest_pid === this.my_pid) this.global_channel.postMessage(packet);
             else this.local_channels[dest_pid].postMessage(packet);
         }));

@@ -41,11 +41,8 @@ function DrawPie({ dict, name, proc }) {
             series={[
                 {
                     data,
-                    highlightScope: { faded: 'global', highlighted: 'item' },
-                    faded: { innerRadius: 60, additionalRadius: 0, color: 'gray' },
-                    highlighted: { innerRadius: 55, additionalRadius: 2 },
                     innerRadius: 60,
-                    outerRadius: 98,
+                    outerRadius: 100,
                     cornerRadius: 5,
 
                 },
