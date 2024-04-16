@@ -117,7 +117,7 @@ As described in [#the-challenge](proposal.md#the-challenge "mention"), JS is an 
 
 ### Sean (haoxians)
 
-[Sean](https://github.com/SeanSun6814) and 
+[Sean](https://github.com/SeanSun6814)
 
 
 ### David (drudo)
