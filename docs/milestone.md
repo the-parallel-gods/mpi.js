@@ -13,6 +13,9 @@ JavaScript is one of the most popular languages used by many developers. It also
 
 As described in [#the-challenge](proposal.md#the-challenge "mention"), JS is an inherently single-threaded programming language. Thus, shared-memory parallel models similar to OpenMP are simply not possible. However, we can still pass messages between multiple "isolated threads" in JS. In such an environment, MPI becomes the perfect solution for parallel programming.
 
+## Summary On Progress
+
+
 
 ## Current Project Status
 
@@ -66,6 +69,13 @@ As described in [#the-challenge](proposal.md#the-challenge "mention"), JS is an 
   * [ ] MPI\_Scan
   * [ ] MPI\_Exscan
 
+## Goals Being Removed
+
+
+## Issues that Concern Us
+
+
+## Intentions For Poster Session
 
 
 
