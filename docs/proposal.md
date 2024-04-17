@@ -2,7 +2,7 @@
 
 ## **URL**
 
-[https://the-parallel-gods.gitbook.io/mpi](https://the-parallel-gods.gitbook.io/mpi)
+[https://the-parallel-gods.github.io/mpi.js/home/](https://the-parallel-gods.github.io/mpi.js/home/)
 
 ## **SUMMARY**
 

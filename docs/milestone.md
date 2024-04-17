@@ -2,7 +2,7 @@
 
 ## **URL**
 
-[https://the-parallel-gods.gitbook.io/mpi](https://the-parallel-gods.gitbook.io/mpi)
+[https://the-parallel-gods.github.io/mpi.js/home/](https://the-parallel-gods.github.io/mpi.js/home/)
 
 
 ## BACKGROUND & PLATFORM CHOICE
@@ -23,7 +23,7 @@ We then created the `node_router` which magically queues up messages by other no
 
 After that, we developed a low-overhead, automatic diagnostic collection system that can be used to monitor the performance of various functions in the MPI.js system. This data is then live-streamed to a real-time dashboard that shows the number of messages being sent and received per second, as well as the time spent in each function vs the time spent on actual computation. Along with this, we developed a simple to use SmartDashboard that allows users to draw graphs, charts, progress bars, and logs in real-time, to help them debug their code.
 
-Then, we implemented the `sqrt` MPI program (from the asst4 example) and found that our JavaScript system is able to perform 5x-10x slower than pure `-O3` heavily optimized C code, which is a huge win. Our benchmark also shows that our system can handle up to 100,000+ message sends and receives per second.
+Then, we implemented the `sqrt` MPI program (from the asst4 example) and found that our JavaScript system is able to perform only 10x slower than pure `-O3` heavily optimized C code, which is a huge win. Our benchmark also shows that our system can handle up to 100,000+ message sends and receives per second.
 
 Finally, we made [a very detailed documentation](docs.md) for every single class, every single data type, and every single function in our system. This will greatly help users to program using our library.
 
