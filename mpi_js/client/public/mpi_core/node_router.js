@@ -48,16 +48,17 @@ class NodeRouter {
         my_pid_idx !== -1 && event.data.dest_pid_arr.splice(my_pid_idx, 1);
 
         if (event.data.dest_pid_arr.length > 0) {
-            let router_set = {};
+            let router_map = {};
             for (const dest_pid of event.data.dest_pid_arr) {
                 const router_pid = this.routing_table[dest_pid];
-                if (!router_set[router_pid]) router_set[router_pid] = [];
-                router_set[router_pid].push(dest_pid);
+                if (!router_map[router_pid]) router_map[router_pid] = [];
+                router_map[router_pid].push(dest_pid);
             }
-            await Promise.all(Object.keys(router_set).map((router_pid) => {
-                // console.log(`FWRD: {${event.data.tag}} [${event.data.src_pid}] --> (${router_pid}) --> [${router_set[router_pid]}]`);
+            await Promise.all(Object.keys(router_map).map((router_pid) => {
+                // console.log(`FWRD: {${event.data.tag}} [${event.data.src_pid}] --> (${router_pid}) --> [${router_map[router_pid]}]`);
                 diagnostics.add_send();
-                this.local_channels[router_pid].postMessage(event.data);
+                const packet = new Packet(event.data.src_pid, router_map[router_pid], event.data.tag, event.data.data);
+                this.local_channels[router_pid].postMessage(packet);
             }));
         }
 
@@ -77,23 +78,18 @@ class NodeRouter {
      * @returns {Promise<void>} A promise that resolves when the packet is sent.
      */
     send = async (dest_pid_arr, tag = "NA", data = "") => {
-        let router_set = {};
+        let router_map = {};
         for (const dest_pid of dest_pid_arr) {
             const router_pid = this.routing_table[dest_pid];
-            if (!router_set[router_pid]) router_set[router_pid] = [];
-            router_set[router_pid].push(dest_pid);
+            if (!router_map[router_pid]) router_map[router_pid] = [];
+            router_map[router_pid].push(dest_pid);
         }
-        await Promise.all(Object.keys(router_set).map((router_pid) => {
-            // console.log(`SEND: {${tag}} [${this.my_pid}] --> (${router_pid}) --> [${router_set[router_pid]}]`);
+        await Promise.all(Object.keys(router_map).map((router_pid) => {
+            // console.log(`SEND: {${tag}} [${this.my_pid}] --> (${router_pid}) --> [${router_map[router_pid]}]`);
             diagnostics.add_send();
-            const packet = new Packet(this.my_pid, router_set[router_pid], tag, data);
-            try {
-                if (router_pid == -1) this.global_channel.postMessage(packet);
-                else this.local_channels[router_pid].postMessage(packet);
-            } catch (e) {
-                console.log(`${this.my_pid} failed to send to (${router_pid}) --> [${dest_pid_arr}],`, router_set, this.routing_table);
-                console.error(e);
-            }
+            const packet = new Packet(this.my_pid, router_map[router_pid], tag, data);
+            if (router_pid == -1) this.global_channel.postMessage(packet);
+            else this.local_channels[router_pid].postMessage(packet);
         }));
     }
 
