@@ -120,7 +120,7 @@ Our intention is to use our in-development dashboard as our main presentation to
 
 ### Sean (haoxians)
 
-[Sean](https://github.com/SeanSun6814) and 
+[Sean](https://github.com/SeanSun6814)
 
 
 ### David (drudo)
