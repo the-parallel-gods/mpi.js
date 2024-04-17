@@ -21,7 +21,7 @@ As described in [#the-challenge](proposal.md#the-challenge "mention"), JS is an 
 
 * [x] **Make a nice documentation website**
 * [ ] **Implement the following APIs**
-  * [ ] Basics
+  * [x] Basics
     * [x] MPI\_Init
     * [x] MPI\_Finalize
     * [x] MPI\_Abort
@@ -64,19 +64,19 @@ As described in [#the-challenge](proposal.md#the-challenge "mention"), JS is an 
 ## HOPE TO ACHIEVE
 
 * [x] **Make a live dashboard that shows how many msgs/sec are happening in real-time**
-* [ ] **~~Make a debugging dashboard that replays the communications during computation~~**
+* [ ] **Make a debugging dashboard that replays the communications during computation**
 * [ ] **Implement the following APIs**
   * [ ] MPI\_Scan
   * [ ] MPI\_Exscan
 
 ## Goals Being Removed
-
+After considering our progress and discoveries made while working on mpi.js, we've decided to no longer pursue the idea of a "debugging" dashboard. The amount of memory necessary to hold the timeline information necessary to implement such a dashboard is too large to be feasibly completed without detracting from the original project. Since we still need to work on the different routing strategies for reduce, gather, and scatter it is also more likely that we will not have time to implement scan since we want to dedicate time to have interesting data to compare. 
 
 ## Issues that Concern Us
 
 
 ## Intentions For Poster Session
-
+Our intention is to use our in-development dashboard as our main presentation tool. Since it shows a break down of time a process spends sending, receiving, waiting, and actually computing it's a great way to visually show the relative speed up we are providing to a program. We also plan to show some pre-captured measurements from the dashboard so that the demo doesn't have to manually run through every variation of our mpi configurations we want to analyze.
 
 
 
