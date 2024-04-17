@@ -27,6 +27,8 @@ Then, we implemented the `sqrt` MPI program (from the asst4 example) and found t
 
 Finally, we made [a very detailed documentation](docs.md) for every single class, every single data type, and every single function in our system. This will greatly help users to program using our library.
 
+Here's a screenshot of our live-dashboard:
+
 ![](./images/milestone-dashboard.png)
 
 
