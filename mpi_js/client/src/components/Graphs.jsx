@@ -3,7 +3,7 @@ import { LineChart } from '@mui/x-charts/LineChart';
 import { Box } from '@mui/system';
 
 function DrawGraph({ arr, proc, offset }) {
-    const data = [{ data: arr, label: proc.toString(), showMark: false }];
+    const data = [{ data: arr, label: "Node " + proc.toString(), showMark: false }];
     const xLabels = Array.from({ length: arr.length }, (_, i) => i + offset).map((v) => v.toString());
     return (
         <LineChart skipAnimation
