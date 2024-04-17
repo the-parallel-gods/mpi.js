@@ -42,6 +42,17 @@ class NodeRouter {
         this.local_channels.forEach((channel) => { channel.onmessage = this.#receive_or_forward; });
     }
 
+    /**
+     * This is the main function that receives packets from anywhere. 
+     * It first checks if the packet is for this worker. If it is, it will
+     * consume the packet. If the packet also needs to be forwarded, it will
+     * forward the packet to the next hop.
+     * 
+     * When forwarding to the next hop, it will regroup the destination pids
+     * by the next router to eliminate redundant packets with the same message.
+     * 
+     * @param {MessageEvent} event
+     */
     #receive_or_forward = async (event) => {
         diagnostics.add_recv();
         let my_pid_idx = event.data.dest_pid_arr.indexOf(this.my_pid);
@@ -62,7 +73,7 @@ class NodeRouter {
             }));
         }
 
-        if (my_pid_idx !== -1) await this.buffer.produce(event.data);
+        my_pid_idx !== -1 && await this.buffer.produce(event.data);
     }
 
     /**
