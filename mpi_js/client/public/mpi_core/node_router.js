@@ -29,36 +29,39 @@ class NodeRouter {
      * @param {WorkerGlobalScope} global_channel channel to main manager on this node
      * @param {number[][]} local_edges adjacency list of local channels
      */
-    constructor(num_proc, my_pid, node_partition, local_channels, global_channel, local_edges) {
+    constructor(num_proc, my_pid, node_partition, routing_table, local_channels, global_channel, local_edges) {
         this.num_proc = num_proc;
         this.my_pid = my_pid;
         this.node_partition = node_partition;
+        this.routing_table = routing_table;
         this.local_channels = local_channels;
         this.global_channel = global_channel;
         this.local_edges = local_edges;
-        this.hops_table = []
-        // populate hops table in constructor? 
-
-        // bfs on local_edges to populate hops_table
-        // Write all shortest paths from every node to every other node
         this.buffer = new ProducerConsumer();
-        this.global_channel.onmessage = (event) => {
-            diagnostics.add_recv();
-            this.buffer.produce(event.data);
-        }
-        this.local_channels.forEach((channel) => {
-            channel.onmessage = (event) => {
-                diagnostics.add_recv();
-                this.buffer.produce(event.data);
-            }
-        });
+        this.global_channel.onmessage = this.#receive_or_forward;
+        this.local_channels.forEach((channel) => { channel.onmessage = this.#receive_or_forward; });
     }
 
-    /**
-     * @todo Finish this function. Do not call yet.
-     */
-    num_hops = async (dest_pid) => {
-        return this.hops_table[dest_pid];
+    #receive_or_forward = async (event) => {
+        diagnostics.add_recv();
+        let my_pid_idx = event.data.dest_pid_arr.indexOf(this.my_pid);
+        my_pid_idx !== -1 && event.data.dest_pid_arr.splice(my_pid_idx, 1);
+
+        if (event.data.dest_pid_arr.length > 0) {
+            let router_set = {};
+            for (const dest_pid of event.data.dest_pid_arr) {
+                const router_pid = this.routing_table[dest_pid];
+                if (!router_set[router_pid]) router_set[router_pid] = [];
+                router_set[router_pid].push(dest_pid);
+            }
+            await Promise.all(Object.keys(router_set).map((router_pid) => {
+                // console.log(`FWRD: {${event.data.tag}} [${event.data.src_pid}] --> (${router_pid}) --> [${router_set[router_pid]}]`);
+                diagnostics.add_send();
+                this.local_channels[router_pid].postMessage(event.data);
+            }));
+        }
+
+        if (my_pid_idx !== -1) await this.buffer.produce(event.data);
     }
 
     /**
@@ -66,17 +69,31 @@ class NodeRouter {
      * returns immediately after sending the packet. The receiving worker can
      * only receive this packet if it is listening for packets with the same tag or ANY tag.
      * 
+     * Send to your own pid if you want to send to the global router.
+     * 
      * @param {number[]} dest_pid_arr The destination pids of the packet.
      * @param {string} tag The tag of the packet. Default is "NA".
      * @param {any} data The data of the packet. Default is "".
      * @returns {Promise<void>} A promise that resolves when the packet is sent.
      */
     send = async (dest_pid_arr, tag = "NA", data = "") => {
-        await Promise.all(dest_pid_arr.map((dest_pid) => {
-            const packet = new Packet(this.my_pid, dest_pid_arr, tag, data);
+        let router_set = {};
+        for (const dest_pid of dest_pid_arr) {
+            const router_pid = this.routing_table[dest_pid];
+            if (!router_set[router_pid]) router_set[router_pid] = [];
+            router_set[router_pid].push(dest_pid);
+        }
+        await Promise.all(Object.keys(router_set).map((router_pid) => {
+            // console.log(`SEND: {${tag}} [${this.my_pid}] --> (${router_pid}) --> [${router_set[router_pid]}]`);
             diagnostics.add_send();
-            if (dest_pid === -1 || dest_pid === this.my_pid) this.global_channel.postMessage(packet);
-            else this.local_channels[dest_pid].postMessage(packet);
+            const packet = new Packet(this.my_pid, router_set[router_pid], tag, data);
+            try {
+                if (router_pid == -1) this.global_channel.postMessage(packet);
+                else this.local_channels[router_pid].postMessage(packet);
+            } catch (e) {
+                console.log(`${this.my_pid} failed to send to (${router_pid}) --> [${dest_pid_arr}],`, router_set, this.routing_table);
+                console.error(e);
+            }
         }));
     }
 

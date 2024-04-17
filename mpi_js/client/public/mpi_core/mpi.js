@@ -3,7 +3,8 @@ importScripts('/mpi_core/node_router.js');
 importScripts('/mpi_core/smartdashboard.js');
 importScripts('/mpi_core/mpi_request.js');
 
-importScripts('/mpi_core/basics.js');
+importScripts('/mpi_core/point2point.js');
+importScripts('/mpi_core/bcast_barrier.js');
 
 /**
  * A box holds data. This is used to pass data between functions by reference.
@@ -11,7 +12,8 @@ importScripts('/mpi_core/basics.js');
  */
 
 /**
- * @typedef {{num_proc: number, 
+ * @typedef {{
+ *            num_proc: number, 
  *            my_pid: number,
  *            node_partition: number[][],
  *            local_channels: Record<number, MessagePort>,
@@ -19,7 +21,10 @@ importScripts('/mpi_core/basics.js');
  *            channel_ports: Record<number, MessagePort>,
  *            enable_smartdashboard: boolean,
  *            enable_diagnostics: boolean,
- *            neighbor_list: number[]}} Config
+ *            neighbor_list: number[],
+ *            local_routing_table: number[][],
+ *            interconnect_type: ('crossbar'|'tree'|'ring'),
+ *          }} Config
  * 
  * @type {Config} config
  */
@@ -63,11 +68,19 @@ const flush_telemetry = async () => {
  * the initial configuration is received.
  */
 const finish_setup = async () => {
-    node_router = new NodeRouter(config.num_proc, config.my_pid, config.node_partition, config.local_channels, config.global_channel, config.channel_ports);
+    node_router = new NodeRouter(
+        config.num_proc,
+        config.my_pid,
+        config.node_partition,
+        config.local_routing_table,
+        config.local_channels,
+        config.global_channel,
+        config.channel_ports,
+    );
     config.neighbor_list = config.node_partition.flat().filter((pid) => pid !== config.my_pid);
     config.my_pid === 0 && console.log(config.my_pid, "Final config", config);
     smartdashboard = new SmartDashboard(config.enable_smartdashboard, async (delta) => {
-        await node_router.send([-1], "MPI_Smartdashboard", delta);
+        await node_router.send([config.my_pid], "MPI_Smartdashboard", delta);
     });
 
     diagnostics.configure(smartdashboard, config.enable_diagnostics);

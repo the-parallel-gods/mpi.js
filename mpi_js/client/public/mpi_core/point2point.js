@@ -50,7 +50,7 @@ const MPI_Send = diagnostics.profile("MPI_Send", async (data_ptr, dest_pid, star
 });
 
 /**
- * MPI_ISend sends data to another process. This function is non-blocking, and it will return
+ * MPI_Isend sends data to another process. This function is non-blocking, and it will return
  * immediately after sending the data. The user can use the MPI_Request object to test if the
  * buffer is ready to be reused.
  * 
@@ -64,7 +64,7 @@ const MPI_Send = diagnostics.profile("MPI_Send", async (data_ptr, dest_pid, star
  * @param {number} count The number of elements to send. Only use if data is an array.
  * @returns {Promise<MPI_Request>} A promise that indicates that the data has been sent.
  */
-const MPI_ISend = diagnostics.profile("MPI_ISend", async (data_ptr, dest_pid, start = null, count = null) => {
+const MPI_Isend = diagnostics.profile("MPI_Isend", async (data_ptr, dest_pid, start = null, count = null) => {
     let data = data_ptr.data;
     if (count !== null) {
         start = start || 0;
@@ -97,7 +97,7 @@ const MPI_Recv = diagnostics.profile("MPI_Recv", async (data_ptr, src_pid = null
 });
 
 /**
- * MPI_IRecv receives data from another process. This function is non-blocking, and it will return
+ * MPI_Irecv receives data from another process. This function is non-blocking, and it will return
  * immediately after receiving the data. The user can use the MPI_Request object to test if the
  * receive is done, or to wait for the receive to be done.
  * 
@@ -111,7 +111,7 @@ const MPI_Recv = diagnostics.profile("MPI_Recv", async (data_ptr, src_pid = null
  * @param {number} count The number of elements to receive. Only use if data is an array.
  * @returns {Promise<MPI_Request>} A promise that indicates that the data has been received.
  */
-const MPI_IRecv = diagnostics.profile("MPI_IRecv", async (data_ptr, src_pid = null, start = null, count = null) => {
+const MPI_Irecv = diagnostics.profile("MPI_Irecv", async (data_ptr, src_pid = null, start = null, count = null) => {
     const process_data = (packet) => {
         console.log("packet", packet);
         const data = packet.data.data;
@@ -133,40 +133,4 @@ const MPI_IRecv = diagnostics.profile("MPI_IRecv", async (data_ptr, src_pid = nu
             }
             return false;
         });
-});
-
-/**
- * MPI_Bcast broadcasts data from the root process to all other processes. This function is blocking,
- * and it will only return after all the processes have received the data.
- * 
- * @function
- * @param {Box} data_ptr The data to broadcast.
- * @param {number} root The root process ID.
- * @returns {Promise<void>} A promise that resolves when the data has been broadcasted.
- */
-const MPI_Bcast = diagnostics.profile("MPI_Bcast", async (data_ptr, root) => {
-    if (config.my_pid === root)
-        node_router.send(config.neighbor_list, "MPI_Bcast", data_ptr.data);
-    else
-        data_ptr.data = (await node_router.receive(root, "MPI_Bcast")).data;
-});
-
-/**
- * MPI_Barrier is a synchronization function that blocks the processes until all processes have reached
- * the barrier. This function is blocking, and it will only return after all the processes have reached
- * the barrier.
- * 
- * @function
- * @returns {Promise<void>} A promise that resolves when all the processes have reached the barrier.
- */
-const MPI_Barrier = diagnostics.profile("MPI_Barrier", async () => {
-    if (config.my_pid === 0) {
-        await Promise.all(config.neighbor_list.map(async (pid) => {
-            await node_router.receive(pid, "MPI_Barrier_1");
-        }));
-        await node_router.send(config.neighbor_list, "MPI_Barrier_2", "");
-    } else {
-        await node_router.send([0], "MPI_Barrier_1", "");
-        await node_router.receive(0, "MPI_Barrier_2");
-    }
 });

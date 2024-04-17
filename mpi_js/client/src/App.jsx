@@ -8,18 +8,17 @@ const callback_box = { callback: () => { } };
 const GlobalContext = React.createContext(null);
 export default function App() {
     const [context, setContext] = React.useState({ a: "1" });
-    const setCallback = (callback) => { callback_box.callback = callback; };
 
     useEffect(() => {
-        const num_proc = 8;
-        const path = "./mpi_core/workspace/tests/test_mult.js";
+        const num_proc = 4;
+        const path = "./mpi_core/workspace/tests/test_bcast.js";
         new Job(callback_box, path, num_proc);
     }, []);
     return (
         <div>
             <GlobalContext.Provider value={{ context, setContext }}>
                 <TopBar />
-                <Smartdashboard setCallback={setCallback} />
+                <Smartdashboard callback_box={callback_box} />
             </GlobalContext.Provider>
         </div>
     );

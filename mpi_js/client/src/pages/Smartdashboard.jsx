@@ -42,9 +42,9 @@ const preprocess_data = (new_data) => {
     return result;
 }
 
-export default function Smartdashboard({ setCallback }) {
+export default function Smartdashboard({ callback_box }) {
     const [graphData, setGraphData] = React.useState({});
-    setCallback((d) => {
+    callback_box.callback = (d) => {
         // const example_data = {
         //     "pid": 6,
         //     "data": {
@@ -61,8 +61,7 @@ export default function Smartdashboard({ setCallback }) {
         //     }
         // };
         setGraphData(preprocess_data(d));
-        console.log("callback from mpi")
-    });
+    };
 
     const wrap_in_accordion = (title, contents) => {
         return (
