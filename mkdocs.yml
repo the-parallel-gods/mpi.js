@@ -28,4 +28,5 @@ copyright: >
 nav:
   - Home: home.md
   - Proposal: proposal.md
+  - Milestone: milestone.md
   - Docs: docs.md
