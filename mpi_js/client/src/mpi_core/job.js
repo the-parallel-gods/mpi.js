@@ -8,6 +8,7 @@ export class Job {
         interconnect_type = "ring",
         enable_smartdashboard = true,
         enable_diagnostics = true,
+        optimized = true,
     ) {
         this.smartdashboard_callback = smartdashboard_callback_box.callback;
         enable_smartdashboard |= enable_diagnostics;
@@ -30,6 +31,7 @@ export class Job {
             worker.postMessage({ command: "init_variable", name: "interconnect_type", value: interconnect_type });
             worker.postMessage({ command: "init_variable", name: "enable_smartdashboard", value: enable_smartdashboard });
             worker.postMessage({ command: "init_variable", name: "enable_diagnostics", value: enable_diagnostics });
+            worker.postMessage({ command: "init_variable", name: "optimized", value: optimized });
 
             worker.onmessage = this.on_message;
             workers.push(worker);

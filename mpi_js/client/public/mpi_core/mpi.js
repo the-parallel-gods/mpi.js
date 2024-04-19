@@ -5,6 +5,7 @@ importScripts('/mpi_core/mpi_request.js');
 
 importScripts('/mpi_core/point2point.js');
 importScripts('/mpi_core/bcast_barrier.js');
+importScripts('/mpi_core/reduce.js');
 
 /**
  * A box holds data. This is used to pass data between functions by reference.
@@ -24,6 +25,7 @@ importScripts('/mpi_core/bcast_barrier.js');
  *            neighbor_list: number[],
  *            local_routing_table: number[][],
  *            interconnect_type: ('crossbar'|'tree'|'ring'),
+ *            optimized: boolean,
  *          }} Config
  * 
  * @type {Config} config
