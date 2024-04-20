@@ -15,8 +15,13 @@ export class Job {
         num_proc = 8,
         enable_smartdashboard = true,
         enable_diagnostics = true,
+        optimized = true,
+        url = "localhost",
+        port = 9001
     ) {
-        enable_diagnostics &= enable_smartdashboard;
+        this.gr_id = -1;
+        this.smartdashboard_callback = smartdashboard_callback_box.callback;
+        enable_smartdashboard |= enable_diagnostics;
         console.log("Setting up job");
         let workers = []
         const node_list = Array.from({ length: num_proc }, (_, i) => [i]).flat();
@@ -43,7 +48,8 @@ export class Job {
             }
         }
         workers.forEach((w) => w.postMessage({ command: "init_finished" }));
-
+        
+        this.establish_gr_connection();
         console.log("Main UI Sending start message to worker")
         // workers.forEach((worker, idx) => worker.postMessage({ src_pid: -1, dest_pid_arr: [idx], data: "start" }));
         workers.forEach((worker, idx) => worker.postMessage(new Packet(-1, [idx], "start", null)));
@@ -64,6 +70,32 @@ export class Job {
             msg.dest_pid_arr.forEach((idx) => this.workers[idx].postMessage(new Packet(msg.src_pid, [idx], "reschedule", null)));
 
 
+        // forward via gr server
+    }
+
+    establish_gr_connection = async () => {
+        // console.log("Establishing connection with GR server");
+        // set up websocket connection with GR server on port 9001
+        const ws = new WebSocket(`ws://${this.url}:${this.port}`);
+    
+        ws.onopen = () => {
+            console.log("GR server connection established");
+        }
+    
+        ws.onmessage = async (event) => {
+            const message = JSON.parse(event.data);
+            if ("assigned_id" in message) {
+                this.gr_id = message.assigned_id;
+            } else {
+                // forward to node router
+                packet = message["data"];
+                dests = packet["dest_pid_arr"]
+
+                // console.log("Forwarding message to", dests);
+                // TODO: Fix translation of ids
+                dests.forEach((idx) => this.workers[idx].postMessage(message["data"]));
+            }
+        }
     }
 }
 
