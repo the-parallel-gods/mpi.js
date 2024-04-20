@@ -12,7 +12,7 @@ export default function App() {
     useEffect(() => {
         const num_proc = 4;
         const path = "./mpi_core/workspace/tests/test_bcast.js";
-        new Job(callback_box, path, num_proc);
+        new Job(callback_box, path, num_proc, window.location.host);
     }, []);
     return (
         <div>

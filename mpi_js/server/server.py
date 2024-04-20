@@ -9,6 +9,7 @@ import json
 # }
 
 client_map = dict()
+nr_to_gr = dict()
 clients = 0
 
 # Called for every client connecting (after handshake)
@@ -35,10 +36,24 @@ def client_left(client, server):
 def message_received(client, server, message):
 	message = json.loads(message)
 
-	gr_recv = int(message["gr_receiver"])
-	receiver = client_map[gr_recv]
-	
-	server.send_message(receiver, json.dumps(message)) # forward
+	if "nodes" in message:
+		# message is giving routing info update
+		gr_sender = int(message["gr_sender"])
+		nodes = int(message["nodes"])
+		baseline = len(nr_to_gr.keys())
+		for i in range(baseline, baseline + nodes):
+			nr_to_gr[i] = gr_sender
+
+		server.send_message(client, json.dumps({"nr_id_base" : baseline}))
+	elif "start" in message:
+		# on launch, send routing table to all gr's
+		server.send_message_to_all(json.dumps({"routing_table": nr_to_gr}))
+	else:
+		# normal message to be forwarded
+		gr_recv = int(message["gr_receiver"])
+		receiver = client_map[gr_recv]
+
+		server.send_message(receiver, json.dumps(message)) # forward
 
 
 PORT=9001
