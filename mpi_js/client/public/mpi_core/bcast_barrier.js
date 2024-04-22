@@ -12,12 +12,12 @@
 const MPI_Bcast = diagnostics.profile("MPI_Bcast", async (data_ptr, root) => {
     if (config.optimized) {
         if (config.my_pid === root)
-            await node_router.send(config.neighbor_list, "MPI_Bcast", data_ptr.data);
+            await node_router.send(config.all_neighbors, "MPI_Bcast", data_ptr.data);
         else
             data_ptr.data = (await node_router.receive(root, "MPI_Bcast")).data;
     } else {
         if (config.my_pid === root) {
-            await Promise.all(config.neighbor_list.map(async (pid) => {
+            await Promise.all(config.all_neighbors.map(async (pid) => {
                 await node_router.send([pid], "MPI_Bcast", data_ptr.data);
             }));
         } else {
@@ -41,7 +41,7 @@ const MPI_Bcast = diagnostics.profile("MPI_Bcast", async (data_ptr, root) => {
 const MPI_Ibcast = diagnostics.profile("MPI_Ibcast", async (data_ptr, root) => {
     if (config.optimized) {
         if (config.my_pid === root) {
-            await node_router.send(config.neighbor_list, "MPI_Bcast", data_ptr.data);
+            await node_router.send(config.all_neighbors, "MPI_Bcast", data_ptr.data);
             return new MPI_Request(true);
         }
 
@@ -64,7 +64,7 @@ const MPI_Ibcast = diagnostics.profile("MPI_Ibcast", async (data_ptr, root) => {
             });
     } else {
         if (config.my_pid === root) {
-            await Promise.all(config.neighbor_list.map(async (pid) => {
+            await Promise.all(config.all_neighbors.map(async (pid) => {
                 await node_router.send([pid], "MPI_Bcast", data_ptr.data);
             }));
             return new MPI_Request(true);
@@ -100,20 +100,20 @@ const MPI_Ibcast = diagnostics.profile("MPI_Ibcast", async (data_ptr, root) => {
 const MPI_Barrier = diagnostics.profile("MPI_Barrier", async () => {
     if (config.optimized) {
         if (config.my_pid === 0) {
-            await Promise.all(config.neighbor_list.map(async (pid) => {
+            await Promise.all(config.all_neighbors.map(async (pid) => {
                 await node_router.receive(pid, "MPI_Barrier_1");
             }));
-            await node_router.send(config.neighbor_list, "MPI_Barrier_2", "");
+            await node_router.send(config.all_neighbors, "MPI_Barrier_2", "");
         } else {
             await node_router.send([0], "MPI_Barrier_1", "");
             await node_router.receive(0, "MPI_Barrier_2");
         }
     } else {
         if (config.my_pid === 0) {
-            await Promise.all(config.neighbor_list.map(async (pid) => {
+            await Promise.all(config.all_neighbors.map(async (pid) => {
                 await node_router.receive(pid, "MPI_Barrier_1");
             }));
-            await Promise.all(config.neighbor_list.map(async (pid) => {
+            await Promise.all(config.all_neighbors.map(async (pid) => {
                 await node_router.send([pid], "MPI_Barrier_2", "");
             }));
         } else {

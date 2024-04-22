@@ -1,64 +1,66 @@
-from websocket_server import WebsocketServer
+from http.server import BaseHTTPRequestHandler, HTTPServer
 import json
-
-### Message Format is a dictionary with the following:
-# {
-# 	"gr_sender": "The sender's id",
-# 	"gr_receiver": "The receiver's id",
-#   "data": Holds node related info including the message to be sent,
-# }
-
-client_map = dict()
-nr_to_gr = dict()
-clients = 0
-
-# Called for every client connecting (after handshake)
-def new_client(client, server):
-	clients += 1
-
-	client_map[clients] = client
-
-	# send the client their assigned id
-	server.send_message(client, json.dumps({"client_id": clients}))
-
-# Called for every client disconnecting
-def client_left(client, server):
-	# Shit is most likely fucked
-	print("Client(%d) disconnected" % client['id'])
-
-	# delete associated data
-	del client_map[int(client['id'])]
-
-	server.send_message_to_all(json.dumps({"deleted_id": int(client['id'])})) # let clients know about the gr list being updated
+import os
+import time
+from threading import Thread
 
 
-# Called when a client sends a message
-def message_received(client, server, message):
-	message = json.loads(message)
+class handler(BaseHTTPRequestHandler):
+    def do_GET(self):
+        print(self.path)
+        root = __file__.replace("server.py", "")
+        if "/mpi_core/workspace" in self.path:
+            self.path = self.path.replace("mpi_core/workspace", "")
+            filename = root + "../../workspace" + self.path
+        else:
+            self.path = self.path.replace("/%PUBLIC_URL%", "")
+            filename = root + "../client/build" + self.path
+        if self.path.endswith("/"):
+            filename += "/index.html"
+        print(f"GET ", filename)
 
-	if "nodes" in message:
-		# message is giving routing info update
-		gr_sender = int(message["gr_sender"])
-		nodes = int(message["nodes"])
-		baseline = len(nr_to_gr.keys())
-		for i in range(baseline, baseline + nodes):
-			nr_to_gr[i] = gr_sender
+        self.send_response(200)
+        if filename[-4:] == ".css":
+            self.send_header("Content-type", "text/css")
+        elif filename[-5:] == ".json":
+            self.send_header("Content-type", "application/javascript")
+        elif filename[-3:] == ".js":
+            self.send_header("Content-type", "application/javascript")
+        elif filename[-4:] == ".ico":
+            self.send_header("Content-type", "image/x-icon")
+        elif filename[-4:] == ".svg":
+            self.send_header("Content-type", "image/svg+xml")
+        else:
+            self.send_header("Content-type", "text/html")
+        self.end_headers()
+        try:
+            with open(filename, "rb") as fh:
+                html = fh.read()
+                self.wfile.write(html)
+        except:
+            with open(root + "../client/build/index.html", "rb") as fh:
+                html = fh.read()
+                self.wfile.write(html)
 
-		server.send_message(client, json.dumps({"nr_id_base" : baseline}))
-	elif "start" in message:
-		# on launch, send routing table to all gr's
-		server.send_message_to_all(json.dumps({"routing_table": nr_to_gr}))
-	else:
-		# normal message to be forwarded
-		gr_recv = int(message["gr_receiver"])
-		receiver = client_map[gr_recv]
 
-		server.send_message(receiver, json.dumps(message)) # forward
+def startServer(requestOpenBrowser, port):
+    def openBrowser():
+        try:
+            import webbrowser
 
+            time.sleep(0.25)
+            if requestOpenBrowser:
+                print("Opening app at 127.0.0.1:" + str(port))
+                print(webbrowser.open("http://127.0.0.1:" + str(port)))
+            else:
+                print("\033[33mPlease open app at 127.0.0.1:" + str(port) + "\033[0m")
+        except:
+            print("Cannot open browser automatically. Please go to 127.0.0.1:" + str(port))
 
-PORT=9001
-server = WebsocketServer(port = PORT)
-server.set_fn_new_client(new_client)
-server.set_fn_client_left(client_left)
-server.set_fn_message_received(message_received)
-server.run_forever()
+    def createServer():
+        print("Starting server on 0.0.0.0:" + str(port))
+        with HTTPServer(("0.0.0.0", port), handler) as server:
+            server.serve_forever()
+
+    Thread(target=createServer).start()
+    Thread(target=openBrowser).start()

@@ -14,17 +14,18 @@ importScripts('/mpi_core/reduce.js');
 
 /**
  * @typedef {{
- *            num_proc: number, 
  *            my_pid: number,
- *            node_partition: number[][],
+ *            nr_offset: number,
+ *            local_num_proc: number, 
+ *            global_num_proc: number,
+ *            local_neighbors: number[],
+ *            all_neighbors: number[],
  *            local_channels: Record<number, MessagePort>,
  *            global_channel: MessagePort,
- *            channel_ports: Record<number, MessagePort>,
+ *            routing_table: number[],
+ *            interconnect_type: ('crossbar'|'tree'|'ring'),
  *            enable_smartdashboard: boolean,
  *            enable_diagnostics: boolean,
- *            neighbor_list: number[],
- *            local_routing_table: number[][],
- *            interconnect_type: ('crossbar'|'tree'|'ring'),
  *            optimized: boolean,
  *          }} Config
  * 
@@ -74,13 +75,11 @@ const finish_setup = async () => {
         config.num_proc,
         config.my_pid,
         config.node_partition,
-        config.local_routing_table,
+        config.routing_table,
         config.local_channels,
         config.global_channel,
-        config.channel_ports,
     );
-    config.neighbor_list = config.node_partition.flat().filter((pid) => pid !== config.my_pid);
-    config.my_pid === 0 && console.log(config.my_pid, "Final config", config);
+    config.my_pid - config.nr_offset === 0 && console.log(config.my_pid, "Final config", config);
     smartdashboard = new SmartDashboard(config.enable_smartdashboard, async (delta) => {
         await node_router.send([config.my_pid], "MPI_Smartdashboard", delta);
     });
@@ -89,10 +88,8 @@ const finish_setup = async () => {
 
     console.warn(`[${config.my_pid}] MPI core ready`);
     await MPI_Barrier();
-    node_router.receive(-1, "start").then(async (_) => {
-        config.my_pid === 0 && console.warn("STARTING USER PROGRAM");
-        await user_main_fn();
-    });
+    console.log(`[${config.my_pid}] Starting user code`)
+    await user_main_fn();
 }
 
 /**
@@ -145,7 +142,7 @@ const MPI_Comm_rank = async (rank_ptr) => {
  * @param {Box} size_ptr A box to store the number of processes.
  */
 const MPI_Comm_size = async (size_ptr) => {
-    size_ptr.data = config.num_proc;
+    size_ptr.data = config.global_num_proc;
 }
 
 /**

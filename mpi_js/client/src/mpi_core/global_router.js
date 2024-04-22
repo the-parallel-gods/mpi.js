@@ -1,41 +1,63 @@
 import { Packet } from "./packet.js";
 export class GlobalRouter {
-    constructor(url) {
-        this.url = url;
+    constructor() { }
 
-        this.ws = new WebSocket(`ws://${this.url}:9001`);
+    init(url, set_gr_id_callback) {
+        return new Promise((resolve) => {
+            const ws_url = `ws://${url}:8001`;
+            console.log("connecting to", ws_url);
 
-        ws.onopen = () => {
-            console.log("GR server connection established");
-        }
+            this.ws = new WebSocket(ws_url);
 
-        ws.onmessage = async (event) => {
-            const message = JSON.parse(event.data);
-            if ("assigned_id" in message) {
-                this.gr_id = message.assigned_id;
-            } else if ("nr_id_base" in message) {
-                this.nr_id_base = message.nr_id_base;
-            } else if ("routing_table" in message) {
-                this.routing_table = message.routing_table;
-                resolve();
-            } else {
-                // forward to node router
-                const packet = message.data;
-                const dests = packet.dest_pid_arr;
-                dests.forEach((idx) => {
-                    const w = this.workers[idx - this.nr_id_base];
-                    const new_message = new Packet(packet.src_pid, [idx], packet.tag, packet.data);
-                    w.postMessage(new_message);
-                });
+            this.ws.onopen = () => {
+                console.log("God node connection established");
             }
-        }
+
+            this.ws.onclose = () => {
+                alert("Disconnected from God Server. Please reload window.")
+                window.location.reload();
+                set_gr_id_callback(-2);
+            }
+
+            this.ws.onmessage = async (event) => {
+                const message = JSON.parse(event.data);
+                // console.log("gr message received", message)
+                if (message.gr_id !== undefined) {
+                    this.gr_id = message.gr_id;
+                    set_gr_id_callback(this.gr_id);
+                    console.log("this.gr_id received", this.gr_id);
+                } else if (message.routing_table !== undefined) {
+                    this.routing_table = message.routing_table;
+                    this.program_path = message.program_path;
+                    this.num_total_nodes = Object.keys(this.routing_table).length;
+                    this.nr_offset = Object.keys(this.routing_table)
+                        .filter((key) => this.routing_table[key] === this.gr_id)
+                        .reduce((acc, val) => Math.min(acc, val), 1e8);
+                    console.log("nr_offset", this.nr_offset, "num_total_nodes", this.num_total_nodes, "program_path", this.program_path, "routing_table", this.routing_table);
+                    resolve(this);
+                } else {
+                    const packet = message.data;
+                    packet.dest_pid_arr.forEach((dest_pid) => {
+                        const nr_message = new Packet(packet.src_pid, [dest_pid], packet.tag, packet.data);
+                        this.workers[dest_pid].postMessage(nr_message);
+                    });
+                }
+            }
+        });
+    }
+
+    start(num_proc, program_path) {
+        this.ws.send(JSON.stringify({ gr_src: this.gr_id, num_proc, program_path }));
     }
 
     set_workers(workers) {
         this.workers = workers;
     }
 
-    send_to_gr = (message) => {
-        this.ws.send(JSON.stringify(message));
+    send_to_gr = (msg) => {
+        let gr_dest_set = new Set();
+        msg.dest_pid_arr.forEach((pid) => { gr_dest_set.add(this.routing_table[pid]); });
+        const gr_dest_arr = Array.from(gr_dest_set);
+        this.ws.send(JSON.stringify({ gr_src: this.gr_id, gr_dest_arr, data: msg }));
     }
 }

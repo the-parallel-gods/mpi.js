@@ -25,21 +25,19 @@ class NodeRouter {
      * @param {number} num_proc number of workers
      * @param {number} my_pid the pid of this worker
      * @param {number[][]} node_partition partition of workers on each node
-     * @param {MessagePort[]} local_channels channels to peers on the my local node
+     * @param {Record<number, MessagePort>} local_channels channels to peers on the my local node
      * @param {WorkerGlobalScope} global_channel channel to main manager on this node
-     * @param {number[][]} local_edges adjacency list of local channels
      */
-    constructor(num_proc, my_pid, node_partition, routing_table, local_channels, global_channel, local_edges) {
+    constructor(num_proc, my_pid, node_partition, routing_table, local_channels, global_channel) {
         this.num_proc = num_proc;
         this.my_pid = my_pid;
         this.node_partition = node_partition;
         this.routing_table = routing_table;
         this.local_channels = local_channels;
         this.global_channel = global_channel;
-        this.local_edges = local_edges;
         this.buffer = new ProducerConsumer();
         this.global_channel.onmessage = this.#receive_or_forward;
-        this.local_channels.forEach((channel) => { channel.onmessage = this.#receive_or_forward; });
+        Object.values(this.local_channels).forEach((channel) => { channel.onmessage = this.#receive_or_forward; });
     }
 
     /**
@@ -66,6 +64,7 @@ class NodeRouter {
                 router_map[router_pid].push(dest_pid);
             }
             await Promise.all(Object.keys(router_map).map((router_pid) => {
+                router_pid = parseInt(router_pid);
                 // console.log(`FWRD: {${event.data.tag}} [${event.data.src_pid}] --> (${router_pid}) --> [${router_map[router_pid]}]`);
                 diagnostics.add_send();
                 const packet = new Packet(event.data.src_pid, router_map[router_pid], event.data.tag, event.data.data);
@@ -96,10 +95,11 @@ class NodeRouter {
             router_map[router_pid].push(dest_pid);
         }
         await Promise.all(Object.keys(router_map).map((router_pid) => {
+            router_pid = parseInt(router_pid);
             // console.log(`SEND: {${tag}} [${this.my_pid}] --> (${router_pid}) --> [${router_map[router_pid]}]`);
             diagnostics.add_send();
             const packet = new Packet(this.my_pid, router_map[router_pid], tag, data);
-            if (router_pid == -1) this.global_channel.postMessage(packet);
+            if (router_pid === config.my_pid) this.global_channel.postMessage(packet);
             else this.local_channels[router_pid].postMessage(packet);
         }));
     }
