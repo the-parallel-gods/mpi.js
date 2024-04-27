@@ -5,8 +5,11 @@ importScripts('/mpi_core/mpi_request.js');
 importScripts('/mpi_core/utils.js');
 
 importScripts('/mpi_core/point2point.js');
-importScripts('/mpi_core/bcast_barrier.js');
+importScripts('/mpi_core/barrier.js');
+importScripts('/mpi_core/bcast.js');
 importScripts('/mpi_core/reduce.js');
+importScripts('/mpi_core/gather.js');
+importScripts('/mpi_core/scatter.js');
 
 /**
  * A box holds data. This is used to pass data between functions by reference.
