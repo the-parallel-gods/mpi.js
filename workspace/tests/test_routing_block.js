@@ -20,4 +20,5 @@ main(async () => {
     }
 
     console.log("rank", rank_ptr.data, "done");
+    await MPI_Finalize();
 }, self);
