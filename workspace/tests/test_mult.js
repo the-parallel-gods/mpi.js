@@ -113,4 +113,5 @@ main(async () => {
         outputs.data[iteration_idx] = approxSqrt3(inputs.data[iteration_idx]);
         flush_telemetry();
     }
+    await MPI_Finalize();
 }, self);

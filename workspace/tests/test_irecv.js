@@ -34,7 +34,7 @@ main(async () => {
         await MPI_Send(data_ptr, 0);
     }
     console.log("rank", rank_ptr.data, "finished", recv_ptr.data);
-
+    await MPI_Finalize();
 }, self);
 
 // main(async () => {

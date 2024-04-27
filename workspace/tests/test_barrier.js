@@ -21,4 +21,5 @@ main(async () => {
     }
     const end_time = performance.now();
     console.log("rank", rank_ptr.data, "time", end_time - start_time, "ms");
+    await MPI_Finalize();
 }, self);

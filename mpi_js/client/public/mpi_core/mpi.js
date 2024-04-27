@@ -159,6 +159,7 @@ const MPI_Init = async () => {
  */
 const MPI_Finalize = async () => {
     await flush_telemetry();
+    await node_router.send([config.my_pid], "MPI_Finalize", "");
 }
 
 const MPI_Abort = async () => {
