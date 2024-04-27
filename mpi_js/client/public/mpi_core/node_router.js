@@ -24,14 +24,12 @@ class NodeRouter {
     /**
      * @param {number} num_proc number of workers
      * @param {number} my_pid the pid of this worker
-     * @param {number[][]} node_partition partition of workers on each node
      * @param {Record<number, MessagePort>} local_channels channels to peers on the my local node
      * @param {WorkerGlobalScope} global_channel channel to main manager on this node
      */
-    constructor(num_proc, my_pid, node_partition, routing_table, local_channels, global_channel) {
+    constructor(num_proc, my_pid, routing_table, local_channels, global_channel) {
         this.num_proc = num_proc;
         this.my_pid = my_pid;
-        this.node_partition = node_partition;
         this.routing_table = routing_table;
         this.local_channels = local_channels;
         this.global_channel = global_channel;
@@ -140,19 +138,6 @@ class NodeRouter {
      */
     peek = async (src_pid = null, tag = null) => {
         return this.buffer.peek(src_pid, tag);
-    }
-
-    /**
-     * Broadcast a packet to all other workers. This is a non-blocking function that
-     * returns immediately after sending the packet. The receiving workers can
-     * only receive this packet if they are listening for packets with the same tag or ANY tag.
-     * 
-     * @param {any} data The data of the packet.
-     * @param {string} tag The tag of the packet. Default is "NA".
-     * @returns {Promise<void>} A promise that resolves when the packet is sent.
-     */
-    bcast = async (data, tag = "NA") => {
-        await this.send(this.node_partition.flat(Infinity).filter((pid) => pid !== this.my_pid), tag, data);
     }
 }
 

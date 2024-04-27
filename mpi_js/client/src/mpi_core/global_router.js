@@ -28,12 +28,15 @@ export class GlobalRouter {
                     console.log("this.gr_id received", this.gr_id);
                 } else if (message.routing_table !== undefined) {
                     this.routing_table = message.routing_table;
+                    this.optimized = message.optimized;
                     this.program_path = message.program_path;
                     this.num_total_nodes = Object.keys(this.routing_table).length;
-                    this.nr_offset = Object.keys(this.routing_table)
-                        .filter((key) => this.routing_table[key] === this.gr_id)
-                        .reduce((acc, val) => Math.min(acc, val), 1e8);
-                    console.log("nr_offset", this.nr_offset, "num_total_nodes", this.num_total_nodes, "program_path", this.program_path, "routing_table", this.routing_table);
+                    this.nr_offsets = [0];
+                    for (let i = 1; i < Object.keys(this.routing_table).length; i++)
+                        if (this.routing_table[i] !== this.routing_table[i - 1])
+                            this.nr_offsets.push(i);
+                    this.nr_offset = this.nr_offsets[this.gr_id];
+                    console.log("optimized", this.optimized, "nr_offsets", this.nr_offsets, "nr_offset", this.nr_offset, "num_total_nodes", this.num_total_nodes, "program_path", this.program_path, "routing_table", this.routing_table);
                     resolve(this);
                 } else {
                     const packet = message.data;
@@ -47,8 +50,8 @@ export class GlobalRouter {
         });
     }
 
-    start(num_proc, program_path) {
-        this.ws.send(JSON.stringify({ gr_src: this.gr_id, num_proc, program_path }));
+    start(num_proc, program_path, optimized) {
+        this.ws.send(JSON.stringify({ gr_src: this.gr_id, num_proc, program_path, optimized }));
     }
 
     set_workers(workers) {

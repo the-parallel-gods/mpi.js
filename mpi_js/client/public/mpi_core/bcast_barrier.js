@@ -108,14 +108,26 @@ const MPI_Ibcast = diagnostics.profile("MPI_Ibcast", async (data_ptr, root) => {
  */
 const MPI_Barrier = diagnostics.profile("MPI_Barrier", async () => {
     if (config.optimized) {
-        if (config.my_pid === 0) {
-            await Promise.all(config.all_neighbors.map(async (pid) => {
+        if (config.my_pid === config.my_nr_offset) {
+            await Promise.all(config.local_neighbors.map(async (pid) => {
                 await node_router.receive(pid, "MPI_Barrier_1");
             }));
-            await node_router.send(config.all_neighbors, "MPI_Barrier_2", "");
+
+            if (config.global_num_proc !== config.local_num_proc) {
+                if (config.my_pid === 0) {
+                    await Promise.all(config.gr_neighbors.map(async (pid) => {
+                        await node_router.receive(pid, "MPI_Barrier_global_1");
+                    }));
+                    await node_router.send(config.gr_neighbors, "MPI_Barrier_global_2", "");
+                } else {
+                    await node_router.send([0], "MPI_Barrier_global_1", "");
+                    await node_router.receive(0, "MPI_Barrier_global_2");
+                }
+            }
+            await node_router.send(config.local_neighbors, "MPI_Barrier_2", "");
         } else {
-            await node_router.send([0], "MPI_Barrier_1", "");
-            await node_router.receive(0, "MPI_Barrier_2");
+            await node_router.send([config.my_nr_offset], "MPI_Barrier_1", "");
+            await node_router.receive(config.my_nr_offset, "MPI_Barrier_2");
         }
     } else {
         if (config.my_pid === 0) {

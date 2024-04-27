@@ -16,7 +16,7 @@ let global_router, start_job_fn;
 export default function App() {
     const [context, setContext] = React.useState({
         gr_id: -1,
-        program_path: "tests/test_bcast.js",
+        program_path: "tests/test_barrier.js",
         num_proc: 4,
         interconnect: "crossbar",
         enable_smartdashboard: true,
@@ -32,7 +32,6 @@ export default function App() {
                 context.interconnect,
                 context.enable_smartdashboard,
                 context.enable_diagnostics,
-                context.optimized
             );
         };
     }, [context]);
@@ -48,7 +47,7 @@ export default function App() {
     }, []);
 
     const on_start_button = () => {
-        global_router.start(context.num_proc, context.program_path);
+        global_router.start(context.num_proc, context.program_path, context.optimized);
         console.log("Start requested");
     }
     return (
@@ -83,9 +82,10 @@ export default function App() {
                     <FormControlLabel sx={{ m: 3 }} control={<Switch defaultChecked />} label="Enable Diagnostics"
                         value={context.enable_diagnostics} onChange={(e) => setContext({ ...context, enable_diagnostics: e.target.checked })}
                     />
-                    <FormControlLabel sx={{ m: 3 }} control={<Switch defaultChecked />} label="Auto optimize"
-                        value={context.optimized} onChange={(e) => setContext({ ...context, optimized: e.target.checked })}
-                    />
+                    {(context.gr_id === 0) ?
+                        <FormControlLabel sx={{ m: 3 }} control={<Switch defaultChecked />} label="Auto optimize"
+                            value={context.optimized} onChange={(e) => setContext({ ...context, optimized: e.target.checked })}
+                        /> : ""}
                     <Box sx={{ m: 3 }}>
                         <Button variant="outlined" size="large" endIcon={<PlayArrowIcon />} onClick={on_start_button}>
                             start

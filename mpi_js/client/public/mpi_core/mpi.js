@@ -15,12 +15,13 @@ importScripts('/mpi_core/reduce.js');
 /**
  * @typedef {{
  *            my_pid: number,
- *            gr_id: number,
- *            nr_id: number,
- *            nr_offset: number,
+ *            my_gr_id: number,
+ *            my_nr_id: number,
+ *            my_nr_offset: number,
  *            local_num_proc: number, 
  *            global_num_proc: number,
  *            local_neighbors: number[],
+ *            gr_neighbors: number[],
  *            all_neighbors: number[],
  *            local_channels: Record<number, MessagePort>,
  *            global_channel: MessagePort,
@@ -73,15 +74,14 @@ const flush_telemetry = async () => {
  * the initial configuration is received.
  */
 const finish_setup = async () => {
+    console.log(config.my_pid, "Final config", config);
     node_router = new NodeRouter(
-        config.num_proc,
+        config.local_num_proc,
         config.my_pid,
-        config.node_partition,
         config.routing_table,
         config.local_channels,
         config.global_channel,
     );
-    config.my_pid - config.nr_offset === 0 && console.log(config.my_pid, "Final config", config);
     smartdashboard = new SmartDashboard(config.enable_smartdashboard, async (delta) => {
         await node_router.send([config.my_pid], "MPI_Smartdashboard", delta);
     });
@@ -90,7 +90,6 @@ const finish_setup = async () => {
 
     console.warn(`[${config.my_pid}] MPI core ready`);
     await MPI_Barrier();
-    console.log(`[${config.my_pid}] Starting user code`)
     await user_main_fn();
 }
 
@@ -159,6 +158,11 @@ const MPI_Init = async () => {
  */
 const MPI_Finalize = async () => {
     await flush_telemetry();
+}
+
+const MPI_Abort = async () => {
+    await flush_telemetry();
+    await node_router.send([config.my_pid], "abort", "");
 }
 
 /**

@@ -9,14 +9,15 @@ export class Job {
         interconnect_type = "ring",
         enable_smartdashboard = true,
         enable_diagnostics = true,
-        optimized = true,
     ) {
         this.global_router = global_router;
         this.program_path = "./mpi_core/workspace/" + this.global_router.program_path;
         this.gr_routing_table = this.global_router.routing_table;
         this.my_gr_id = this.global_router.gr_id;
         this.nr_offset = this.global_router.nr_offset;
+        this.nr_offsets = this.global_router.nr_offsets;
         this.num_total_nodes = this.global_router.num_total_nodes;
+        this.optimized = this.global_router.optimized;
 
         this.smartdashboard_callback = smartdashboard_callback_box.callback;
         enable_smartdashboard |= enable_diagnostics;
@@ -49,19 +50,20 @@ export class Job {
             i = parseInt(i);
             workers[i] = new Worker(this.program_path);
             workers[i].postMessage({ command: "init_variable", name: "my_pid", value: i });
-            workers[i].postMessage({ command: "init_variable", name: "gr_id", value: this.my_gr_id });
-            workers[i].postMessage({ command: "init_variable", name: "nr_id", value: i - this.nr_offset });
-            workers[i].postMessage({ command: "init_variable", name: "nr_offset", value: this.nr_offset });
+            workers[i].postMessage({ command: "init_variable", name: "my_gr_id", value: this.my_gr_id });
+            workers[i].postMessage({ command: "init_variable", name: "my_nr_id", value: i - this.nr_offset });
+            workers[i].postMessage({ command: "init_variable", name: "my_nr_offset", value: this.nr_offset });
             workers[i].postMessage({ command: "init_variable", name: "local_num_proc", value: num_proc });
             workers[i].postMessage({ command: "init_variable", name: "global_num_proc", value: this.num_total_nodes });
-            workers[i].postMessage({ command: "init_variable", name: "local_neighbors", value: local_nodes.filter((node) => node !== parseInt(i)) });
-            workers[i].postMessage({ command: "init_variable", name: "all_neighbors", value: global_nodes.filter((node) => node !== parseInt(i)) });
+            workers[i].postMessage({ command: "init_variable", name: "local_neighbors", value: local_nodes.filter((node) => node !== i) });
+            workers[i].postMessage({ command: "init_variable", name: "gr_neighbors", value: this.nr_offsets.filter((node) => node !== this.nr_offsets[this.my_gr_id]) });
+            workers[i].postMessage({ command: "init_variable", name: "all_neighbors", value: global_nodes.filter((node) => node !== i) });
             workers[i].postMessage({ command: "init_variable", name: "local_channels", value: {} });
             workers[i].postMessage({ command: "init_variable", name: "routing_table", value: routing_tables[i] });
             workers[i].postMessage({ command: "init_variable", name: "interconnect_type", value: interconnect_type });
             workers[i].postMessage({ command: "init_variable", name: "enable_smartdashboard", value: enable_smartdashboard });
             workers[i].postMessage({ command: "init_variable", name: "enable_diagnostics", value: enable_diagnostics });
-            workers[i].postMessage({ command: "init_variable", name: "optimized", value: optimized });
+            workers[i].postMessage({ command: "init_variable", name: "optimized", value: this.optimized });
             workers[i].onmessage = this.on_nr_message;
         });
 
@@ -85,6 +87,10 @@ export class Job {
             msg.dest_pid_arr.forEach((idx) => this.workers[idx].postMessage(new Packet(msg.src_pid, [idx], "reschedule", null)));
         } else if (msg.tag === "MPI_Smartdashboard") {
             this.smartdashboard_callback({ pid: msg.src_pid, data: msg.data });
+        } else if (msg.tag === "abort") {
+            Object.keys(this.workers).forEach((idx) => this.workers[idx].terminate());
+            console.log("MPI_ABORT");
+            window.location.reload();
         } else {
             this.global_router.send_to_gr(msg);
         }

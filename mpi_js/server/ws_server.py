@@ -36,7 +36,7 @@ client_id_map = {}
 clients = dict()
 num_procs = dict()
 state = SETUP
-program_path = ""
+config = {}
 send_perf, recv_perf = None, None
 
 
@@ -52,7 +52,7 @@ def new_client(client, server):
 
 
 def client_left(client, server):
-    global state, clients, num_procs, client_id_map, program_path
+    global state, clients, num_procs, client_id_map, config
     if state == RUNNING:
         print(f"Client disconnected. MPI Abort.")
         recv_perf.flush()
@@ -61,7 +61,7 @@ def client_left(client, server):
         clients = dict()
         num_procs = dict()
         client_id_map = dict()
-        program_path = ""
+        config = {}
         server.disconnect_clients_gracefully()
         server.allow_new_connections()
     else:
@@ -77,7 +77,7 @@ def client_left(client, server):
 
 
 def message_received(client, server, message_str):
-    global state, num_procs, program_path
+    global state, num_procs, config
     message = json.loads(message_str)
     if state == RUNNING:
         gr_dest_arr = message["gr_dest_arr"]
@@ -102,13 +102,22 @@ def message_received(client, server, message_str):
                         nr_to_gr[i] = gr_src
                 state = RUNNING
                 server.deny_new_connections()
-                server.send_message_to_all(json.dumps({"routing_table": nr_to_gr, "program_path": program_path}))
+                server.send_message_to_all(
+                    json.dumps(
+                        {
+                            "routing_table": nr_to_gr,
+                            "program_path": config["program_path"],
+                            "optimized": config["optimized"],
+                        }
+                    )
+                )
 
         if "num_proc" in message:  # message is giving routing info update
             gr_src, num_proc = message["gr_src"], message["num_proc"]
             num_procs[gr_src] = num_proc
             if gr_src == 0:
-                program_path = message["program_path"]
+                config["program_path"] = message["program_path"]
+                config["optimized"] = message["optimized"]
             print(f"Client [{gr_src}] registered {num_proc} processes.")
             start_when_ready()
 
