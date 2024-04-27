@@ -17,12 +17,9 @@ main(async () => {
 
     const start_time = performance.now();
     console.log("start_time", start_time, "rank", rank_ptr.data)
-    for (let j = 0; j < 1000; j++) {
+    for (let j = 0; j < 10000; j++) {
         const data_ptr = box(rank_ptr.data);
-        for (let i = 0; i < size_ptr.data; i++) {
-            data_ptr.data = rank_ptr.data;
-            await MPI_Bcast(data_ptr, i);
-        }
+        await MPI_Bcast(data_ptr, 0);
     }
     const end_time = performance.now();
     console.log("rank", rank_ptr.data, "time", end_time - start_time, "ms");

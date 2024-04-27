@@ -24,35 +24,53 @@ class NodeRouter {
     /**
      * @param {number} num_proc number of workers
      * @param {number} my_pid the pid of this worker
-     * @param {number[][]} node_partition partition of workers on each node
-     * @param {MessagePort[]} local_channels channels to peers on the my local node
+     * @param {Record<number, MessagePort>} local_channels channels to peers on the my local node
      * @param {WorkerGlobalScope} global_channel channel to main manager on this node
-     * @param {number[][]} local_edges adjacency list of local channels
      */
-    constructor(num_proc, my_pid, node_partition, local_channels, global_channel, local_edges) {
+    constructor(num_proc, my_pid, routing_table, local_channels, global_channel) {
         this.num_proc = num_proc;
         this.my_pid = my_pid;
-        this.node_partition = node_partition;
+        this.routing_table = routing_table;
         this.local_channels = local_channels;
         this.global_channel = global_channel;
-        this.local_edges = local_edges;
-        this.hops_table = []
-        // populate hops table in constructor? 
-
-        // bfs on local_edges to populate hops_table
-        // Write all shortest paths from every node to every other node
         this.buffer = new ProducerConsumer();
-        this.global_channel.onmessage = (event) => { this.buffer.produce(event.data); }
-        this.local_channels.forEach((channel) => {
-            channel.onmessage = (event) => { this.buffer.produce(event.data); }
-        });
+        this.global_channel.onmessage = this.#receive_or_forward;
+        Object.values(this.local_channels).forEach((channel) => { channel.onmessage = this.#receive_or_forward; });
     }
 
     /**
-     * @todo Finish this function. Do not call yet.
+     * This is the main function that receives packets from anywhere. 
+     * It first checks if the packet is for this worker. If it is, it will
+     * consume the packet. If the packet also needs to be forwarded, it will
+     * forward the packet to the next hop.
+     * 
+     * When forwarding to the next hop, it will regroup the destination pids
+     * by the next router to eliminate redundant packets with the same message.
+     * 
+     * @param {MessageEvent} event
      */
-    num_hops = async (dest_pid) => {
-        return this.hops_table[dest_pid];
+    #receive_or_forward = async (event) => {
+        diagnostics.add_recv();
+        let my_pid_idx = event.data.dest_pid_arr.indexOf(this.my_pid);
+        my_pid_idx !== -1 && event.data.dest_pid_arr.splice(my_pid_idx, 1);
+
+        if (event.data.dest_pid_arr.length > 0) {
+            let router_map = {};
+            for (const dest_pid of event.data.dest_pid_arr) {
+                const router_pid = this.routing_table[dest_pid];
+                if (!router_map[router_pid]) router_map[router_pid] = [];
+                router_map[router_pid].push(dest_pid);
+            }
+            await Promise.all(Object.keys(router_map).map((router_pid) => {
+                router_pid = parseInt(router_pid);
+                // console.log(`FWRD: {${event.data.tag}} [${event.data.src_pid}] --> (${router_pid}) --> [${router_map[router_pid]}]`);
+                diagnostics.add_send();
+                const packet = new Packet(event.data.src_pid, router_map[router_pid], event.data.tag, event.data.data);
+                this.local_channels[router_pid].postMessage(packet);
+            }));
+        }
+
+        my_pid_idx !== -1 && await this.buffer.produce(event.data);
     }
 
     /**
@@ -60,16 +78,27 @@ class NodeRouter {
      * returns immediately after sending the packet. The receiving worker can
      * only receive this packet if it is listening for packets with the same tag or ANY tag.
      * 
+     * Send to your own pid if you want to send to the global router.
+     * 
      * @param {number[]} dest_pid_arr The destination pids of the packet.
      * @param {string} tag The tag of the packet. Default is "NA".
      * @param {any} data The data of the packet. Default is "".
      * @returns {Promise<void>} A promise that resolves when the packet is sent.
      */
     send = async (dest_pid_arr, tag = "NA", data = "") => {
-        await Promise.all(dest_pid_arr.map((dest_pid) => {
-            const packet = new Packet(this.my_pid, dest_pid_arr, tag, data);
-            if (dest_pid === -1 || dest_pid === this.my_pid) this.global_channel.postMessage(packet);
-            else this.local_channels[dest_pid].postMessage(packet);
+        let router_map = {};
+        for (const dest_pid of dest_pid_arr) {
+            const router_pid = this.routing_table[dest_pid];
+            if (!router_map[router_pid]) router_map[router_pid] = [];
+            router_map[router_pid].push(dest_pid);
+        }
+        await Promise.all(Object.keys(router_map).map((router_pid) => {
+            router_pid = parseInt(router_pid);
+            // console.log(`SEND: {${tag}} [${this.my_pid}] --> (${router_pid}) --> [${router_map[router_pid]}]`);
+            diagnostics.add_send();
+            const packet = new Packet(this.my_pid, router_map[router_pid], tag, data);
+            if (router_pid === config.my_pid) this.global_channel.postMessage(packet);
+            else this.local_channels[router_pid].postMessage(packet);
         }));
     }
 
@@ -109,19 +138,6 @@ class NodeRouter {
      */
     peek = async (src_pid = null, tag = null) => {
         return this.buffer.peek(src_pid, tag);
-    }
-
-    /**
-     * Broadcast a packet to all other workers. This is a non-blocking function that
-     * returns immediately after sending the packet. The receiving workers can
-     * only receive this packet if they are listening for packets with the same tag or ANY tag.
-     * 
-     * @param {any} data The data of the packet.
-     * @param {string} tag The tag of the packet. Default is "NA".
-     * @returns {Promise<void>} A promise that resolves when the packet is sent.
-     */
-    bcast = async (data, tag = "NA") => {
-        await this.send(this.node_partition.flat(Infinity).filter((pid) => pid !== this.my_pid), tag, data);
     }
 }
 

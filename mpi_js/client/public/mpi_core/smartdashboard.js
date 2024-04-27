@@ -54,7 +54,7 @@ class SmartDashboard {
         this.delta[name].data.push(value);
         // console.log("SmartDashboard updated", name, value);
         if (performance.now() - this.last_flush > this.period) {
-            this.flush();
+            this.flush(false);
         }
     }
 
@@ -123,31 +123,16 @@ class SmartDashboard {
      * So if variables are not updated frequently, some data may not be flushed.
      * Use this function to force a flush.
      * 
-     * This function does not respect the min period.
+     * A force flush does not respect the min period.
+     * A normal flush respects the min period, and can be called as frequently as you want.
      */
-    flush() {
+    flush(force = false) {
         if (!this.enabled) return;
+        if (!force && performance.now() - this.last_flush < this.period) return;
         this.last_flush = performance.now();
         if (Object.keys(this.delta).length === 0) return;
         this.send_msg_fn(this.delta);
-        console.log("SmartDashboard sent", this.delta);
+        // console.log("SmartDashboard sent", this.delta);
         this.delta = {};
-    }
-
-    /**
-     * This function is used to soft flush the SmartDashboard.
-     * 
-     * Every time a variable is updated, SmartDashboard will try to flush the data,
-     * but it will only flush if the period has passed.
-     * 
-     * So if variables are not updated frequently, some data may not be flushed.
-     * Use this function to force a flush.
-     * 
-     * This function respects the min period. You can call this function as frequently as you want.
-     */
-    soft_flush() {
-        if (performance.now() - this.last_flush > this.period) {
-            this.flush();
-        }
     }
 }

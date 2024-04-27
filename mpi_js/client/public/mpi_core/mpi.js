@@ -1,9 +1,11 @@
+importScripts('/mpi_core/diagnostics.js');
 importScripts('/mpi_core/node_router.js');
 importScripts('/mpi_core/smartdashboard.js');
-importScripts('/mpi_core/diagnostics.js');
 importScripts('/mpi_core/mpi_request.js');
 
-importScripts('/mpi_core/basics.js');
+importScripts('/mpi_core/point2point.js');
+importScripts('/mpi_core/bcast_barrier.js');
+importScripts('/mpi_core/reduce.js');
 
 /**
  * A box holds data. This is used to pass data between functions by reference.
@@ -11,15 +13,24 @@ importScripts('/mpi_core/basics.js');
  */
 
 /**
- * @typedef {{num_proc: number, 
+ * @typedef {{
  *            my_pid: number,
- *            node_partition: number[][],
+ *            my_gr_id: number,
+ *            my_nr_id: number,
+ *            my_nr_offset: number,
+ *            local_num_proc: number, 
+ *            global_num_proc: number,
+ *            local_neighbors: number[],
+ *            gr_neighbors: number[],
+ *            all_neighbors: number[],
  *            local_channels: Record<number, MessagePort>,
  *            global_channel: MessagePort,
- *            channel_ports: Record<number, MessagePort>,
+ *            routing_table: number[],
+ *            interconnect_type: ('crossbar'|'tree'|'ring'),
  *            enable_smartdashboard: boolean,
  *            enable_diagnostics: boolean,
- *            neighbor_list: number[]}} Config
+ *            optimized: boolean,
+ *          }} Config
  * 
  * @type {Config} config
  */
@@ -63,21 +74,23 @@ const flush_telemetry = async () => {
  * the initial configuration is received.
  */
 const finish_setup = async () => {
-    node_router = new NodeRouter(config.num_proc, config.my_pid, config.node_partition, config.local_channels, config.global_channel, config.channel_ports);
-    config.neighbor_list = config.node_partition.flat().filter((pid) => pid !== config.my_pid);
-    config.my_pid === 0 && console.log(config.my_pid, "Final config", config);
+    console.log(config.my_pid, "Final config", config);
+    node_router = new NodeRouter(
+        config.local_num_proc,
+        config.my_pid,
+        config.routing_table,
+        config.local_channels,
+        config.global_channel,
+    );
     smartdashboard = new SmartDashboard(config.enable_smartdashboard, async (delta) => {
-        await node_router.send([-1], "MPI_Smartdashboard", delta);
+        await node_router.send([config.my_pid], "MPI_Smartdashboard", delta);
     });
 
     diagnostics.configure(smartdashboard, config.enable_diagnostics);
 
     console.warn(`[${config.my_pid}] MPI core ready`);
     await MPI_Barrier();
-    node_router.receive(-1, "start").then(async (_) => {
-        config.my_pid === 0 && console.warn("STARTING USER PROGRAM");
-        await user_main_fn();
-    });
+    await user_main_fn();
 }
 
 /**
@@ -130,7 +143,7 @@ const MPI_Comm_rank = async (rank_ptr) => {
  * @param {Box} size_ptr A box to store the number of processes.
  */
 const MPI_Comm_size = async (size_ptr) => {
-    size_ptr.data = config.num_proc;
+    size_ptr.data = config.global_num_proc;
 }
 
 /**
@@ -145,6 +158,11 @@ const MPI_Init = async () => {
  */
 const MPI_Finalize = async () => {
     await flush_telemetry();
+}
+
+const MPI_Abort = async () => {
+    await flush_telemetry();
+    await node_router.send([config.my_pid], "abort", "");
 }
 
 /**

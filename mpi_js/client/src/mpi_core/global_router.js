@@ -1,127 +1,68 @@
 import { Packet } from "./packet.js";
 export class GlobalRouter {
-    /**
-     * 
-     * @param {number} num_proc number of workers
-     * @param {number} my_pid the pid of this worker
-     * @param {number[][]} node_partition partition of workers on each node
-     * @param {MessagePort[]} local_channels channels to peers on the my local node
-     * @param {WorkerGlobalScope} global_channel channel to main manager on this node
-     * @param {number[][]} local_edges adjacency list of local channels
-     */
-    constructor(num_proc, my_pid, node_partition, local_channels, global_channel, local_edges) {
-        this.num_proc = num_proc;
-        this.my_pid = my_pid;
-        this.node_partition = node_partition;
-        this.local_channels = local_channels;
-        this.global_channel = global_channel;
-        this.local_edges = local_edges;
-        this.hops_table = []
-        // populate hops table in constructor? 
+    constructor() { }
 
-        // bfs on local_edges to populate hops_table
-        // Write all shortest paths from every node to every other node
-        this.buffer = new ProducerConsumer();
-        this.global_channel.onmessage = (event) => { this.buffer.produce(event.data); }
-        this.local_channels.forEach((channel) => {
-            channel.onmessage = (event) => { this.buffer.produce(event.data); }
+    init(url, set_gr_id_callback) {
+        return new Promise((resolve) => {
+            const ws_url = `ws://${url}:8001`;
+            console.log("connecting to", ws_url);
+
+            this.ws = new WebSocket(ws_url);
+
+            this.ws.onopen = () => {
+                console.log("God node connection established");
+            }
+
+            this.ws.onclose = () => {
+                alert("Disconnected from God Server. Please reload window.")
+                window.location.reload();
+                set_gr_id_callback(-2);
+            }
+
+            this.ws.onmessage = async (event) => {
+                const message = JSON.parse(event.data);
+                // console.log("gr message received", message)
+                if (message.gr_id !== undefined) {
+                    this.gr_id = message.gr_id;
+                    set_gr_id_callback(this.gr_id);
+                    console.log("this.gr_id received", this.gr_id);
+                } else if (message.routing_table !== undefined) {
+                    this.routing_table = message.routing_table;
+                    this.optimized = message.optimized;
+                    this.program_path = message.program_path;
+                    this.num_total_nodes = Object.keys(this.routing_table).length;
+                    this.nr_offsets = [0];
+                    for (let i = 1; i < Object.keys(this.routing_table).length; i++)
+                        if (this.routing_table[i] !== this.routing_table[i - 1])
+                            this.nr_offsets.push(i);
+                    this.nr_offset = this.nr_offsets[this.gr_id];
+                    console.log("optimized", this.optimized, "nr_offsets", this.nr_offsets, "nr_offset", this.nr_offset, "num_total_nodes", this.num_total_nodes, "program_path", this.program_path, "routing_table", this.routing_table);
+                    resolve(this);
+                } else {
+                    const packet = message.data;
+                    // console.log("latency", Date.now() - message.timestamp, packet);
+                    packet.dest_pid_arr.forEach((dest_pid) => {
+                        const nr_message = new Packet(packet.src_pid, [dest_pid], packet.tag, packet.data);
+                        this.workers[dest_pid].postMessage(nr_message);
+                    });
+                }
+            }
         });
     }
 
-    num_hops = async (dest_pid) => {
-        return this.hops_table[dest_pid];
+    start(num_proc, program_path, optimized) {
+        this.ws.send(JSON.stringify({ gr_src: this.gr_id, num_proc, program_path, optimized }));
     }
 
-    send = async (dest_pid_arr, tag = "NA", data = "") => {
-        await Promise.all(dest_pid_arr.map((dest_pid) => {
-            const packet = new Packet(this.my_pid, dest_pid_arr, tag, data);
-            if (dest_pid === -1) this.global_channel.postMessage(packet);
-            else this.local_channels[dest_pid].postMessage(packet);
-        }));
+    set_workers(workers) {
+        this.workers = workers;
     }
 
-    receive = async (src_pid = null, tag = null) => {
-        return await this.buffer.consume(src_pid, tag);
-    }
-
-    bcast = async (data) => {
-        await this.send(this.node_partition.flat(Infinity).filter((pid) => pid !== this.my_pid), data);
-    }
-}
-
-class Map2D {
-    constructor() {
-        this.ab_map = {};
-        this.ba_map = {};
-    }
-
-    add(a, b, value) {
-        this.ab_map[a] || (this.ab_map[a] = {});
-        this.ba_map[b] || (this.ba_map[b] = {});
-        this.ab_map[a][b] || (this.ab_map[a][b] = []);
-        this.ba_map[b][a] || (this.ba_map[b][a] = []);
-        this.ab_map[a][b].push(value);
-        this.ba_map[b][a].push(value);
-    }
-
-    get(a = null, b = null) { // null means wildcard, return one such value
-        if (a !== null && b !== null) {
-            if (this.ab_map[a] && this.ab_map[a][b])
-                return this.ab_map[a][b][0];
-        } else if (a !== null) {
-            if (this.ab_map[a])
-                for (const b in this.ab_map[a])
-                    return this.ab_map[a][b][0];
-        } else if (b !== null) {
-            if (this.ba_map[b])
-                for (const a in this.ba_map[b])
-                    return this.ba_map[b][a][0];
-        } else {
-            for (const a in this.ab_map)
-                for (const b in this.ab_map[a])
-                    return this.ab_map[a][b][0];
-        }
-        return null;
-    }
-
-    pop(a = null, b = null) {
-        const result = this.get(a, b);
-        if (!result) return null;
-
-        this.ab_map[a][b].shift();
-        this.ba_map[b][a].shift();
-        this.ab_map[a][b].length === 0 && delete this.ab_map[a][b];
-        this.ba_map[b][a].length === 0 && delete this.ba_map[b][a];
-        Object.keys(this.ab_map[a]).length === 0 && delete this.ab_map[a];
-        Object.keys(this.ba_map[b]).length === 0 && delete this.ba_map[b];
-        return result;
-    }
-}
-
-class ProducerConsumer {
-    constructor() {
-        this.buffer = new Map2D();
-        this.callbacks = new Map2D();
-    }
-
-    async produce(object) {
-        const pid = object.src_pid, tag = object.tag;
-        const callback =
-            this.callbacks.pop(pid, tag) ||
-            this.callbacks.pop("*", tag) ||
-            this.callbacks.pop(pid, "*");
-
-        if (callback) callback(object);
-        else this.buffer.add(pid, tag, object)
-    }
-
-
-    async consume(src_pid = null, tag = null) {
-        return await new Promise((resolve) => {
-            const src_pid_sign = src_pid !== null ? src_pid : "*", tag_sign = tag !== null ? tag : "*";
-            const result = this.buffer.pop(src_pid, tag);
-            if (result) return resolve(result);
-            this.callbacks.add(src_pid_sign, tag_sign, resolve);
-        });
+    send_to_gr = (msg) => {
+        let gr_dest_set = new Set();
+        msg.dest_pid_arr.forEach((pid) => { gr_dest_set.add(this.routing_table[pid]); });
+        const gr_dest_arr = Array.from(gr_dest_set);
+        this.ws.send(JSON.stringify({ gr_src: this.gr_id, gr_dest_arr, data: msg }));
+        // this.ws.send(JSON.stringify({ gr_src: this.gr_id, gr_dest_arr, data: msg, timestamp: Date.now() }));
     }
 }

@@ -18,7 +18,7 @@ main(async () => {
     const recv_ptr = box(0);
     if (rank_ptr.data === 0) {
         console.log("rank", rank_ptr.data, "receiving")
-        const req = await MPI_IRecv(recv_ptr, 1);
+        const req = await MPI_Irecv(recv_ptr, 1);
         console.log("rank", rank_ptr.data, "doing other stuff")
         while (true) {
             console.log("rank", rank_ptr.data, "testing");
@@ -54,7 +54,7 @@ main(async () => {
 //     const recv_ptr = box(0);
 //     if (rank_ptr.data === 0) {
 //         console.log("rank", rank_ptr.data, "receiving")
-//         const req = await MPI_IRecv(recv_ptr, 1);
+//         const req = await MPI_Irecv(recv_ptr, 1);
 //         console.log("rank", rank_ptr.data, "doing other stuff")
 //         await MPI_Wait(req);
 //     } else {
