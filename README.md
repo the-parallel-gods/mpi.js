@@ -8,7 +8,7 @@ _MPI, now on the web._
 
 # Get started
 
-[Get Started](/mpi.js/docs)
+[Documentation](https://the-parallel-gods.github.io/mpi.js/docs/)
 
 ## Develop locally
 ```bash
