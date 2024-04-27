@@ -91,6 +91,8 @@ export class Job {
             Object.keys(this.workers).forEach((idx) => this.workers[idx].terminate());
             console.log("MPI_ABORT");
             window.location.reload();
+        } else if (msg.dest_pid_arr.includes(msg.src_pid)) {
+            this.workers[msg.src_pid].postMessage(new Packet(msg.src_pid, [msg.src_pid], msg.tag, msg.data));
         } else {
             this.global_router.send_to_gr(msg);
         }

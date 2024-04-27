@@ -109,7 +109,7 @@ const MPI_Ibcast = diagnostics.profile("MPI_Ibcast", async (data_ptr, root) => {
  */
 const MPI_Barrier = diagnostics.profile("MPI_Barrier", async () => {
     if (config.optimized) {
-        if (config.my_pid === config.my_nr_offset) {
+        if (config.my_nr_id === 0) {
             await Promise.all(config.local_neighbors.map(async (pid) => {
                 await node_router.receive(pid, "MPI_Barrier_1");
             }));

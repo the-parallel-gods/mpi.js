@@ -17,7 +17,7 @@ export default function App() {
     const [context, setContext] = React.useState({
         gr_id: -1,
         program_path: "tests/test_reduce.js",
-        num_proc: 4,
+        num_proc: 8,
         interconnect: "crossbar",
         enable_smartdashboard: true,
         enable_diagnostics: true,

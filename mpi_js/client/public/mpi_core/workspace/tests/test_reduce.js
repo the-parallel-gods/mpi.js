@@ -16,13 +16,13 @@ main(async () => {
 
     const start_time = performance.now();
     console.log("start_time", start_time, "rank", rank_ptr.data)
-    for (let j = 0; j < 1; j++) {
+    for (let j = 0; j < 100; j++) {
         const send_ptr = box([1, 2, 3, 4]);
         const recv_ptr = box(null);
         await MPI_Reduce(send_ptr, recv_ptr, (a, b) => a + b, 0);
-        console.log("rank", rank_ptr.data, "reduce recv", recv_ptr.data);
-        await MPI_Allreduce(send_ptr, recv_ptr, (a, b) => a + b);
-        console.log("rank", rank_ptr.data, "allreduce recv", recv_ptr.data);
+        // console.log("rank", rank_ptr.data, "reduce recv", recv_ptr.data);
+        // await MPI_Allreduce(send_ptr, recv_ptr, (a, b) => a + b);
+        // console.log("rank", rank_ptr.data, "allreduce recv", recv_ptr.data);
     }
     const end_time = performance.now();
     console.log("rank", rank_ptr.data, "time", end_time - start_time, "ms");
