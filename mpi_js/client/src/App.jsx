@@ -16,7 +16,7 @@ let global_router, start_job_fn;
 export default function App() {
     const [context, setContext] = React.useState({
         gr_id: -1,
-        program_path: "tests/test_barrier.js",
+        program_path: "tests/test_reduce.js",
         num_proc: 4,
         interconnect: "crossbar",
         enable_smartdashboard: true,

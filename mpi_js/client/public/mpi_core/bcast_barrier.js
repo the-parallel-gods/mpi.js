@@ -16,17 +16,18 @@
  */
 const MPI_Bcast = diagnostics.profile("MPI_Bcast", async (data_ptr, root) => {
     if (config.optimized) {
-        if (config.my_pid === root)
+        if (config.my_pid === root) {
             await node_router.send(config.all_neighbors, "MPI_Bcast", data_ptr.data);
-        else
+        } else {
             data_ptr.data = (await node_router.receive(root, "MPI_Bcast")).data;
+        }
     } else {
         if (config.my_pid === root) {
             await Promise.all(config.all_neighbors.map(async (pid) => {
                 await node_router.send([pid], "MPI_Bcast", data_ptr.data);
             }));
             await Promise.all(config.all_neighbors.map(async (pid) => {
-                data_ptr.data = await node_router.receive(pid, "MPI_Bcast_2");
+                await node_router.receive(pid, "MPI_Bcast_2");
             }));
         } else {
             data_ptr.data = (await node_router.receive(root, "MPI_Bcast")).data;
@@ -71,7 +72,7 @@ const MPI_Ibcast = diagnostics.profile("MPI_Ibcast", async (data_ptr, root) => {
                 }
                 return false;
             });
-    } else {
+    } else { // TODO: Implement unoptimized version
         if (config.my_pid === root) {
             await Promise.all(config.all_neighbors.map(async (pid) => {
                 await node_router.send([pid], "MPI_Bcast", data_ptr.data);
