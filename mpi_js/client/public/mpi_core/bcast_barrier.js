@@ -72,7 +72,7 @@ const MPI_Ibcast = diagnostics.profile("MPI_Ibcast", async (data_ptr, root) => {
                 }
                 return false;
             });
-    } else { // TODO: Implement unoptimized version
+    } else {
         if (config.my_pid === root) {
             await Promise.all(config.all_neighbors.map(async (pid) => {
                 await node_router.send([pid], "MPI_Bcast", data_ptr.data);

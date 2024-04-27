@@ -30,7 +30,7 @@ const MPI_Reduce = diagnostics.profile("MPI_Reduce", async (send_ptr, recv_ptr, 
             await MPI_Isend(local_result, root);
             // console.log("local_result", local_result);
         } else {
-            await MPI_Send(send_ptr, config.my_nr_offset);
+            await MPI_Isend(send_ptr, config.my_nr_offset);
         }
 
         if (config.my_pid === root) {
@@ -54,7 +54,7 @@ const MPI_Reduce = diagnostics.profile("MPI_Reduce", async (send_ptr, recv_ptr, 
                 }
             }));
         } else {
-            await MPI_Send(send_ptr, root);
+            await MPI_Isend(send_ptr, root);
         }
         await MPI_Barrier();
     }
@@ -77,8 +77,7 @@ const MPI_Reduce = diagnostics.profile("MPI_Reduce", async (send_ptr, recv_ptr, 
  * @returns {Promise<void>} A promise that resolves when reduce is done.
  */
 const MPI_Allreduce_local_optimized = async (send_ptr, recv_ptr, operation) => {
-    if (config.interconnect_type === "crossbar" || config.interconnect_type === "ring") {
-        // use ring allreduce strategy
+    if (config.interconnect_type === "crossbar" || config.interconnect_type === "ring") {// use ring strategy
         const wrap = make_wrap(config.local_num_proc);
         recv_ptr.data = send_ptr.data.slice();
         const buffer_ptr = box(send_ptr.data.slice());
@@ -101,8 +100,23 @@ const MPI_Allreduce_local_optimized = async (send_ptr, recv_ptr, operation) => {
             const packet = await node_router.receive(pid, "MPI_Allreduce_phase_2");
             recv_ptr.data.splice(offsets[wrap(pid + 1)], sizes[wrap(pid + 1)], ...packet.data);
         }));
-    } else { // tree
-
+    } else { // use tree strategy
+        const children = config.local_neighbors.filter((pid) => pid > config.my_pid && config.routing_table[pid] === pid);
+        const buffer_ptr = box(null);
+        if (children.length !== 0) {
+            await Promise.all(children.map(async (pid) => {
+                await MPI_Recv(buffer_ptr, pid);
+                for (let i = 0; i < send_ptr.data.length; i++) {
+                    send_ptr.data[i] = operation(send_ptr.data[i], buffer_ptr.data[i]);
+                }
+            }));
+        }
+        if (config.my_pid !== 0) {
+            const parent = config.local_neighbors.filter((pid) => pid < config.my_pid && config.routing_table[pid] === pid)[0];
+            await MPI_Isend(send_ptr, parent);
+        }
+        await MPI_Bcast(send_ptr, 0);
+        recv_ptr.data = send_ptr.data;
     }
 }
 

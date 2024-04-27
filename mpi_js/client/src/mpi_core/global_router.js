@@ -1,4 +1,6 @@
 import { Packet } from "./packet.js";
+import Swal from 'sweetalert2'
+
 export class GlobalRouter {
     constructor() { }
 
@@ -14,8 +16,17 @@ export class GlobalRouter {
             }
 
             this.ws.onclose = () => {
-                alert("Disconnected from God Server. Please reload window.")
-                window.location.reload();
+                Swal.fire({
+                    title: "Connection Lost",
+                    html: "Disconnected from God Server. Please reload window.",
+                    icon: "error",
+                    allowEscapeKey: false,
+                    allowOutsideClick: false,
+                    showConfirmButton: true,
+                    confirmButtonText: "Reload window",
+                }).then(() => {
+                    window.location.reload();
+                });
                 set_gr_id_callback(-2);
             }
 

@@ -9,6 +9,7 @@ export class Job {
         interconnect_type = "ring",
         enable_smartdashboard = true,
         enable_diagnostics = true,
+        set_finish_status,
     ) {
         this.global_router = global_router;
         this.program_path = "./mpi_core/workspace/" + this.global_router.program_path;
@@ -18,6 +19,7 @@ export class Job {
         this.nr_offsets = this.global_router.nr_offsets;
         this.num_total_nodes = this.global_router.num_total_nodes;
         this.optimized = this.global_router.optimized;
+        this.set_finish_status = set_finish_status;
 
         this.smartdashboard_callback = smartdashboard_callback_box.callback;
         enable_smartdashboard |= enable_diagnostics;
@@ -91,6 +93,8 @@ export class Job {
             Object.keys(this.workers).forEach((idx) => this.workers[idx].terminate());
             console.log("MPI_ABORT");
             window.location.reload();
+        } else if (msg.tag === "MPI_Finalize") {
+            this.set_finish_status();
         } else if (msg.dest_pid_arr.includes(msg.src_pid)) {
             this.workers[msg.src_pid].postMessage(new Packet(msg.src_pid, [msg.src_pid], msg.tag, msg.data));
         } else {
