@@ -38,9 +38,7 @@ const MPI_Reduce = diagnostics.profile("MPI_Reduce", async (send_ptr, recv_ptr, 
                     local_result.data[elem_idx] = operation(local_result.data[elem_idx], buffer.data[elem_idx]);
                 }
             }));
-            if (config.global_num_proc !== config.local_num_proc) {
-                await MPI_Isend(local_result, root);
-            }
+            await MPI_Isend(local_result, root);
             // console.log("local_result", local_result);
         } else {
             await MPI_Send(send_ptr, config.my_nr_offset);
@@ -73,9 +71,41 @@ const MPI_Reduce = diagnostics.profile("MPI_Reduce", async (send_ptr, recv_ptr, 
 });
 
 
+const MPI_Allreduce_local_optimized = async (send_ptr, recv_ptr, operation) => {
+    if (config.interconnect_type === "crossbar" || config.interconnect_type === "ring") {
+        // use ring allreduce strategy
+        const wrap = make_wrap(config.local_num_proc);
+        recv_ptr.data = send_ptr.data.slice();
+        const buffer_ptr = box(send_ptr.data.slice());
+        const { sizes, offsets } = partition(send_ptr.data.length, config.local_num_proc);
+        const next_id = wrap(config.my_nr_id + 1), prev_id = wrap(config.my_nr_id - 1);
+        for (let i = 0; i < config.local_num_proc; i++) {
+            const send_offset_idx = wrap(config.my_nr_id - i);
+            const recv_offset_idx = wrap(config.my_nr_id - i - 1);
+            await MPI_Isend(buffer_ptr, next_id, offsets[send_offset_idx], sizes[send_offset_idx]);
+            await MPI_Recv(buffer_ptr, prev_id, offsets[recv_offset_idx], sizes[recv_offset_idx]);
+            for (let j = offsets[recv_offset_idx]; j < offsets[recv_offset_idx] + sizes[recv_offset_idx]; j++) {
+                buffer_ptr.data[j] = operation(buffer_ptr.data[j], send_ptr.data[j]);
+            }
+        }
+        await MPI_Barrier();
+        recv_ptr.data = buffer_ptr.data;
+        await node_router.send(config.local_neighbors, "MPI_Allreduce_phase_2",
+            buffer_ptr.data.slice(offsets[next_id], offsets[next_id] + sizes[next_id]));
+        await Promise.all(config.local_neighbors.map(async (pid) => {
+            const packet = await node_router.receive(pid, "MPI_Allreduce_phase_2");
+            recv_ptr.data.splice(offsets[wrap(pid + 1)], sizes[wrap(pid + 1)], ...packet.data);
+        }));
+    } else { // tree
+
+    }
+}
+
 const MPI_Allreduce = diagnostics.profile("MPI_Allreduce", async (send_ptr, recv_ptr, operation) => {
     if (config.optimized) {
-
+        if (config.global_num_proc === config.local_num_proc) {
+            return await MPI_Allreduce_local_optimized(send_ptr, recv_ptr, operation);
+        }
     } else {
         const bcast_boxes = Array.from({ length: config.global_num_proc }, () => box(null));
         bcast_boxes[config.my_pid] = send_ptr;

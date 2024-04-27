@@ -42,8 +42,11 @@ const create_crossbar = (num_nodes) => {
  * For example, if we have 4 workers, the following channels will be created:
  * 
  * 0 <---> 1
+ * 
  * 1 <---> 2
+ * 
  * 2 <---> 3
+ * 
  * 3 <---> 0
  * 
  * For N workers, the number of channels created is O(N)
@@ -95,11 +98,17 @@ const create_ring = (num_nodes) => {
  * For example, if we have 8 workers, the following channels will be created:
  * 
  * 0 <---> 1
+ * 
  * 2 <---> 3
+ * 
  * 4 <---> 5
+ * 
  * 6 <---> 7
+ * 
  * 0 <---> 2
+ * 
  * 4 <---> 6
+ * 
  * 0 <---> 4
  * 
  * For N workers, the number of channels created is O(N)
@@ -164,10 +173,15 @@ const create_tree_pow_of_2 = (num_nodes) => {
  * For example, if we have 7 workers, the following channels will be created:
  * 
  * 0 <---> 1
+ * 
  * 2 <---> 3
+ * 
  * 4 <---> 5
+ * 
  * 0 <---> 2
+ * 
  * 4 <---> 6
+ * 
  * 0 <---> 4
  * 
  * For N workers, the number of channels created is O(N)
