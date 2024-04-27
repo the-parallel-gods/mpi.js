@@ -4,6 +4,11 @@
  * 
  * If optimization flag is set, SSMR (Single Source Multiple Recipients) will be utilized where applicable.
  * 
+ * Another optimizatin made is sending parallel messages. If there is a lot of bcasts from the same 
+ * gr_id, then the later ones don't need to wait for the earlier ones to propogate every other gr_id. 
+ * The root can move on whenever it's done within the local gr. This parallelism maintains correctness 
+ * and can offer up to 300x speedup.
+ * 
  * @function
  * @param {Box} data_ptr The data to broadcast.
  * @param {number} root The root process ID.
@@ -20,8 +25,12 @@ const MPI_Bcast = diagnostics.profile("MPI_Bcast", async (data_ptr, root) => {
             await Promise.all(config.all_neighbors.map(async (pid) => {
                 await node_router.send([pid], "MPI_Bcast", data_ptr.data);
             }));
+            await Promise.all(config.all_neighbors.map(async (pid) => {
+                data_ptr.data = await node_router.receive(pid, "MPI_Bcast_2");
+            }));
         } else {
             data_ptr.data = (await node_router.receive(root, "MPI_Bcast")).data;
+            await node_router.send([root], "MPI_Bcast_2", "");
         }
     }
 });

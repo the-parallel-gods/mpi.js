@@ -37,6 +37,7 @@ export class GlobalRouter {
                     resolve(this);
                 } else {
                     const packet = message.data;
+                    // console.log("latency", Date.now() - message.timestamp, packet);
                     packet.dest_pid_arr.forEach((dest_pid) => {
                         const nr_message = new Packet(packet.src_pid, [dest_pid], packet.tag, packet.data);
                         this.workers[dest_pid].postMessage(nr_message);
@@ -59,5 +60,6 @@ export class GlobalRouter {
         msg.dest_pid_arr.forEach((pid) => { gr_dest_set.add(this.routing_table[pid]); });
         const gr_dest_arr = Array.from(gr_dest_set);
         this.ws.send(JSON.stringify({ gr_src: this.gr_id, gr_dest_arr, data: msg }));
+        // this.ws.send(JSON.stringify({ gr_src: this.gr_id, gr_dest_arr, data: msg, timestamp: Date.now() }));
     }
 }

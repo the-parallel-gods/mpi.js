@@ -46,10 +46,13 @@ export class Job {
         console.log("routing_tables", routing_tables);
 
         Object.keys(routing_tables).forEach((i) => {
+            i = parseInt(i);
             workers[i] = new Worker(this.program_path);
-            workers[i].postMessage({ command: "init_variable", name: "my_pid", value: parseInt(i) });
+            workers[i].postMessage({ command: "init_variable", name: "my_pid", value: i });
+            workers[i].postMessage({ command: "init_variable", name: "gr_id", value: this.my_gr_id });
+            workers[i].postMessage({ command: "init_variable", name: "nr_id", value: i - this.nr_offset });
             workers[i].postMessage({ command: "init_variable", name: "nr_offset", value: this.nr_offset });
-            workers[i].postMessage({ command: "init_variable", name: "local_num_proc", value: num_proc }); //TODO: change worker interface
+            workers[i].postMessage({ command: "init_variable", name: "local_num_proc", value: num_proc });
             workers[i].postMessage({ command: "init_variable", name: "global_num_proc", value: this.num_total_nodes });
             workers[i].postMessage({ command: "init_variable", name: "local_neighbors", value: local_nodes.filter((node) => node !== parseInt(i)) });
             workers[i].postMessage({ command: "init_variable", name: "all_neighbors", value: global_nodes.filter((node) => node !== parseInt(i)) });
@@ -78,12 +81,10 @@ export class Job {
     on_nr_message = async (msg) => {
         msg = msg.data;
         // console.log("Main UI received msg", msg, "from worker", msg.src_pid, JSON.stringify(msg));
-        if (msg.dest_pid_arr.includes(msg.src_pid)) {
-            if (msg.tag === "reschedule") {
-                msg.dest_pid_arr.forEach((idx) => this.workers[idx].postMessage(new Packet(msg.src_pid, [idx], "reschedule", null)));
-            } else if (msg.tag === "MPI_Smartdashboard") {
-                this.smartdashboard_callback({ pid: msg.src_pid, data: msg.data });
-            }
+        if (msg.tag === "reschedule") {
+            msg.dest_pid_arr.forEach((idx) => this.workers[idx].postMessage(new Packet(msg.src_pid, [idx], "reschedule", null)));
+        } else if (msg.tag === "MPI_Smartdashboard") {
+            this.smartdashboard_callback({ pid: msg.src_pid, data: msg.data });
         } else {
             this.global_router.send_to_gr(msg);
         }

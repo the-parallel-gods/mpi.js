@@ -12,7 +12,7 @@ import FormControl from '@mui/material/FormControl';
 
 const GlobalContext = React.createContext(null);
 const callback_box = { callback: () => { } };
-let global_router;
+let global_router, start_job_fn;
 export default function App() {
     const [context, setContext] = React.useState({
         gr_id: -1,
@@ -23,16 +23,8 @@ export default function App() {
         enable_diagnostics: true,
         optimized: true
     });
-
-
     useEffect(() => {
-        const set_gr_id = (gr_id) => {
-            console.log("set_gr_id", gr_id);
-            setContext({ ...context, gr_id })
-        };
-        const ws_url = window.location.host.split(":")[0];
-        global_router = new GlobalRouter();
-        global_router.init(ws_url, set_gr_id).then(() => {
+        start_job_fn = () => {
             new Job(
                 callback_box,
                 context.num_proc,
@@ -42,10 +34,20 @@ export default function App() {
                 context.enable_diagnostics,
                 context.optimized
             );
-        });
+        };
+    }, [context]);
+
+    useEffect(() => {
+        const set_gr_id = (gr_id) => {
+            console.log("set_gr_id", gr_id);
+            setContext({ ...context, gr_id })
+        };
+        const ws_url = window.location.host.split(":")[0];
+        global_router = new GlobalRouter();
+        global_router.init(ws_url, set_gr_id).then(() => { start_job_fn(); });
     }, []);
 
-    const on_start = () => {
+    const on_start_button = () => {
         global_router.start(context.num_proc, context.program_path);
         console.log("Start requested");
     }
@@ -60,7 +62,7 @@ export default function App() {
                         />
                         : ""}
                     <TextField sx={{ m: 3 }} id="num_proc" type="number" label="Num proc" variant="outlined" placeholder="4" fullWidth
-                        value={context.num_proc} onChange={(e) => setContext({ ...context, num_proc: e.target.value })}
+                        value={context.num_proc} onChange={(e) => setContext({ ...context, num_proc: parseInt(e.target.value) })}
                     />
                     <FormControl sx={{ m: 3 }} fullWidth>
                         <InputLabel id="interconnect_select_label">Local interconnect architecture</InputLabel>
@@ -85,7 +87,7 @@ export default function App() {
                         value={context.optimized} onChange={(e) => setContext({ ...context, optimized: e.target.checked })}
                     />
                     <Box sx={{ m: 3 }}>
-                        <Button variant="outlined" size="large" endIcon={<PlayArrowIcon />} onClick={on_start}>
+                        <Button variant="outlined" size="large" endIcon={<PlayArrowIcon />} onClick={on_start_button}>
                             start
                         </Button>
                     </Box>

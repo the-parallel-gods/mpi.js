@@ -9,15 +9,6 @@ import time
 #   "data": Holds node related info including the message to be sent,
 # }
 
-SETUP, RUNNING = 0, 1
-
-client_id_map = {}
-clients = dict()
-num_procs = dict()
-state = SETUP
-program_path = ""
-
-
 class PerformanceMonitor:
     def __init__(self, description):
         self.start_time = 0
@@ -38,7 +29,14 @@ class PerformanceMonitor:
         self.count = 0
 
 
-send_perf, recv_perf = PerformanceMonitor("Send"), PerformanceMonitor("Receive")
+SETUP, RUNNING = 0, 1
+
+client_id_map = {}
+clients = dict()
+num_procs = dict()
+state = SETUP
+program_path = ""
+send_perf, recv_perf = None, None
 
 
 def new_client(client, server):
@@ -55,7 +53,9 @@ def new_client(client, server):
 def client_left(client, server):
     global state, clients, num_procs, client_id_map, program_path
     if state == RUNNING:
-        print(f"Client disconnected. Abort.")
+        print(f"Client disconnected. MPI Abort.")
+        recv_perf.flush()
+        send_perf.flush()
         state = SETUP
         clients = dict()
         num_procs = dict()
@@ -87,14 +87,13 @@ def message_received(client, server, message_str):
             send_perf.update()
 
     else:
-
         def start_when_ready():
-            global state
+            global state, recv_perf, send_perf
             print(f"clients: {len(clients)} num_procs: {len(num_procs.keys())}")
             if len(clients) == len(num_procs.keys()):
                 print("All clients connected. Starting MPI.")
+                send_perf, recv_perf = PerformanceMonitor("Send"), PerformanceMonitor("Receive")
                 nr_to_gr = dict()
-                # for gr_src, num_proc in num_procs.items():
                 for gr_src in range(len(clients)):
                     offset = len(nr_to_gr.keys())
                     for i in range(offset, offset + num_procs[gr_src]):

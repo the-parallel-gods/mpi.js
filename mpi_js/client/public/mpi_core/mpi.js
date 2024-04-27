@@ -15,6 +15,8 @@ importScripts('/mpi_core/reduce.js');
 /**
  * @typedef {{
  *            my_pid: number,
+ *            gr_id: number,
+ *            nr_id: number,
  *            nr_offset: number,
  *            local_num_proc: number, 
  *            global_num_proc: number,
