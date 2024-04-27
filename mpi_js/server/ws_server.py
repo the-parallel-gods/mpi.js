@@ -9,6 +9,7 @@ import time
 #   "data": Holds node related info including the message to be sent,
 # }
 
+
 class PerformanceMonitor:
     def __init__(self, description):
         self.start_time = 0
@@ -87,6 +88,7 @@ def message_received(client, server, message_str):
             send_perf.update()
 
     else:
+
         def start_when_ready():
             global state, recv_perf, send_perf
             print(f"clients: {len(clients)} num_procs: {len(num_procs.keys())}")
