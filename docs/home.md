@@ -16,7 +16,7 @@ _MPI, now on the web._
 
 
 * [x] **Make a nice documentation website**
-* [ ] **Implement the following APIs**
+* [x] **Implement the following APIs**
   * [x] Basics
     * [x] MPI\_Init
     * [x] MPI\_Finalize
@@ -32,14 +32,14 @@ _MPI, now on the web._
     * [x] MPI\_Barrier
     * [x] MPI\_Bcast
     * [x] MPI\_Ibcast
-  * [ ] Gathers
-    * [ ] MPI\_Gather
-    * [ ] MPI\_Gatherv
-    * [ ] MPI\_Allgather
-    * [ ] MPI\_Allgatherv
-  * [ ] Scatters
-    * [ ] MPI\_Scatter
-    * [ ] MPI\_Scatterv
+  * [x] Gathers
+    * [x] MPI\_Gather
+    * [x] MPI\_Gatherv
+    * [x] MPI\_Allgather
+    * [x] MPI\_Allgatherv
+  * [x] Scatters
+    * [x] MPI\_Scatter
+    * [x] MPI\_Scatterv
   * [x] Reduces
     * [x] MPI\_Reduce
     * [x] MPI\_Allreduce
