@@ -51,7 +51,7 @@ const create_crossbar = (num_nodes) => {
  * The longest path between any two workers is O(N)
  * 
  * @param {number} num_nodes 
- * @returns 
+ * @returns {{edges: number[][], routing_tables: number[][]}} The result routing computation
  */
 const create_ring = (num_nodes) => {
     let edges = [];
