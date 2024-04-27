@@ -29,7 +29,7 @@ importScripts('/mpi_core/reduce.js');
  *            interconnect_type: ('crossbar'|'tree'|'ring'),
  *            enable_smartdashboard: boolean,
  *            enable_diagnostics: boolean,
- *            optimized: boolean,
+ *            optimized: boolean
  *          }} Config
  * 
  * @type {Config} config
