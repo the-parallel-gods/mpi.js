@@ -1,0 +1,543 @@
+﻿Local tests:
+Not optimized
+Crossbar
+num_procs 1
+bench_local.js:19 bcast start
+bench_local.js:25 bcast time 60.40000000037253 ms
+bench_local.js:28 allreduce start
+bench_local.js:34 allreduce time 13.800000000745058 ms
+bench_local.js:38 barrier start
+bench_local.js:43 barrier time 9.299999999813735 ms
+bench_local.js:44 Test done
+
+
+num_procs 2
+bench_local.js:19 bcast start
+bench_local.js:25 bcast time 170.20000000018626 ms
+bench_local.js:28 allreduce start
+bench_local.js:34 allreduce time 38.10000000055879 ms
+bench_local.js:38 barrier start
+bench_local.js:43 barrier time 57.59999999962747 ms
+bench_local.js:44 Test done
+
+
+num_procs 4
+bench_local.js:19 bcast start
+bench_local.js:25 bcast time 244.09999999962747 ms
+bench_local.js:28 allreduce start
+bench_local.js:34 allreduce time 88.90000000037253 ms
+bench_local.js:38 barrier start
+bench_local.js:43 barrier time 140.59999999962747 ms
+bench_local.js:44 Test done
+
+
+num_procs 8
+bench_local.js:19 bcast start
+bench_local.js:25 bcast time 462.80000000074506 ms
+bench_local.js:28 allreduce start
+bench_local.js:34 allreduce time 296.09999999962747 ms
+bench_local.js:38 barrier start
+bench_local.js:43 barrier time 273.5 ms
+bench_local.js:44 Test done
+
+
+num_procs 16
+bench_local.js:19 bcast start
+bench_local.js:25 bcast time 1048.7999999998137 ms
+bench_local.js:28 allreduce start
+bench_local.js:34 allreduce time 865.8999999994412 ms
+bench_local.js:38 barrier start
+bench_local.js:43 barrier time 626.3000000007451 ms
+bench_local.js:44 Test done
+
+
+num_procs 32
+bench_local.js:19 bcast start
+bench_local.js:25 bcast time 2095.100000000559 ms
+bench_local.js:28 allreduce start
+bench_local.js:34 allreduce time 3194.4000000003725 ms
+bench_local.js:38 barrier start
+bench_local.js:43 barrier time 1197.300000000745 ms
+bench_local.js:44 Test done
+
+
+Ring
+num_procs 1
+bench_local.js:19 bcast start
+bench_local.js:25 bcast time 63.59999999962747 ms
+bench_local.js:28 allreduce start
+bench_local.js:34 allreduce time 13.700000000186265 ms
+bench_local.js:38 barrier start
+bench_local.js:43 barrier time 8.799999999813735 ms
+bench_local.js:44 Test done
+
+
+num_procs 2
+bench_local.js:19 bcast start
+bench_local.js:25 bcast time 172.90000000037253 ms
+bench_local.js:28 allreduce start
+bench_local.js:34 allreduce time 39.200000000186265 ms
+bench_local.js:38 barrier start
+bench_local.js:43 barrier time 63.19999999925494 ms
+bench_local.js:44 Test done
+
+
+num_procs 4
+bench_local.js:19 bcast start
+bench_local.js:25 bcast time 531.2000000001863 ms
+bench_local.js:28 allreduce start
+bench_local.js:34 allreduce time 150.59999999962747 ms
+bench_local.js:38 barrier start
+bench_local.js:43 barrier time 180.70000000018626 ms
+bench_local.js:44 Test done
+
+
+num_procs 8
+bench_local.js:19 bcast start
+bench_local.js:25 bcast time 1399.1000000005588 ms
+bench_local.js:28 allreduce start
+bench_local.js:34 allreduce time 627.2000000001863 ms
+bench_local.js:38 barrier start
+bench_local.js:43 barrier time 406.70000000018626 ms
+bench_local.js:44 Test done
+
+
+num_procs 16
+bench_local.js:19 bcast start
+bench_local.js:25 bcast time 3481 ms
+bench_local.js:28 allreduce start
+bench_local.js:34 allreduce time 2891.300000000745 ms
+bench_local.js:38 barrier start
+bench_local.js:43 barrier time 1028.1000000005588 ms
+bench_local.js:44 Test done
+
+
+num_procs 32
+bench_local.js:19 bcast start
+bench_local.js:25 bcast time 9800.200000000186 ms
+bench_local.js:28 allreduce start
+bench_local.js:34 allreduce time 21468.5 ms
+bench_local.js:38 barrier start
+bench_local.js:43 barrier time 2685.7999999998137 ms
+bench_local.js:44 Test done
+
+
+Tree
+num_procs 1
+bench_local.js:19 bcast start
+bench_local.js:25 bcast time 57.60000000055879 ms
+bench_local.js:28 allreduce start
+bench_local.js:34 allreduce time 13.099999999627471 ms
+bench_local.js:38 barrier start
+bench_local.js:43 barrier time 8.5 ms
+bench_local.js:44 Test done
+
+
+num_procs 2
+bench_local.js:19 bcast start
+bench_local.js:25 bcast time 162.80000000074506 ms
+bench_local.js:28 allreduce start
+bench_local.js:34 allreduce time 40.09999999962747 ms
+bench_local.js:38 barrier start
+bench_local.js:43 barrier time 60.700000000186265 ms
+bench_local.js:44 Test done
+
+
+num_procs 4
+bench_local.js:19 bcast start
+bench_local.js:25 bcast time 527.7000000001863 ms
+bench_local.js:28 allreduce start
+bench_local.js:34 allreduce time 192.6000000005588 ms
+bench_local.js:38 barrier start
+bench_local.js:43 barrier time 212.20000000018626 ms
+bench_local.js:44 Test done
+
+
+num_procs 8
+bench_local.js:19 bcast start
+bench_local.js:25 bcast time 1153.5 ms
+bench_local.js:28 allreduce start
+bench_local.js:34 allreduce time 744.7999999998137 ms
+bench_local.js:38 barrier start
+bench_local.js:43 barrier time 413.79999999981374 ms
+bench_local.js:44 Test done
+
+
+num_procs 16
+bench_local.js:19 bcast start
+bench_local.js:25 bcast time 2104.9000000003725 ms
+bench_local.js:28 allreduce start
+bench_local.js:34 allreduce time 2947.7000000001863 ms
+bench_local.js:38 barrier start
+bench_local.js:43 barrier time 657.8999999994412 ms
+bench_local.js:44 Test done
+
+
+num_procs 32
+bench_local.js:19 bcast start
+bench_local.js:25 bcast time 4291.100000000559 ms
+bench_local.js:28 allreduce start
+bench_local.js:34 allreduce time 14209.799999999814 ms
+bench_local.js:38 barrier start
+bench_local.js:43 barrier time 1352.3999999994412 ms
+bench_local.js:44 Test done
+
+
+
+
+
+
+
+
+Optimized
+Crossbar
+num_procs 1
+bench_local.js:19 bcast start
+bench_local.js:25 bcast time 62 ms
+bench_local.js:28 allreduce start
+bench_local.js:34 allreduce time 41.5 ms
+bench_local.js:38 barrier start
+bench_local.js:43 barrier time 11.5 ms
+bench_local.js:44 Test done
+
+
+num_procs 2
+bench_local.js:19 bcast start
+bench_local.js:25 bcast time 118.20000000018626 ms
+bench_local.js:28 allreduce start
+bench_local.js:34 allreduce time 45.80000000074506 ms
+bench_local.js:38 barrier start
+bench_local.js:43 barrier time 56.09999999962747 ms
+bench_local.js:44 Test done
+
+
+num_procs 4
+bench_local.js:19 bcast start
+bench_local.js:25 bcast time 132.29999999981374 ms
+bench_local.js:28 allreduce start
+bench_local.js:34 allreduce time 79 ms
+bench_local.js:38 barrier start
+bench_local.js:43 barrier time 117.09999999962747 ms
+bench_local.js:44 Test done
+
+
+num_procs 8
+bench_local.js:19 bcast start
+bench_local.js:25 bcast time 212.70000000018626 ms
+bench_local.js:28 allreduce start
+bench_local.js:34 allreduce time 197.20000000018626 ms
+bench_local.js:38 barrier start
+bench_local.js:43 barrier time 226.90000000037253 ms
+bench_local.js:44 Test done
+
+
+num_procs 16
+bench_local.js:19 bcast start
+bench_local.js:25 bcast time 466.79999999981374 ms
+bench_local.js:28 allreduce start
+bench_local.js:34 allreduce time 491.6000000005588 ms
+bench_local.js:38 barrier start
+bench_local.js:43 barrier time 481.1000000005588 ms
+bench_local.js:44 Test done
+
+
+num_procs 32
+bench_local.js:19 bcast start
+bench_local.js:25 bcast time 967.8000000007451 ms
+bench_local.js:28 allreduce start
+bench_local.js:34 allreduce time 1538.7000000001863 ms
+bench_local.js:38 barrier start
+bench_local.js:43 barrier time 1038.5999999996275 ms
+bench_local.js:44 Test done
+
+
+Ring
+num_procs 1
+bench_local.js:19 bcast start
+bench_local.js:25 bcast time 59.09999999962747 ms
+bench_local.js:28 allreduce start
+bench_local.js:34 allreduce time 40.30000000074506 ms
+bench_local.js:38 barrier start
+bench_local.js:43 barrier time 11 ms
+bench_local.js:44 Test done
+
+
+num_procs 2
+bench_local.js:19 bcast start
+bench_local.js:25 bcast time 115.09999999962747 ms
+bench_local.js:28 allreduce start
+bench_local.js:34 allreduce time 46.59999999962747 ms
+bench_local.js:38 barrier start
+bench_local.js:43 barrier time 55 ms
+bench_local.js:44 Test done
+
+
+num_procs 4
+bench_local.js:19 bcast start
+bench_local.js:25 bcast time 194.70000000018626 ms
+bench_local.js:28 allreduce start
+bench_local.js:34 allreduce time 96.5 ms
+bench_local.js:38 barrier start
+bench_local.js:43 barrier time 121.90000000037253 ms
+bench_local.js:44 Test done
+
+
+num_procs 8
+bench_local.js:19 bcast start
+bench_local.js:25 bcast time 342.1000000005588 ms
+bench_local.js:28 allreduce start
+bench_local.js:34 allreduce time 236.79999999981374 ms
+bench_local.js:38 barrier start
+bench_local.js:43 barrier time 337.30000000074506 ms
+bench_local.js:44 Test done
+
+
+num_procs 16
+bench_local.js:19 bcast start
+bench_local.js:25 bcast time 490.8999999994412 ms
+bench_local.js:28 allreduce start
+bench_local.js:34 allreduce time 522.3000000007451 ms
+bench_local.js:38 barrier start
+bench_local.js:43 barrier time 668.0999999996275 ms
+bench_local.js:44 Test done
+
+
+num_procs 32
+bench_local.js:19 bcast start
+bench_local.js:25 bcast time 973.1000000005588 ms
+bench_local.js:28 allreduce start
+bench_local.js:34 allreduce time 1471.199999999255 ms
+bench_local.js:38 barrier start
+bench_local.js:43 barrier time 1472.5999999996275 ms
+bench_local.js:44 Test done
+
+
+Tree
+num_procs 1
+bench_local.js:19 bcast start
+bench_local.js:25 bcast time 58.39999999944121 ms
+bench_local.js:28 allreduce start
+bench_local.js:34 allreduce time 7.400000000372529 ms
+bench_local.js:38 barrier start
+bench_local.js:43 barrier time 10.200000000186265 ms
+bench_local.js:44 Test done
+
+
+num_procs 2
+bench_local.js:19 bcast start
+bench_local.js:25 bcast time 113.70000000018626 ms
+bench_local.js:28 allreduce start
+bench_local.js:34 allreduce time 29.299999999813735 ms
+bench_local.js:38 barrier start
+bench_local.js:43 barrier time 62 ms
+bench_local.js:44 Test done
+
+
+num_procs 4
+bench_local.js:19 bcast start
+bench_local.js:25 bcast time 186.29999999981374 ms
+bench_local.js:28 allreduce start
+bench_local.js:34 allreduce time 69.8999999994412 ms
+bench_local.js:38 barrier start
+bench_local.js:43 barrier time 141.29999999981374 ms
+bench_local.js:44 Test done
+
+
+num_procs 8
+bench_local.js:19 bcast start
+bench_local.js:25 bcast time 316.8999999994412 ms
+bench_local.js:28 allreduce start
+bench_local.js:34 allreduce time 115.29999999981374 ms
+bench_local.js:38 barrier start
+bench_local.js:43 barrier time 308.09999999962747 ms
+bench_local.js:44 Test done
+
+
+num_procs 16
+bench_local.js:19 bcast start
+bench_local.js:25 bcast time 506.70000000018626 ms
+bench_local.js:28 allreduce start
+bench_local.js:34 allreduce time 174 ms
+bench_local.js:38 barrier start
+bench_local.js:43 barrier time 476.70000000018626 ms
+bench_local.js:44 Test done
+
+
+num_procs 32
+bench_local.js:19 bcast start
+bench_local.js:25 bcast time 927.7999999998137 ms
+bench_local.js:28 allreduce start
+bench_local.js:34 allreduce time 290.1000000005588 ms
+bench_local.js:38 barrier start
+bench_local.js:43 barrier time 903.0999999996275 ms
+bench_local.js:44 Test done
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+Global vs local (num_procs evenly split between two computers)
+
+
+Global tests
+Not optimized
+num_procs 2
+bench_local_global.js:19 bcast start
+bench_local_global.js:25 bcast time 306.20000000018626 ms
+bench_local_global.js:28 reduce start
+bench_local_global.js:34 reduce time 5080.0999999996275 ms
+bench_local_global.js:38 barrier start
+bench_local_global.js:43 barrier time 82.70000000018626 ms
+bench_local_global.js:44 Test done
+
+
+num_procs 4
+bench_local_global.js:19 bcast start
+bench_local_global.js:25 bcast time 309.90000000037253 ms
+bench_local_global.js:28 reduce start
+bench_local_global.js:34 reduce time 9911.400000000373 ms
+bench_local_global.js:38 barrier start
+bench_local_global.js:43 barrier time 138.3999999994412 ms
+bench_local_global.js:44 Test done
+
+
+num_procs 8
+bench_local_global.js:19 bcast start
+bench_local_global.js:25 bcast time 5170.299999999814 ms
+bench_local_global.js:28 reduce start
+bench_local_global.js:34 reduce time 7690.5 ms
+bench_local_global.js:38 barrier start
+bench_local_global.js:43 barrier time 5090 ms
+bench_local_global.js:44 Test done
+
+
+num_procs 16
+bench_local_global.js:19 bcast start
+bench_local_global.js:25 bcast time 5130.5 ms
+bench_local_global.js:28 reduce start
+bench_local_global.js:34 reduce time 9739 ms
+bench_local_global.js:38 barrier start
+bench_local_global.js:43 barrier time 5089.700000000186 ms
+bench_local_global.js:44 Test done
+
+
+num_procs 32
+bench_local_global.js:19 bcast start
+bench_local_global.js:25 bcast time 5111 ms
+bench_local_global.js:28 reduce start
+bench_local_global.js:34 reduce time 11919.799999999814 ms
+bench_local_global.js:38 barrier start
+bench_local_global.js:43 barrier time 5120.600000000559 ms
+bench_local_global.js:44 Test done
+
+
+num_procs 64
+bench_local_global.js:19 bcast start
+bench_local_global.js:25 bcast time 5083.0999999996275 ms
+bench_local_global.js:28 reduce start
+bench_local_global.js:34 reduce time 10567 ms
+bench_local_global.js:38 barrier start
+bench_local_global.js:43 barrier time 5059.700000000186 ms
+bench_local_global.js:44 Test done
+
+
+Optimized
+num_procs 2
+bench_local_global.js:19 bcast start
+bench_local_global.js:25 bcast time 46.60000000055879 ms
+bench_local_global.js:28 reduce start
+bench_local_global.js:34 reduce time 154.6000000005588 ms
+bench_local_global.js:38 barrier start
+bench_local_global.js:43 barrier time 81.29999999981374 ms
+bench_local_global.js:44 Test done
+
+
+num_procs 4
+bench_local_global.js:19 bcast start
+bench_local_global.js:25 bcast time 50.90000000037253 ms
+bench_local_global.js:28 reduce start
+bench_local_global.js:34 reduce time 174.79999999981374 ms
+bench_local_global.js:38 barrier start
+bench_local_global.js:43 barrier time 107.69999999925494 ms
+bench_local_global.js:44 Test done
+
+
+num_procs 8
+bench_local_global.js:19 bcast start
+bench_local_global.js:25 bcast time 50.09999999962747 ms
+bench_local_global.js:28 reduce start
+bench_local_global.js:34 reduce time 183.80000000074506 ms
+bench_local_global.js:38 barrier start
+bench_local_global.js:43 barrier time 116.09999999962747 ms
+bench_local_global.js:44 Test done
+
+
+num_procs 16
+bench_local_global.js:19 bcast start
+bench_local_global.js:25 bcast time 58 ms
+bench_local_global.js:28 reduce start
+bench_local_global.js:34 reduce time 182.70000000018626 ms
+bench_local_global.js:38 barrier start
+bench_local_global.js:43 barrier time 114.6000000005588 ms
+bench_local_global.js:44 Test done
+
+
+num_procs 32
+bench_local_global.js:19 bcast start
+bench_local_global.js:25 bcast time 62.09999999962747 ms
+bench_local_global.js:28 reduce start
+bench_local_global.js:34 reduce time 314.90000000037253 ms
+bench_local_global.js:38 barrier start
+bench_local_global.js:43 barrier time 166.79999999981374 ms
+bench_local_global.js:44 Test done
+
+
+num_procs 64
+bench_local_global.js:19 bcast start
+bench_local_global.js:25 bcast time 70.6000000005588 ms
+bench_local_global.js:28 reduce start
+bench_local_global.js:34 reduce time 563.2000000001863 ms
+bench_local_global.js:38 barrier start
+bench_local_global.js:43 barrier time 235.79999999981374 ms
+bench_local_global.js:44 Test done
