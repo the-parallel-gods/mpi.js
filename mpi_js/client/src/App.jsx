@@ -19,12 +19,12 @@ let global_router, start_job_fn;
 export default function App() {
     const [context, setContext] = React.useState({
         gr_id: -1,
-        program_path: "tests/bench_local_global.js",
+        program_path: "tests/test_latency.js",
         num_proc: 4,
         interconnect: "crossbar",
-        enable_smartdashboard: true,
-        enable_diagnostics: true,
-        optimized: true,
+        enable_smartdashboard: false,
+        enable_diagnostics: false,
+        optimized: false,
         status: 0,
     });
     const set_finish_status = () => {
@@ -86,7 +86,7 @@ export default function App() {
                             value={context.program_path} onChange={(e) => setContext({ ...context, program_path: e.target.value })}
                         />
                         : ""}
-                    <TextField sx={{ m: 3 }} id="num_proc" type="number" label="Num proc" variant="outlined" placeholder="4" fullWidth
+                    <TextField sx={{ m: 3 }} id="num_proc" type="number" label="Num proc" variant="outlined" fullWidth
                         value={context.num_proc} onChange={(e) => setContext({ ...context, num_proc: parseInt(e.target.value) })}
                     />
                     <FormControl sx={{ m: 3 }} fullWidth>
@@ -103,13 +103,13 @@ export default function App() {
                             <MenuItem value={"tree"}>Tree interconnect</MenuItem>
                         </Select>
                     </FormControl>
-                    <FormControlLabel sx={{ m: 3 }} control={<Switch defaultChecked />} label="Enable Smartdashboard"
+                    <FormControlLabel sx={{ m: 3 }} control={<Switch checked={context.enable_smartdashboard} />} label="Enable Smartdashboard"
                         value={context.enable_smartdashboard} onChange={(e) => setContext({ ...context, enable_smartdashboard: e.target.checked })} />
-                    <FormControlLabel sx={{ m: 3 }} control={<Switch defaultChecked />} label="Enable Diagnostics"
+                    <FormControlLabel sx={{ m: 3 }} control={<Switch checked={context.enable_diagnostics} />} label="Enable Diagnostics"
                         value={context.enable_diagnostics} onChange={(e) => setContext({ ...context, enable_diagnostics: e.target.checked })}
                     />
                     {(context.gr_id === 0) ?
-                        <FormControlLabel sx={{ m: 3 }} control={<Switch defaultChecked />} label="Auto optimize"
+                        <FormControlLabel sx={{ m: 3 }} control={<Switch checked={context.optimized} />} label="Auto optimize"
                             value={context.optimized} onChange={(e) => setContext({ ...context, optimized: e.target.checked })}
                         /> : ""}
                     <Box sx={{ m: 3 }}>
