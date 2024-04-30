@@ -43,42 +43,35 @@ We have created a 40-page long documentation website for MPI developers here:
 
 ## Table of Contents
 
-- [PROJECT: MPI.JS](#project-mpijs)
-- [URL](#url)
-- [THE VISION](#the-vision)
-- [SUMMARY](#summary)
-- [Table of Contents](#table-of-contents)
 - [BACKGROUND](#background)
-  - [Processes inside a browser are very isolated](#processes-inside-a-browser-are-very-isolated)
-  - [JavaScript is event-driven single-threaded language](#javascript-is-event-driven-single-threaded-language)
-  - [The browser cannot create a WebSocket server](#the-browser-cannot-create-a-websocket-server)
-  - [Browser comes with a UI](#browser-comes-with-a-ui)
+    - [Processes inside a browser are very isolated](#processes-inside-a-browser-are-very-isolated)
+    - [JavaScript is event-driven single-threaded language](#javascript-is-event-driven-single-threaded-language)
+    - [The browser cannot create a WebSocket server](#the-browser-cannot-create-a-websocket-server)
+    - [Browser comes with a UI](#browser-comes-with-a-ui)
 - [SYSTEM ARCHITECTURE](#system-architecture)
-  - [Address naming](#address-naming)
-  - [WebSocket Server](#websocket-server)
-  - [Static File Server](#static-file-server)
-  - [Global Router](#global-router)
-  - [Node Router](#node-router)
-  - [Doubly Indexed Database](#doubly-indexed-database)
-  - [Real-time Dashboard](#real-time-dashboard)
+    - [Address naming](#address-naming)
+    - [WebSocket Server](#websocket-server)
+    - [Static File Server](#static-file-server)
+    - [Global Router](#global-router)
+    - [Node Router](#node-router)
+    - [Doubly Indexed Database](#doubly-indexed-database)
+    - [Real-time Dashboard](#real-time-dashboard)
 - [OPTIMIZATION](#optimization)
-  - [Single Source Multiple Receive (SSMR)](#single-source-multiple-receive-ssmr)
-  - [Local Allreduce Optimization](#local-allreduce-optimization)
-  - [Global Optimization](#global-optimization)
-  - [Latency Hiding](#latency-hiding)
+    - [Single Source Multiple Receive (SSMR)](#single-source-multiple-receive-ssmr)
+    - [Local Allreduce Optimization](#local-allreduce-optimization)
+    - [Global Optimization](#global-optimization)
+    - [Latency Hiding](#latency-hiding)
 - [RESULTS](#results)
-  - [Local Tests](#local-tests)
-    - [Local Allreduce](#local-allreduce)
-    - [Local Barrier](#local-barrier)
-    - [Local Bcast](#local-bcast)
-  - [Global Tests](#global-tests)
-    - [Global Broadcast](#global-broadcast)
-  - [Global Barrier](#global-barrier)
-    - [Global Reduce](#global-reduce)
+    - [Local Tests](#local-tests)
+        - [Local Allreduce](#local-allreduce)
+        - [Local Barrier](#local-barrier)
+        - [Local Bcast](#local-bcast)
+    - [Global Tests](#global-tests)
+        - [Global Broadcast](#global-broadcast)
+        - [Global Barrier](#global-barrier)
+        - [Global Reduce](#global-reduce)
 - [Conclusion](#conclusion)
 - [Contribution](#contribution)
-  - [Sean (haoxians) - 50%](#sean-haoxians---50)
-  - [David (drudo) - 50%](#david-drudo---50)
 
 ## BACKGROUND
 
@@ -345,7 +338,7 @@ The unoptimized global broadcast time is slightly surprising. When there's less 
 The optimized global broadcast time is significantly faster than the unoptimized version. First, we avoid the cliff in the graph by condensing all the messages into one message. Second, it uses SSMR avoid the overhead of sending the same message multiple times. The optimized version time graph makes sense, since it only sends one message at a time. The time it takes gradually increases as the number of nodes increases, as expected. 
 As a result, we get some speedup at lower processor counts, but the largest speedup is at higher processor counts. However, the speedup decreases at higher processor counts, since the unoptimized speed is largely constant. The fastest speedup is 100x with 64 nodes.
 
-### Global Barrier
+#### Global Barrier
 
 ![](./images/benchmarks/Time_(ms)_Global_Unoptimized_Barrier_Time.png){: style="display:block;width:75%;margin-left: auto;margin-right: auto;"}
 
