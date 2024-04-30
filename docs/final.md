@@ -366,7 +366,7 @@ Although we could not implement the non-blocking APIs (due to the single-threade
 
 As planned in the proposal, we ran a MPI program on our system (the sqrt program provided in asst4), and found our system to only perform ~10x slower than the `-O3` optimized C version. This is a significant achievement, considering the overhead of running a scripted language in the browser. We also compared using local channels and global WebSocket channels, and found that the global channels are significantly slower (and thus, we optimized accordingly).
 
-This project is truly one-of-a-kind, there is really not much out there that compares to it. We hope our work not only served as a good learning experience for us, but also could be inspiring to others in the community.
+This project is truly one-of-a-kind, there is really not much out there that does what it does. We hope our work not only served as a good learning experience for us, but also could be inspiring to others in the community.
 
 Here's the documentation link again for this project:
 
