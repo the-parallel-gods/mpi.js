@@ -14,51 +14,41 @@ import LoadingButton from '@mui/lab/LoadingButton';
 
 const GlobalContext = React.createContext(null);
 const callback_box = { callback: () => { } };
-let global_router, start_job_fn;
+let global_router, start_job_fn, set_finish_status, set_gr_id, on_start_button;
 
 export default function App() {
     const [context, setContext] = React.useState({
         gr_id: -1,
-        program_path: "tests/test_latency.js",
+        program_path: "tests/test_mult.js",
         num_proc: 4,
         interconnect: "crossbar",
-        enable_smartdashboard: false,
-        enable_diagnostics: false,
-        optimized: false,
+        enable_smartdashboard: true,
+        enable_diagnostics: true,
+        optimized: true,
         status: 0,
     });
-    const set_finish_status = () => {
+
+    set_finish_status = () => {
         if (context.status !== 3) setContext({ ...context, status: 3 });
     }
 
-    useEffect(() => {
-        start_job_fn = () => {
-            new Job(
-                callback_box,
-                context.num_proc,
-                global_router,
-                context.interconnect,
-                context.enable_smartdashboard,
-                context.enable_diagnostics,
-                () => set_finish_status()
-            );
-        };
-    }, [context]);
-
-    useEffect(() => {
-        const set_gr_id = (gr_id) => {
-            console.log("set_gr_id", gr_id);
-            setContext({ ...context, gr_id })
-        };
-        const ws_url = window.location.host.split(":")[0];
-        global_router = new GlobalRouter();
-        global_router.init(ws_url, set_gr_id).then(() => {
-            setContext({ ...context, status: 2 });
-            start_job_fn();
-        });
-    }, []);
-
-    const on_start_button = () => {
+    set_gr_id = (gr_id) => {
+        console.log("set_gr_id", gr_id);
+        setContext({ ...context, gr_id })
+    };
+    start_job_fn = () => {
+        setContext({ ...context, status: 2 });
+        new Job(
+            callback_box,
+            context.num_proc,
+            global_router,
+            context.interconnect,
+            context.enable_smartdashboard,
+            context.enable_diagnostics,
+            () => set_finish_status()
+        );
+    };
+    on_start_button = () => {
         if (context.status === 0) {
             global_router.start(context.num_proc, context.program_path, context.optimized);
             console.log("Start requested");
@@ -68,6 +58,13 @@ export default function App() {
         }
     }
 
+    useEffect(() => {
+        const ws_url = window.location.host.split(":")[0];
+        global_router = new GlobalRouter();
+        global_router.init(ws_url, set_gr_id).then(() => { start_job_fn(); });
+    }, []);
+
+
     const get_status = () => {
         // returns the button text, loading, and icon
         if (context.status === 0) return ["start", false, <PlayArrowIcon key={0} />];
@@ -76,6 +73,7 @@ export default function App() {
         if (context.status === 3) return ["restart", false, <SyncOutlinedIcon key={3} />];
     }
 
+    console.log("RENDER: gr_id", context.gr_id);
     return (
         <div>
             <GlobalContext.Provider value={{ context, setContext }}>
