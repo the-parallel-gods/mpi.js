@@ -43,35 +43,42 @@ We have created a 40-page long documentation website for MPI developers here:
 
 ## Table of Contents
 
+- [PROJECT: MPI.JS](#project-mpijs)
+- [URL](#url)
+- [THE VISION](#the-vision)
+- [SUMMARY](#summary)
+- [Table of Contents](#table-of-contents)
 - [BACKGROUND](#background)
-    - [Processes inside a browser are very isolated](#processes-inside-a-browser-are-very-isolated)
-    - [JavaScript is event-driven single-threaded language](#javascript-is-event-driven-single-threaded-language)
-    - [The browser cannot create a WebSocket server](#the-browser-cannot-create-a-websocket-server)
-    - [Browser comes with a UI](#browser-comes-with-a-ui)
+  - [Processes inside a browser are very isolated](#processes-inside-a-browser-are-very-isolated)
+  - [JavaScript is event-driven single-threaded language](#javascript-is-event-driven-single-threaded-language)
+  - [The browser cannot create a WebSocket server](#the-browser-cannot-create-a-websocket-server)
+  - [Browser comes with a UI](#browser-comes-with-a-ui)
 - [SYSTEM ARCHITECTURE](#system-architecture)
-    - [Address naming](#address-naming)
-    - [WebSocket Server](#websocket-server)
-    - [Static File Server](#static-file-server)
-    - [Global Router](#global-router)
-    - [Node Router](#node-router)
-    - [Doubly Indexed Database](#doubly-indexed-database)
-    - [Real-time Dashboard](#real-time-dashboard)
+  - [Address naming](#address-naming)
+  - [WebSocket Server](#websocket-server)
+  - [Static File Server](#static-file-server)
+  - [Global Router](#global-router)
+  - [Node Router](#node-router)
+  - [Doubly Indexed Database](#doubly-indexed-database)
+  - [Real-time Dashboard](#real-time-dashboard)
 - [OPTIMIZATION](#optimization)
-    - [Single Source Multiple Receive (SSMR)](#single-source-multiple-receive-ssmr)
-    - [Local Allreduce Optimization](#local-allreduce-optimization)
-    - [Global Optimization](#global-optimization)
-    - [Latency Hiding](#latency-hiding)
+  - [Single Source Multiple Receive (SSMR)](#single-source-multiple-receive-ssmr)
+  - [Local Allreduce Optimization](#local-allreduce-optimization)
+  - [Global Optimization](#global-optimization)
+  - [Latency Hiding](#latency-hiding)
 - [RESULTS](#results)
-    - [Local Tests](#local-tests)
-        - [Local Allreduce](#local-allreduce)
-        - [Local Barrier](#local-barrier)
-        - [Local Bcast](#local-bcast)
-    - [Global Tests](#global-tests)
-        - [Global Broadcast](#global-broadcast)
-        - [Global Barrier](#global-barrier)
-        - [Global Reduce](#global-reduce)
+  - [Local Tests](#local-tests)
+    - [Local Allreduce](#local-allreduce)
+    - [Local Barrier](#local-barrier)
+    - [Local Bcast](#local-bcast)
+  - [Global Tests](#global-tests)
+    - [Global Broadcast](#global-broadcast)
+  - [Global Barrier](#global-barrier)
+    - [Global Reduce](#global-reduce)
 - [Conclusion](#conclusion)
 - [Contribution](#contribution)
+  - [Sean (haoxians) - 50%](#sean-haoxians---50)
+  - [David (drudo) - 50%](#david-drudo---50)
 
 ## BACKGROUND
 
@@ -136,7 +143,7 @@ Since this project involves significant routing work, here we formally clarify t
 
 * GR_ID: Global Router ID (unique identifier for each browser)
 * NR_ID: Node Router ID (local unique identifier for each worker process, starts from 0 for each browser)
-* PID: Node Router ID (what user sees; global unique identifier for each worker process, continuous across browsers)
+* PID: Universal Node Router ID (what user sees; global unique identifier for each worker process, continuous across browsers)
 * NR_OFFSET: Node Router Offset (smallest PID in the local worker pool)
 
 The system is designed this way so that the user can use an abstraction that gives the illusion of every worker process being in the same global network; however, the system under the hood is designed to be as optimized as possible.
@@ -155,29 +162,29 @@ Browser: GR_ID=1
 ```
 ### WebSocket Server
 
-The WebSocket server is responsible for routing messages between the browser. It assigns each browser a unique GR_ID and keeps track of the global routing table. Since this central server is a point of contention, we designed it to be as lightweight as possible, and we offload as much work as possible to the browser. Each request to the server is a simple JSON object that contains the message and the destination GR_ID. The websocket server uses SSMR optimization (described later).
+The WebSocket server is responsible for routing messages between the browser. It assigns each browser a unique GR_ID and keeps track of the global routing table. Since this central server is a point of contention, we designed it to be as lightweight as possible. We also designed our routing protocols to offload as much work as possible to the browser. Each request to the server is a simple JSON object that contains the message and the destination GR_ID. The websocket server uses the SSMR optimization (described later).
 
 ### Static File Server
 
-The static file server is responsible for serving the user's MPI code, the MPI.js library, and the UI files. It is a simple HTTP server that supports hot loading the user's code into the browser.
+The static file server is responsible for serving the user's desired MPI code, the MPI.js library, and the UI files. It is a simple HTTP server that supports hot-loading the user's code into the browser.
 
 ### Global Router
 
-Sitting in the Browser UI process, the Global Router is responsible for routing messages between browsers. Whenever a Node Router wants to send a message to another browser, it delegates the message to the Global Router. The Global Router then forwards the message to the destination browser's Global Router, which then forwards the message to the destination Node Router. When messages get to the Global Router level, the PID and the NR_IDs are abstracted away, and the system only deals with GR_IDs. This is done to make the system more scalable and to hide the complexity of the system at each layer. The Global Router uses SSMR optimization (described later), so if it needs to send the same message to multiple other Global Routers, it only needs to send one message to the WebSocket server.
+Sitting in the Browser's UI process, the Global Router is responsible for routing messages between browsers. Whenever a Node Router wants to send a message to another browser, it delegates the message to the Global Router. The Global Router then forwards the message to the destination browser's Global Router, which then forwards the message to the destination Node Router. When messages get to the Global Router level, the PID and the NR_IDs are abstracted away, and the system only deals with GR_IDs. This is done to make the system more scalable and to hide the complexity of the system at each layer. The Global Router uses SSMR optimization (described later), so if it needs to send the same message to multiple other Global Routers, it only needs to send one message to the WebSocket server.
 
 ### Node Router
 
-In the worker process, there is a Node Router is responsible for routing, queueing, and feeding message to and from the user's MPI code. The Node Router is responsible for routing messages between workers within the same browser. The Node Router uses a custom routing table to determine the best route to send a message to another worker process. The Node Router uses SSMR optimization (described later) to reduce the number of messages sent.
+The Node Router is located in the worker process and is responsible for routing, queueing, and feeding messages to and from the user's MPI code. The Node Router is also handles routing messages between workers within the same browser. The Node Router achieves this with a custom routing table to determine the best route to send a message to another worker process. The Node Router uses SSMR optimization (described later) to reduce the number of messages sent.
 
-In the best case, the interconnect that connects the Node Routers within the same browser is a crossbar, which allows any message to be sent to any other worker process with one hop. However, when more workers are needed, the number of connections grows quadratically, so we also support ring and tree interconnects that balance the number of connections and the number of hops.
+In the best case, the interconnect that connects the Node Routers within the same browser is a crossbar, which allows any message to be sent to any other worker process within one hop. However, when more workers are needed, the number of connections grows quadratically, so we also support a ring and tree interconnect that balance the number of connections and hops.
 
 When ring or tree interconnects are used, the Node Router also serves as a forwarder for messages that need to be sent to another worker. If a node isn't directly connected to the destination node, it will send it to someone closer to the destination, who will then forward it to the destination.
 
 ### Doubly Indexed Database
 
-Whenever a Node Router receives a message, it needs to feed that message to the user's MPI code. In our JavaScript MPI implementation, we skip the back and forth checking that actual MPI implementations do, in order to improve performance. Instead, we directly deposit the message into a queue. Since the system is in a browser, where memory usage is already very high without MPI, we delegate the responsibility of not overflowing the queue to the MPI user. Since JavaScript is single-threaded and thread-safe, we can construct a very performant ProducerConsumer queue without locks. 
+Whenever a Node Router receives a message, it needs to feed that message to the user's MPI code. In our JavaScript MPI implementation, we skip the back and forth checking that actual MPI implementations do in order to improve performance. Instead, we directly deposit the message into a queue. Since the system is in a browser, where memory usage is already very high without MPI, we delegate the responsibility of not overflowing the queue to the MPI user. Since JavaScript is single-threaded and thread-safe, we can construct a very performant ProducerConsumer queue without locks.
 
-The logic is as follows: when we receive a message with tag and src_pid, we check the receiverDB if there is a user waiting for that message. If there is, we directly call the user's callback. If there isn't, we deposit the message into the messageDB. When the user calls a receive function, we check the messageDB for the message. If it is there, we directly call the user's callback. If it isn't, we deposit the user's callback into the receiverDB. 
+The logic is as follows: when we receive a message with a tag and src_pid, we check the receiverDB if there is a user waiting for that message. If there is, we directly call the user's callback. If there isn't, we deposit the message into the messageDB. When the user calls a receive function, we check the messageDB for that message. If it is there, we directly call the user's callback. If it isn't, we deposit the user's callback into the receiverDB.
 
 <!-- ```python
 # Pseudo code
@@ -205,7 +212,7 @@ Our focus then shifts to making the queue as efficient as possible, since many m
 
 ### Real-time Dashboard
 
-One of the key features of our system is the real-time dashboard. The dashboard shows the number of messages sent and received by each worker process, and the proportion of time spent on each MPI operation. The dashboard is updated in real-time, so the user can see how their MPI program is performing, and use the animations to debug or optimize their code.
+One of the key features of our system is the real-time dashboard. The dashboard shows the number of messages sent and received by each worker process, and the proportion of time spent on each MPI operation. The dashboard is updated in real-time, so the user can see how their MPI program is performing, and interpret the animations to debug or optimize their code.
 
 ![](./images/milestone-dashboard.png)
 
@@ -218,28 +225,28 @@ One of the key features of our system is the real-time dashboard. The dashboard 
 
 ![](./images/ssmr.png)
 
-One of the key optimizations we implemented was Single Source Multiple Receive. We observed that during a bcast operation, the same message is sent to multiple workers. But since some messages are forwarded multiple times, the same message is sent multiple times. This is a waste of bandwidth.
+One of the key optimizations we implemented was Single Source Multiple Receive. We observed that during a broadcast operation, the same message is sent to multiple workers. But since some messages are forwarded multiple times, the same message is sent multiple times. This is a waste of bandwidth.
 
-Thus, we propose to change the destination of the message to hold multiple destinations. This way, when a message is sent, it is sent to multiple destinations at once. Each forwarder along the way will first check if the message is meant for them, and if it is, they will first consume the message before forwarding it. Finally, the forwarding router will check if the message needs to be send along multiple paths to reach all the intended destinations. If it does, it will group the recipients to achieve the minimum number of duplications.
+Thus, we propose to change the destination field of the message to hold multiple destinations. This way, when a message is sent, it is sent to multiple destinations at once. Each forwarder along the way will first check if the message is meant for them, and if it is, they will first consume the message before forwarding it. Finally, the forwarding router will check if the message needs to be sent along multiple paths to reach all the intended destinations. If it does, it will group the recipients to achieve the minimum number of duplications as depicted above.
 
 This optimization is implemented at both the local level between the Node Routers and the global level between the Global Routers.
-This optimization is particularly useful when the local interconnect is a ring or a tree, as well as the global level where the resources are more scarce.
+This optimization is particularly useful when the local interconnect is a ring or a tree. It is also effective at the global level where the resources are more scarce.
 
 ### Local Allreduce Optimization
 
-At the local level, we implemented an optimized allreduce operation using ring reduce. As described in lecture, strategy uses signficantly less bandwidth than the naive allreduce implementation. Particularly, when the interconnect is a ring, the allreduce operation fits perfectly into the ring structure. 
+At the local level, we implemented an optimized allreduce operation using ring reduce. As described in lecture, the strategy uses significantly less bandwidth than the naive allreduce implementation. Particularly, when the interconnect is a ring, the allreduce operation fits perfectly into the ring structure. 
 
 For the tree interconnect, we implemented a optimized version as well. In this case, each layer of the tree reduces at the same time, and the root node broadcasts the result to all the other nodes. This is a significant improvement over the naive allreduce implementation, which would have to send the message to every other node.
 
 ### Global Optimization
 
-As described before, sending messages over the WebSocket server has high latency and low bandwidth. To reduce the number of messages sent, we implemented a divide-and-conquer strategy for MPI_Reduce and MPI_Barrier. For reduce, for example, first, each machine does its local fast reduce to produce a partial result. Then, the operation is raised to the global level, where each machine sends its partial result to perform a secondarily reduce. This way, the number of messages sent over the WebSocket server is reduced significantly.
+As described before, sending messages over the WebSocket server has high latency and low bandwidth. To reduce the number of messages sent, we implemented a divide-and-conquer strategy for MPI_Reduce and MPI_Barrier. For reduce, for example, first, each machine does its local fast reduce to produce a partial result. Then, the operation is raised to the global level, where each machine sends its partial result to perform a secondary reduce. This way, the number of messages sent over the WebSocket server is decreased significantly.
 
 ### Latency Hiding
 
 ![](./images/bcast_latency.png)
 
-Finally, we implemented a latency hiding strategy for the bcast operation. We discovered that the WebSocket is many orders of magnitude slower than the local communication. Thus, we implemented a strategy where the local workers can keep working if permitted by correctness. This way, the latency of sending messages over the WebSocket server significantly overlaps. We found that the bandwidth isn't the bottleneck, so this strategy is particularly effective.
+Finally, we implemented a latency hiding strategy for the bcast operation. We discovered that the WebSocket is many orders of magnitude slower than the local communication. Thus, we implemented a strategy where the local workers can keep working if permitted by correctness. This way, the latency of sending messages over the WebSocket server significantly overlaps. We found that the bandwidth isn't the primary bottleneck, so this strategy is particularly effective.
 
 In this example, node 1 first sends a bcast to everyone, then node 2 sends a bcast to everyone. However, node 1's message reaches node 2 before node 1's bcast reaches everyone on the other machine. Instead of waiting for the message to propagate fully, node 2 can continue working and send its bcast without violating correctness. This way, the latency of the bcast operation is significantly reduced.
 
@@ -312,7 +319,7 @@ In this test, we see that the optimized barrier operation is not significantly d
 
 ![](./images/benchmarks/Speedup_Local_Broadcast_with_Tree_Interconnect_Optimization_Speedup.png){: style="display:block;width:75%;margin-left: auto;margin-right: auto;"}
 
-When using the crossbar interconnect, the optimized version is ever so slightly slower than the non-optimized version, indicating that SSMR does also have overhead. However, when the number of nodes increases, the optimized version becomes faster, since they don't wait for the message to propagate fully. Instead, the node can choose to start the next operation early. The most that this stategy can save is the "return echo" of the bcast operation, which should save around 2x. This is exactly what we observe.
+When using the crossbar interconnect, the optimized version is ever so slightly slower than the non-optimized version, indicating that SSMR does also have overhead. However, when the number of nodes increases, the optimized version becomes faster, since they don't wait for the message to propagate fully. Instead, the node can choose to start the next operation early. The most that this strategy can save is the "return echo" of the bcast operation, which should save around 2x. This is exactly what we observe.
 
 When using the ring or tree interconnects, the SSMR and the latency hiding strategy are particularly effective. The fastest speedup is 10x with 32 nodes for ring and 4.5x with 32 nodes for tree. 
 
@@ -333,7 +340,7 @@ Note: the raw time between different operation are not comparable, since they ar
 
 ![](./images/benchmarks/Speedup_Global_Broadcast_Optimization_Speedup.png){: style="display:block;width:75%;margin-left: auto;margin-right: auto;"}
 
-The unoptimized global broadcast time is slightly surprising. When there's less than 4 nodes, the operation is very fast. However, as soon as it hits 8 nodes, the operation becomes very slow. The reason for this is because there is some sort of buffer in the low level WebSocket interface. We performed regular send and receive tests, and found that if first 2 back-to-back messages are sent immediately, but any subsequent messages are queued and sent in a group after around 50ms. We reason that this is a optimziation that is made by the WebSocket, and it is out of our control. Because of this behavior, we observe the cliff in the graph.
+The unoptimized global broadcast time is slightly surprising. When there's less than 4 nodes, the operation is very fast. However, as soon as it hits 8 nodes, the operation becomes very slow. The reason for this is because there is some sort of buffer in the low level WebSocket interface. We performed regular send and receive tests, and found that if first 2 back-to-back messages are sent immediately, but any subsequent messages are queued and sent in a group after around 50ms. We reason that this is a optimization that is made by the WebSocket, and it is out of our control. Because of this behavior, we observe the cliff in the graph.
 
 The optimized global broadcast time is significantly faster than the unoptimized version. First, we avoid the cliff in the graph by condensing all the messages into one message. Second, it uses SSMR avoid the overhead of sending the same message multiple times. The optimized version time graph makes sense, since it only sends one message at a time. The time it takes gradually increases as the number of nodes increases, as expected. 
 As a result, we get some speedup at lower processor counts, but the largest speedup is at higher processor counts. However, the speedup decreases at higher processor counts, since the unoptimized speed is largely constant. The fastest speedup is 100x with 64 nodes.
