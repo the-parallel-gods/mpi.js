@@ -1,5 +1,7 @@
 ## PROJECT: MPI.JS
 
+_MPI, now on the web._
+
 <!-- You should write up your final project report in the style of a research paper. Please go into detail
 regarding the analysis that you did throughout your project, including any initial approaches
 that did not work well (and how you diagnosed and fixed their performance problems), etc. To
@@ -13,6 +15,10 @@ still accurate. -->
 ## URL
 
 [https://the-parallel-gods.github.io/mpi.js/home/](https://the-parallel-gods.github.io/mpi.js/home/)
+
+## THE VISION
+
+> **Our mission is to revolutionize impractical distributed computing by providing a browser-based MPI implementation that empowers researchers and developers to seamlessly explore parallel programming concepts and deploy distributed applications across diverse platforms.**
 
 ## SUMMARY
 
@@ -31,7 +37,12 @@ CAPTCHAS is effective. -->
 
 ![](./images/mpi_sys_arch.png)
 
-This project contains >3000 lines of code and documentation.
+This project contains >3000 lines of code.
+
+We have created a 40-page long comprehensive documentation website for MPI developers here: 
+
+[https://the-parallel-gods.github.io/mpi.js/docs/](https://the-parallel-gods.github.io/mpi.js/docs/)
+
 
 ## BACKGROUND
 
@@ -240,7 +251,7 @@ Due to limited space, we only show the speedup graphs here. For the full results
 
 In the following tests, we run the MPI operations on a single browser with multiple workers. The speedup is calculated by comparing the time taken for the unoptimized version and the optimized version. The optimized version has the SSMR and the local allreduce optimization, while the unoptimized version does not.
 
-#### Allreduce
+#### Local Allreduce
 
 ![](./images/benchmarks/Speedup_Local_AllReduce_with_Crossbar_Interconnect_Optimization_Speedup.png){: style="display:block;width:75%;margin-left: auto;margin-right: auto;"}
 
@@ -254,7 +265,7 @@ When using the ring interconnect, the ring reduce is also slower than the naive 
 
 When using the tree interconnect, the tree reduce is around the same speed as the naive reduce when the number of nodes is small. However, as the number of nodes increases, the tree reduce sees the largest speedup. The fastest speedup is 50x with 32 nodes. While the optimized version perfectly fits the tree architecture's structure, the naive version has to send the message to every other node. Because the tree has a root, a single point of contention, the unoptimized version doesn't know about this contention and results in extreme inefficiency. Due to this contention, the tree architecture is the slowest when using the naive reduce.
 
-#### Barrier
+#### Local Barrier
 
 ![](./images/benchmarks/Speedup_Local_Barrier_with_Crossbar_Interconnect_Optimization_Speedup.png){: style="display:block;width:75%;margin-left: auto;margin-right: auto;"}
 
@@ -262,10 +273,10 @@ When using the tree interconnect, the tree reduce is around the same speed as th
 
 ![](./images/benchmarks/Speedup_Local_Barrier_with_Tree_Interconnect_Optimization_Speedup.png){: style="display:block;width:75%;margin-left: auto;margin-right: auto;"}
 
-In this test, we see that the optimized barrier operation is not significantly different in speed on the crossbar architecture. This is 
+In this test, we see that the optimized barrier operation is not significantly different in speed on the crossbar architecture. This is expected since the SSMR optimization doesn't apply if all messages are direct. In the ring and tree architectures, the optimized barrier operation is slightly faster because the "return echo" of the barrier operation can benefit from the SSMR optimization.
 
-#### Bcast
 
+#### Local Bcast
 
 ![](./images/benchmarks/Speedup_Local_Broadcast_with_Crossbar_Interconnect_Optimization_Speedup.png){: style="display:block;width:75%;margin-left: auto;margin-right: auto;"}
 
@@ -273,42 +284,66 @@ In this test, we see that the optimized barrier operation is not significantly d
 
 ![](./images/benchmarks/Speedup_Local_Broadcast_with_Tree_Interconnect_Optimization_Speedup.png){: style="display:block;width:75%;margin-left: auto;margin-right: auto;"}
 
+When using the crossbar interconnect, the optimized version is ever so slightly slower than the non-optimized version, indicating that SSMR does also have overhead. However, when the number of nodes increases, the optimized version becomes faster, since they don't wait for the message to propagate fully. Instead, the node can choose to start the next operation early. The most that this stategy can save is the "return echo" of the bcast operation, which should save around 2x. This is exactly what we observe.
+
+When using the ring or tree interconnects, the SSMR and the latency hiding strategy are particularly effective. The fastest speedup is 10x with 32 nodes for ring and 4.5x with 32 nodes for tree. 
+
+
 ### Global Tests
 
-#### Broadcast
+In the following tests, we run the MPI operations on a two browsers with evenly split number of workers. The two browsers are running on the same machine for this test. It demonstrates the same principles as using multiple machines, but with less noise. Running on multiple machines should expect much more slowdown due network latency.
+
+The speedup is calculated by comparing the time taken for the unoptimized version and the optimized version. The optimized version has the SSMR and the global optimizations, while the unoptimized version does not. 
+Note: the raw time between different operation are not comparable, since they are run for a different number of iterations. 
+
+
+#### Global Broadcast
 
 ![](./images/benchmarks/Time_(ms)_Global_Unoptimized_Broadcast_Time.png){: style="display:block;width:75%;margin-left: auto;margin-right: auto;"}
-
 
 ![](./images/benchmarks/Time_(ms)_Global_Optimized_Broadcast_Time.png){: style="display:block;width:75%;margin-left: auto;margin-right: auto;"}
 
 ![](./images/benchmarks/Speedup_Global_Broadcast_Optimization_Speedup.png){: style="display:block;width:75%;margin-left: auto;margin-right: auto;"}
 
+The unoptimized global broadcast time is slightly surprising. When there's less than 4 nodes, the operation is very fast. However, as soon as it hits 8 nodes, the operation becomes very slow. The reason for this is because there is some sort of buffer in the low level WebSocket interface. We performed regular send and receive tests, and found that if first 2 back-to-back messages are sent immediately, but any subsequent messages are queued and sent in a group after around 50ms. We reason that this is a optimziation that is made by the WebSocket, and it is out of our control. Because of this behavior, we observe the cliff in the graph.
 
-#### Reduce
+The optimized global broadcast time is significantly faster than the unoptimized version. First, we avoid the cliff in the graph by condensing all the messages into one message. Second, it uses SSMR avoid the overhead of sending the same message multiple times. The optimized version time graph makes sense, since it only sends one message at a time. The time it takes gradually increases as the number of nodes increases, as expected. 
+As a result, we get some speedup at lower processor counts, but the largest speedup is at higher processor counts. However, the speedup decreases at higher processor counts, since the unoptimized speed is largely constant. The fastest speedup is 100x with 64 nodes.
 
-![](./images/benchmarks/Time_(ms)_Global_Unoptimized_Reduce_Time.png){: style="display:block;width:75%;margin-left: auto;margin-right: auto;"}
-
-
-![](./images/benchmarks/Time_(ms)_Global_Optimized_Reduce_Time.png){: style="display:block;width:75%;margin-left: auto;margin-right: auto;"}
-![](./images/benchmarks/Speedup_Global_Reduce_Optimization_Speedup.png){: style="display:block;width:75%;margin-left: auto;margin-right: auto;"}
-
-
-
-### Barrier
+### Global Barrier
 
 ![](./images/benchmarks/Time_(ms)_Global_Unoptimized_Barrier_Time.png){: style="display:block;width:75%;margin-left: auto;margin-right: auto;"}
-
 
 ![](./images/benchmarks/Time_(ms)_Global_Optimized_Barrier_Time.png){: style="display:block;width:75%;margin-left: auto;margin-right: auto;"}
 
 ![](./images/benchmarks/Speedup_Global_Barrier_Optimization_Speedup.png){: style="display:block;width:75%;margin-left: auto;margin-right: auto;"}
 
+Again, we observe the cliff in the unoptimized global barrier time at 8 nodes. This is likely due to the same reason as described above. The optimized global barrier avoids this cliff by first performing a barrier locally, then performing a secondary barrier globally. This way, the number of messages sent over the WebSocket server is reduced significantly. True, there are now two stages of barriers, but this is still faster since it reduces the bottleneck. The optimized version time graph makes sense, since it gradually increases as the number of nodes increases. 
+As a result, we get some speedup at lower processor counts, but the largest speedup is at higher processor counts. However, the speedup decreases at higher processor counts, since the unoptimized speed is largely constant. The fastest speedup is 230x with 64 nodes.
+
+#### Global Reduce
+
+![](./images/benchmarks/Time_(ms)_Global_Unoptimized_Reduce_Time.png){: style="display:block;width:75%;margin-left: auto;margin-right: auto;"}
+
+![](./images/benchmarks/Time_(ms)_Global_Optimized_Reduce_Time.png){: style="display:block;width:75%;margin-left: auto;margin-right: auto;"}
+
+![](./images/benchmarks/Speedup_Global_Reduce_Optimization_Speedup.png){: style="display:block;width:75%;margin-left: auto;margin-right: auto;"}
+
+The unoptimized global reduce time is slow, with an upward trend as the number of nodes increases. This is because the operation is naive and sends more data as there are more nodes. Interestingly, the optimized version uses around the same time up till 16 nodes, then starts to significantly slow down. We suspect that this is because of the machine that we are using only having 20 cores. Thus, the OS is forced to context switch, and since reduce is a computation heavy operation (unlike barrier and bcast), this slows down the operation. As a result, the speedup is fastest when there are 16 nodes, at a little over 50x.
 
 ## Conclusion
 
 This project is much larger and more complex than we initially anticipated. We learned a lot not only about MPI, but also about the browser environment, identifying relevant bottlenecks, and optimizing for interconnects. In the end, this project has over 3000 lines of code, including the library and documentation. 
-Although we could not implement the non-blocking APIs (due to the single-threaded nature of JS), we spent the time to optimize the collective APIs instead. We are proud of the results we achieved, 
+Although we could not implement the non-blocking APIs (due to the single-threaded nature of JS), we spent the time to optimize the collective APIs instead. We are proud of the results we achieved. 
+
+As planned in the proposal, we ran a MPI program on our system (the sqrt program provided in asst4), and found our system to only perform ~10x slower than the `-O3` optimized C version. This is a significant achievement, considering the overhead of running a scripted language in the browser. We also compared using local channels and global WebSocket channels, and found that the global channels are significantly slower (and thus, we optimized accordingly).
+
+This project is truly one-of-a-kind, there is really not much out there that compares to it. We hope our work not only served as a good learning experience for us, but also could be inspiring to others in the community.
+
+Here's the documentation link again for this project:
+
+[https://the-parallel-gods.github.io/mpi.js/docs/](https://the-parallel-gods.github.io/mpi.js/docs/)
+
 
 ## Contribution
 
