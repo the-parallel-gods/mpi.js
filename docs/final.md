@@ -188,12 +188,21 @@ This optimization is particularly useful when the local interconnect is a ring o
 
 ### Local Allreduce Optimization
 
+At the local level, we implemented an optimized allreduce operation using ring reduce. As described in lecture, strategy uses signficantly less bandwidth than the naive allreduce implementation. Particularly, when the interconnect is a ring, the allreduce operation fits perfectly into the ring structure. 
 
+For the tree interconnect, we implemented a optimized version as well. In this case, each layer of the tree reduces at the same time, and the root node broadcasts the result to all the other nodes. This is a significant improvement over the naive allreduce implementation, which would have to send the message to every other node.
 
 ### Global Optimization
 
+As described before, sending messages over the WebSocket server has high latency and low bandwidth. To reduce the number of messages sent, we implemented a divide-and-conquer strategy for MPI_Reduce and MPI_Barrier. For reduce, for example, first, each machine does its local fast reduce to produce a partial result. Then, the operation is raised to the global level, where each machine sends its partial result to perform a secondarily reduce. This way, the number of messages sent over the WebSocket server is reduced significantly.
 
+### Latency Hiding
 
+![](./images/bcast_latency.png)
+
+Finally, we implemented a latency hiding strategy for the bcast operation. We discovered that the WebSocket is many orders of magnitude slower than the local communication. Thus, we implemented a strategy where the local workers can keep working if permitted by correctness. This way, the latency of sending messages over the WebSocket server significantly overlaps. We found that the bandwidth isn't the bottleneck, so this strategy is particularly effective.
+
+In this example, node 1 first sends a bcast to everyone, then node 2 sends a bcast to everyone. However, node 1's message reaches node 2 before node 1's bcast reaches everyone on the other machine. Instead of waiting for the message to propagate fully, node 2 can continue working and send its bcast without violating correctness. This way, the latency of the bcast operation is significantly reduced.
 
 ## RESULTS
 
@@ -227,11 +236,11 @@ been a better choice? Or vice versa.) -->
 
 ### Local Tests
 
+Due to limited space, we only show the speedup graphs here. For the full results, please see [https://github.com/the-parallel-gods/mpi.js/tree/main/docs/images/benchmarks](https://github.com/the-parallel-gods/mpi.js/tree/main/docs/images/benchmarks).
 
+In the following tests, we run the MPI operations on a single browser with multiple workers. The speedup is calculated by comparing the time taken for the unoptimized version and the optimized version. The optimized version has the SSMR and the local allreduce optimization, while the unoptimized version does not.
 
 #### Allreduce
-
-ring speedup, tree speedup, crossbar speedup
 
 ![](./images/benchmarks/Speedup_Local_AllReduce_with_Crossbar_Interconnect_Optimization_Speedup.png){: style="display:block;width:75%;margin-left: auto;margin-right: auto;"}
 
@@ -239,10 +248,13 @@ ring speedup, tree speedup, crossbar speedup
 
 ![](./images/benchmarks/Speedup_Local_AllReduce_with_Tree_Interconnect_Optimization_Speedup.png){: style="display:block;width:75%;margin-left: auto;margin-right: auto;"}
 
+When using the crossbar interconnect, communication is relatively fast. Because of this, naively sending the message to all other nodes is slightly faster than doing the ring reduce when the number of nodes is small. As a result, the extra overhead of calculating indices in ring reduce actually 3x slower. However, as the number of nodes increases, the ring reduce becomes steadily faster than the naive reduce. The fastest speedup is 2x with 32 nodes.
 
+When using the ring interconnect, the ring reduce is also slower than the naive reduce when the number of nodes is small. Again, this signifies the significant overhead of ring reduce. However, as the number of nodes increases, the ring reduce becomes significantly faster than the naive reduce. The fastest speedup is 14x with 32 nodes. Note that the ring reduce has higher speedup than the crossbar because when the interconnect gets more congested, the crossbar architecture is more efficient than the ring architecture, since it does not involve any message forwarding.
+
+When using the tree interconnect, the tree reduce is around the same speed as the naive reduce when the number of nodes is small. However, as the number of nodes increases, the tree reduce sees the largest speedup. The fastest speedup is 50x with 32 nodes. While the optimized version perfectly fits the tree achitecture's structure, the naive version has to send the message to every other node. Because the tree has a root, which is a single point of contention, the unoptimized version which doesn't know about this contention is extremely slow. Due to this contention, the tree architecture is the slowest when using the naive reduce.
 
 #### Barrier
-ring speedup, tree speedup, crossbar speedup
 
 ![](./images/benchmarks/Speedup_Local_Barrier_with_Crossbar_Interconnect_Optimization_Speedup.png){: style="display:block;width:75%;margin-left: auto;margin-right: auto;"}
 
@@ -250,9 +262,9 @@ ring speedup, tree speedup, crossbar speedup
 
 ![](./images/benchmarks/Speedup_Local_Barrier_with_Tree_Interconnect_Optimization_Speedup.png){: style="display:block;width:75%;margin-left: auto;margin-right: auto;"}
 
-#### Bcast
-ring speedup, tree speedup, crossbar speedup
+In this test, we see that the optimized barrier operation is not significantly different in speed on the crossbar architecture. This is 
 
+#### Bcast
 
 
 ![](./images/benchmarks/Speedup_Local_Broadcast_with_Crossbar_Interconnect_Optimization_Speedup.png){: style="display:block;width:75%;margin-left: auto;margin-right: auto;"}
@@ -260,16 +272,17 @@ ring speedup, tree speedup, crossbar speedup
 ![](./images/benchmarks/Speedup_Local_Broadcast_with_Ring_Interconnect_Optimization_Speedup.png){: style="display:block;width:75%;margin-left: auto;margin-right: auto;"}
 
 ![](./images/benchmarks/Speedup_Local_Broadcast_with_Tree_Interconnect_Optimization_Speedup.png){: style="display:block;width:75%;margin-left: auto;margin-right: auto;"}
+
 ### Global Tests
 
-
 #### Broadcast
-
 
 ![](./images/benchmarks/Time_(ms)_Global_Unoptimized_Broadcast_Time.png){: style="display:block;width:75%;margin-left: auto;margin-right: auto;"}
 
 
 ![](./images/benchmarks/Time_(ms)_Global_Optimized_Broadcast_Time.png){: style="display:block;width:75%;margin-left: auto;margin-right: auto;"}
+
+![](./images/benchmarks/Speedup_Global_Broadcast_Optimization_Speedup.png){: style="display:block;width:75%;margin-left: auto;margin-right: auto;"}
 
 
 #### Reduce
@@ -278,6 +291,7 @@ ring speedup, tree speedup, crossbar speedup
 
 
 ![](./images/benchmarks/Time_(ms)_Global_Optimized_Reduce_Time.png){: style="display:block;width:75%;margin-left: auto;margin-right: auto;"}
+![](./images/benchmarks/Speedup_Global_Reduce_Optimization_Speedup.png){: style="display:block;width:75%;margin-left: auto;margin-right: auto;"}
 
 
 
@@ -288,6 +302,13 @@ ring speedup, tree speedup, crossbar speedup
 
 ![](./images/benchmarks/Time_(ms)_Global_Optimized_Barrier_Time.png){: style="display:block;width:75%;margin-left: auto;margin-right: auto;"}
 
+![](./images/benchmarks/Speedup_Global_Barrier_Optimization_Speedup.png){: style="display:block;width:75%;margin-left: auto;margin-right: auto;"}
+
+
+## Conclusion
+
+This project is much larger and more complex than we initially anticipated. We learned a lot not only about MPI, but also about the browser environment, identifying relevant bottlenecks, and optimizing for interconnects. In the end, this project has over 3000 lines of code, including the library and documentation. 
+Although we could not implement the non-blocking APIs (due to the single-threaded nature of JS), we spent the time to optimize the collective APIs instead. We are proud of the results we achieved, 
 
 ## Contribution
 
