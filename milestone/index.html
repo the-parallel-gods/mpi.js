@@ -1,0 +1,869 @@
+
+<!doctype html>
+<html lang="en" class="no-js">
+  <head>
+    
+      <meta charset="utf-8">
+      <meta name="viewport" content="width=device-width,initial-scale=1">
+      
+      
+      
+        <link rel="canonical" href="https://the-parallel-gods.github.io/mpi.js/milestone/">
+      
+      
+        <link rel="prev" href="../proposal/">
+      
+      
+        <link rel="next" href="../final/">
+      
+      
+      <link rel="icon" href="../assets/images/favicon.png">
+      <meta name="generator" content="mkdocs-1.6.0, mkdocs-material-9.5.20">
+    
+    
+      
+        <title>Milestone - MPI.js</title>
+      
+    
+    
+      <link rel="stylesheet" href="../assets/stylesheets/main.66ac8b77.min.css">
+      
+      
+
+
+    
+    
+      
+    
+    
+      
+        
+        
+        <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+        <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Roboto:300,300i,400,400i,700,700i%7CRoboto+Mono:400,400i,700,700i&display=fallback">
+        <style>:root{--md-text-font:"Roboto";--md-code-font:"Roboto Mono"}</style>
+      
+    
+    
+    <script>__md_scope=new URL("..",location),__md_hash=e=>[...e].reduce((e,_)=>(e<<5)-e+_.charCodeAt(0),0),__md_get=(e,_=localStorage,t=__md_scope)=>JSON.parse(_.getItem(t.pathname+"."+e)),__md_set=(e,_,t=localStorage,a=__md_scope)=>{try{t.setItem(a.pathname+"."+e,JSON.stringify(_))}catch(e){}}</script>
+    
+      
+
+    
+    
+    
+  </head>
+  
+  
+    <body dir="ltr">
+  
+    
+    <input class="md-toggle" data-md-toggle="drawer" type="checkbox" id="__drawer" autocomplete="off">
+    <input class="md-toggle" data-md-toggle="search" type="checkbox" id="__search" autocomplete="off">
+    <label class="md-overlay" for="__drawer"></label>
+    <div data-md-component="skip">
+      
+        
+        <a href="#project-mpijs-milestone-report" class="md-skip">
+          Skip to content
+        </a>
+      
+    </div>
+    <div data-md-component="announce">
+      
+    </div>
+    
+    
+      
+
+  
+
+<header class="md-header md-header--shadow" data-md-component="header">
+  <nav class="md-header__inner md-grid" aria-label="Header">
+    <a href=".." title="MPI.js" class="md-header__button md-logo" aria-label="MPI.js" data-md-component="logo">
+      
+  
+  <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M12 8a3 3 0 0 0 3-3 3 3 0 0 0-3-3 3 3 0 0 0-3 3 3 3 0 0 0 3 3m0 3.54C9.64 9.35 6.5 8 3 8v11c3.5 0 6.64 1.35 9 3.54 2.36-2.19 5.5-3.54 9-3.54V8c-3.5 0-6.64 1.35-9 3.54Z"/></svg>
+
+    </a>
+    <label class="md-header__button md-icon" for="__drawer">
+      
+      <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M3 6h18v2H3V6m0 5h18v2H3v-2m0 5h18v2H3v-2Z"/></svg>
+    </label>
+    <div class="md-header__title" data-md-component="header-title">
+      <div class="md-header__ellipsis">
+        <div class="md-header__topic">
+          <span class="md-ellipsis">
+            MPI.js
+          </span>
+        </div>
+        <div class="md-header__topic" data-md-component="header-topic">
+          <span class="md-ellipsis">
+            
+              Milestone
+            
+          </span>
+        </div>
+      </div>
+    </div>
+    
+    
+      <script>var media,input,key,value,palette=__md_get("__palette");if(palette&&palette.color){"(prefers-color-scheme)"===palette.color.media&&(media=matchMedia("(prefers-color-scheme: light)"),input=document.querySelector(media.matches?"[data-md-color-media='(prefers-color-scheme: light)']":"[data-md-color-media='(prefers-color-scheme: dark)']"),palette.color.media=input.getAttribute("data-md-color-media"),palette.color.scheme=input.getAttribute("data-md-color-scheme"),palette.color.primary=input.getAttribute("data-md-color-primary"),palette.color.accent=input.getAttribute("data-md-color-accent"));for([key,value]of Object.entries(palette.color))document.body.setAttribute("data-md-color-"+key,value)}</script>
+    
+    
+    
+      <label class="md-header__button md-icon" for="__search">
+        
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M9.5 3A6.5 6.5 0 0 1 16 9.5c0 1.61-.59 3.09-1.56 4.23l.27.27h.79l5 5-1.5 1.5-5-5v-.79l-.27-.27A6.516 6.516 0 0 1 9.5 16 6.5 6.5 0 0 1 3 9.5 6.5 6.5 0 0 1 9.5 3m0 2C7 5 5 7 5 9.5S7 14 9.5 14 14 12 14 9.5 12 5 9.5 5Z"/></svg>
+      </label>
+      <div class="md-search" data-md-component="search" role="dialog">
+  <label class="md-search__overlay" for="__search"></label>
+  <div class="md-search__inner" role="search">
+    <form class="md-search__form" name="search">
+      <input type="text" class="md-search__input" name="query" aria-label="Search" placeholder="Search" autocapitalize="off" autocorrect="off" autocomplete="off" spellcheck="false" data-md-component="search-query" required>
+      <label class="md-search__icon md-icon" for="__search">
+        
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M9.5 3A6.5 6.5 0 0 1 16 9.5c0 1.61-.59 3.09-1.56 4.23l.27.27h.79l5 5-1.5 1.5-5-5v-.79l-.27-.27A6.516 6.516 0 0 1 9.5 16 6.5 6.5 0 0 1 3 9.5 6.5 6.5 0 0 1 9.5 3m0 2C7 5 5 7 5 9.5S7 14 9.5 14 14 12 14 9.5 12 5 9.5 5Z"/></svg>
+        
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M20 11v2H8l5.5 5.5-1.42 1.42L4.16 12l7.92-7.92L13.5 5.5 8 11h12Z"/></svg>
+      </label>
+      <nav class="md-search__options" aria-label="Search">
+        
+        <button type="reset" class="md-search__icon md-icon" title="Clear" aria-label="Clear" tabindex="-1">
+          
+          <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M19 6.41 17.59 5 12 10.59 6.41 5 5 6.41 10.59 12 5 17.59 6.41 19 12 13.41 17.59 19 19 17.59 13.41 12 19 6.41Z"/></svg>
+        </button>
+      </nav>
+      
+    </form>
+    <div class="md-search__output">
+      <div class="md-search__scrollwrap" data-md-scrollfix>
+        <div class="md-search-result" data-md-component="search-result">
+          <div class="md-search-result__meta">
+            Initializing search
+          </div>
+          <ol class="md-search-result__list" role="presentation"></ol>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+    
+    
+  </nav>
+  
+</header>
+    
+    <div class="md-container" data-md-component="container">
+      
+      
+        
+          
+        
+      
+      <main class="md-main" data-md-component="main">
+        <div class="md-main__inner md-grid">
+          
+            
+              
+              <div class="md-sidebar md-sidebar--primary" data-md-component="sidebar" data-md-type="navigation" >
+                <div class="md-sidebar__scrollwrap">
+                  <div class="md-sidebar__inner">
+                    
+
+
+
+<nav class="md-nav md-nav--primary" aria-label="Navigation" data-md-level="0">
+  <label class="md-nav__title" for="__drawer">
+    <a href=".." title="MPI.js" class="md-nav__button md-logo" aria-label="MPI.js" data-md-component="logo">
+      
+  
+  <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M12 8a3 3 0 0 0 3-3 3 3 0 0 0-3-3 3 3 0 0 0-3 3 3 3 0 0 0 3 3m0 3.54C9.64 9.35 6.5 8 3 8v11c3.5 0 6.64 1.35 9 3.54 2.36-2.19 5.5-3.54 9-3.54V8c-3.5 0-6.64 1.35-9 3.54Z"/></svg>
+
+    </a>
+    MPI.js
+  </label>
+  
+  <ul class="md-nav__list" data-md-scrollfix>
+    
+      
+      
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../home/" class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    Home
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+    
+      
+      
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../proposal/" class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    Proposal
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+    
+      
+      
+  
+  
+    
+  
+  
+  
+    <li class="md-nav__item md-nav__item--active">
+      
+      <input class="md-nav__toggle md-toggle" type="checkbox" id="__toc">
+      
+      
+      
+        <label class="md-nav__link md-nav__link--active" for="__toc">
+          
+  
+  <span class="md-ellipsis">
+    Milestone
+  </span>
+  
+
+          <span class="md-nav__icon md-icon"></span>
+        </label>
+      
+      <a href="./" class="md-nav__link md-nav__link--active">
+        
+  
+  <span class="md-ellipsis">
+    Milestone
+  </span>
+  
+
+      </a>
+      
+        
+
+<nav class="md-nav md-nav--secondary" aria-label="Table of contents">
+  
+  
+  
+  
+    <label class="md-nav__title" for="__toc">
+      <span class="md-nav__icon md-icon"></span>
+      Table of contents
+    </label>
+    <ul class="md-nav__list" data-md-component="toc" data-md-scrollfix>
+      
+        <li class="md-nav__item">
+  <a href="#project-mpijs-milestone-report" class="md-nav__link">
+    <span class="md-ellipsis">
+      PROJECT: MPI.JS -- Milestone Report
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#url" class="md-nav__link">
+    <span class="md-ellipsis">
+      URL
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#background-platform-choice" class="md-nav__link">
+    <span class="md-ellipsis">
+      BACKGROUND &amp; PLATFORM CHOICE
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#summary-on-progress" class="md-nav__link">
+    <span class="md-ellipsis">
+      Summary On Progress
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#current-project-status" class="md-nav__link">
+    <span class="md-ellipsis">
+      Current Project Status
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#hope-to-achieve" class="md-nav__link">
+    <span class="md-ellipsis">
+      HOPE TO ACHIEVE
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#goals-being-removed" class="md-nav__link">
+    <span class="md-ellipsis">
+      Goals Being Removed
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#issues-that-concern-us" class="md-nav__link">
+    <span class="md-ellipsis">
+      Issues that Concern Us
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#intentions-for-poster-session" class="md-nav__link">
+    <span class="md-ellipsis">
+      Intentions For Poster Session
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#updated-schedule" class="md-nav__link">
+    <span class="md-ellipsis">
+      Updated SCHEDULE
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#about-us" class="md-nav__link">
+    <span class="md-ellipsis">
+      ABOUT US
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="ABOUT US">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#sean-haoxians" class="md-nav__link">
+    <span class="md-ellipsis">
+      Sean (haoxians)
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#david-drudo" class="md-nav__link">
+    <span class="md-ellipsis">
+      David (drudo)
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+    </ul>
+  
+</nav>
+      
+    </li>
+  
+
+    
+      
+      
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../final/" class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    Final Report
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+    
+      
+      
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../docs/" class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    Docs
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+    
+  </ul>
+</nav>
+                  </div>
+                </div>
+              </div>
+            
+            
+              
+              <div class="md-sidebar md-sidebar--secondary" data-md-component="sidebar" data-md-type="toc" >
+                <div class="md-sidebar__scrollwrap">
+                  <div class="md-sidebar__inner">
+                    
+
+<nav class="md-nav md-nav--secondary" aria-label="Table of contents">
+  
+  
+  
+  
+    <label class="md-nav__title" for="__toc">
+      <span class="md-nav__icon md-icon"></span>
+      Table of contents
+    </label>
+    <ul class="md-nav__list" data-md-component="toc" data-md-scrollfix>
+      
+        <li class="md-nav__item">
+  <a href="#project-mpijs-milestone-report" class="md-nav__link">
+    <span class="md-ellipsis">
+      PROJECT: MPI.JS -- Milestone Report
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#url" class="md-nav__link">
+    <span class="md-ellipsis">
+      URL
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#background-platform-choice" class="md-nav__link">
+    <span class="md-ellipsis">
+      BACKGROUND &amp; PLATFORM CHOICE
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#summary-on-progress" class="md-nav__link">
+    <span class="md-ellipsis">
+      Summary On Progress
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#current-project-status" class="md-nav__link">
+    <span class="md-ellipsis">
+      Current Project Status
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#hope-to-achieve" class="md-nav__link">
+    <span class="md-ellipsis">
+      HOPE TO ACHIEVE
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#goals-being-removed" class="md-nav__link">
+    <span class="md-ellipsis">
+      Goals Being Removed
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#issues-that-concern-us" class="md-nav__link">
+    <span class="md-ellipsis">
+      Issues that Concern Us
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#intentions-for-poster-session" class="md-nav__link">
+    <span class="md-ellipsis">
+      Intentions For Poster Session
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#updated-schedule" class="md-nav__link">
+    <span class="md-ellipsis">
+      Updated SCHEDULE
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#about-us" class="md-nav__link">
+    <span class="md-ellipsis">
+      ABOUT US
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="ABOUT US">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#sean-haoxians" class="md-nav__link">
+    <span class="md-ellipsis">
+      Sean (haoxians)
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#david-drudo" class="md-nav__link">
+    <span class="md-ellipsis">
+      David (drudo)
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+    </ul>
+  
+</nav>
+                  </div>
+                </div>
+              </div>
+            
+          
+          
+            <div class="md-content" data-md-component="content">
+              <article class="md-content__inner md-typeset">
+                
+                  
+
+
+  <h1>Milestone</h1>
+
+<h2 id="project-mpijs-milestone-report">PROJECT: MPI.JS -- Milestone Report</h2>
+<h2 id="url"><strong>URL</strong></h2>
+<p><a href="https://the-parallel-gods.github.io/mpi.js/home/">https://the-parallel-gods.github.io/mpi.js/home/</a></p>
+<h2 id="background-platform-choice">BACKGROUND &amp; PLATFORM CHOICE</h2>
+<blockquote>
+<p>Atwood’s Law: “Any application that can be written in JavaScript, will eventually be written in JavaScript.”</p>
+</blockquote>
+<p>JavaScript is one of the most popular languages used by many developers. It also runs across diverse platforms. To make MPI accessible to more programmers and compatible with more devices, we introduce it to JavaScript.</p>
+<p>As described in <a href="../proposal/#the-challenge" title="mention">#the-challenge</a>, JS is an inherently single-threaded programming language. Thus, shared-memory parallel models similar to OpenMP are simply not possible. However, we can still pass messages between multiple "isolated threads" in JS. In such an environment, MPI becomes the perfect solution for parallel programming.</p>
+<h2 id="summary-on-progress">Summary On Progress</h2>
+<p>We made huge progress on the project. </p>
+<p>The first big challenge was to make a transpiler that can convert user code into runnable MPI.js code. This involved writing a full stack server, with front-end code that can create the web workers and link with the UI, the backend code to dynamically route the user MPI code, and hot load it into the web workers, and finally the web workers themselves that receives all the system configurations and channel information. The scope of this was way beyond what we initially dreamed of, but after long hours, it's a miracle that it works.</p>
+<p>We then created the <code>node_router</code> which magically queues up messages by other nodes and feeds them to callbacks, supporting message tags. We optimized this data structure for 4 iterations, and finally optimized it to be O(1) time for all operations. After this, we implemented some basic send and receive MPI functions, and tested them with the transpiler. With much work-around (as described below), we also hacked together a way to support async sends and receives in a single-threaded language.</p>
+<p>After that, we developed a low-overhead, automatic diagnostic collection system that can be used to monitor the performance of various functions in the MPI.js system. This data is then live-streamed to a real-time dashboard that shows the number of messages being sent and received per second, as well as the time spent in each function vs the time spent on actual computation. Along with this, we developed a simple to use SmartDashboard that allows users to draw graphs, charts, progress bars, and logs in real-time, to help them debug their code.</p>
+<p>Then, we implemented the <code>sqrt</code> MPI program (from the asst4 example) and found that our JavaScript system is able to perform only 10x slower than pure <code>-O3</code> heavily optimized C code, which is a huge win. Our benchmark also shows that our system can handle up to 100,000+ message sends and receives per second.</p>
+<p>Finally, we made <a href="../docs/">a very detailed documentation</a> for every single class, every single data type, and every single function in our system. This will greatly help users to program using our library.</p>
+<p>Here's a screenshot of our live-dashboard:</p>
+<p><img alt="" src="../images/milestone-dashboard.png" /></p>
+<h2 id="current-project-status">Current Project Status</h2>
+<ul class="task-list">
+<li class="task-list-item"><label class="task-list-control"><input type="checkbox" disabled checked/><span class="task-list-indicator"></span></label> <strong>Make a nice documentation website</strong></li>
+<li class="task-list-item"><label class="task-list-control"><input type="checkbox" disabled/><span class="task-list-indicator"></span></label> <strong>Implement the following APIs</strong></li>
+<li class="task-list-item"><label class="task-list-control"><input type="checkbox" disabled/><span class="task-list-indicator"></span></label> Basics<ul class="task-list">
+<li class="task-list-item"><label class="task-list-control"><input type="checkbox" disabled checked/><span class="task-list-indicator"></span></label> MPI_Init</li>
+<li class="task-list-item"><label class="task-list-control"><input type="checkbox" disabled checked/><span class="task-list-indicator"></span></label> MPI_Finalize</li>
+<li class="task-list-item"><label class="task-list-control"><input type="checkbox" disabled/><span class="task-list-indicator"></span></label> MPI_Abort</li>
+<li class="task-list-item"><label class="task-list-control"><input type="checkbox" disabled checked/><span class="task-list-indicator"></span></label> MPI_Comm_size</li>
+<li class="task-list-item"><label class="task-list-control"><input type="checkbox" disabled checked/><span class="task-list-indicator"></span></label> MPI_Comm_rank</li>
+</ul>
+</li>
+<li class="task-list-item"><label class="task-list-control"><input type="checkbox" disabled checked/><span class="task-list-indicator"></span></label> P2P<ul class="task-list">
+<li class="task-list-item"><label class="task-list-control"><input type="checkbox" disabled checked/><span class="task-list-indicator"></span></label> MPI_Send</li>
+<li class="task-list-item"><label class="task-list-control"><input type="checkbox" disabled checked/><span class="task-list-indicator"></span></label> MPI_Isend</li>
+<li class="task-list-item"><label class="task-list-control"><input type="checkbox" disabled checked/><span class="task-list-indicator"></span></label> MPI_Recv</li>
+<li class="task-list-item"><label class="task-list-control"><input type="checkbox" disabled checked/><span class="task-list-indicator"></span></label> MPI_Irecv</li>
+</ul>
+</li>
+<li class="task-list-item"><label class="task-list-control"><input type="checkbox" disabled/><span class="task-list-indicator"></span></label> Barriers &amp; Broadcasts<ul class="task-list">
+<li class="task-list-item"><label class="task-list-control"><input type="checkbox" disabled checked/><span class="task-list-indicator"></span></label> MPI_Barrier</li>
+<li class="task-list-item"><label class="task-list-control"><input type="checkbox" disabled/><span class="task-list-indicator"></span></label> MPI_Ibarrier</li>
+<li class="task-list-item"><label class="task-list-control"><input type="checkbox" disabled checked/><span class="task-list-indicator"></span></label> MPI_Bcast</li>
+<li class="task-list-item"><label class="task-list-control"><input type="checkbox" disabled/><span class="task-list-indicator"></span></label> MPI_Ibcast</li>
+</ul>
+</li>
+<li class="task-list-item"><label class="task-list-control"><input type="checkbox" disabled/><span class="task-list-indicator"></span></label> Gathers<ul class="task-list">
+<li class="task-list-item"><label class="task-list-control"><input type="checkbox" disabled/><span class="task-list-indicator"></span></label> MPI_Gather</li>
+<li class="task-list-item"><label class="task-list-control"><input type="checkbox" disabled/><span class="task-list-indicator"></span></label> MPI_Gatherv</li>
+<li class="task-list-item"><label class="task-list-control"><input type="checkbox" disabled/><span class="task-list-indicator"></span></label> MPI_Igather</li>
+<li class="task-list-item"><label class="task-list-control"><input type="checkbox" disabled/><span class="task-list-indicator"></span></label> MPI_Igatherv</li>
+<li class="task-list-item"><label class="task-list-control"><input type="checkbox" disabled/><span class="task-list-indicator"></span></label> MPI_Allgather</li>
+<li class="task-list-item"><label class="task-list-control"><input type="checkbox" disabled/><span class="task-list-indicator"></span></label> MPI_Allgatherv</li>
+<li class="task-list-item"><label class="task-list-control"><input type="checkbox" disabled/><span class="task-list-indicator"></span></label> MPI_Iallgather</li>
+</ul>
+</li>
+<li class="task-list-item"><label class="task-list-control"><input type="checkbox" disabled/><span class="task-list-indicator"></span></label> Scatters<ul class="task-list">
+<li class="task-list-item"><label class="task-list-control"><input type="checkbox" disabled/><span class="task-list-indicator"></span></label> MPI_Scatter</li>
+<li class="task-list-item"><label class="task-list-control"><input type="checkbox" disabled/><span class="task-list-indicator"></span></label> MPI_Scatterv</li>
+<li class="task-list-item"><label class="task-list-control"><input type="checkbox" disabled/><span class="task-list-indicator"></span></label> MPI_Iscatter</li>
+<li class="task-list-item"><label class="task-list-control"><input type="checkbox" disabled/><span class="task-list-indicator"></span></label> MPI_Iscatterv</li>
+</ul>
+</li>
+<li class="task-list-item"><label class="task-list-control"><input type="checkbox" disabled/><span class="task-list-indicator"></span></label> Reduces<ul class="task-list">
+<li class="task-list-item"><label class="task-list-control"><input type="checkbox" disabled/><span class="task-list-indicator"></span></label> MPI_Reduce</li>
+<li class="task-list-item"><label class="task-list-control"><input type="checkbox" disabled/><span class="task-list-indicator"></span></label> MPI_Ireduce</li>
+<li class="task-list-item"><label class="task-list-control"><input type="checkbox" disabled/><span class="task-list-indicator"></span></label> MPI_Allreduce</li>
+<li class="task-list-item"><label class="task-list-control"><input type="checkbox" disabled/><span class="task-list-indicator"></span></label> MPI_Iallreduce</li>
+</ul>
+</li>
+<li class="task-list-item"><label class="task-list-control"><input type="checkbox" disabled checked/><span class="task-list-indicator"></span></label> <strong>Write the tool that transplants user JS code into runnable MPI.js code</strong></li>
+<li class="task-list-item"><label class="task-list-control"><input type="checkbox" disabled/><span class="task-list-indicator"></span></label> <strong>Compare different communication methods (channels/WebSockets) between local threads</strong></li>
+<li class="task-list-item"><label class="task-list-control"><input type="checkbox" disabled checked/><span class="task-list-indicator"></span></label> <strong>Use WebSockets to connect MPI nodes across multiple computers</strong></li>
+<li class="task-list-item"><label class="task-list-control"><input type="checkbox" disabled/><span class="task-list-indicator"></span></label> <strong>Optimize for memory usage by using clever message-routing techniques</strong></li>
+<li class="task-list-item"><label class="task-list-control"><input type="checkbox" disabled/><span class="task-list-indicator"></span></label> <strong>Run benchmarks on all variations of our API</strong></li>
+</ul>
+<h2 id="hope-to-achieve">HOPE TO ACHIEVE</h2>
+<ul class="task-list">
+<li class="task-list-item"><label class="task-list-control"><input type="checkbox" disabled checked/><span class="task-list-indicator"></span></label> <strong>Make a live dashboard that shows how many msgs/sec are happening in real-time</strong></li>
+<li class="task-list-item"><label class="task-list-control"><input type="checkbox" disabled/><span class="task-list-indicator"></span></label> <strong><strike>Make a debugging dashboard that replays the communications during computation~~</strike></strong></li>
+<li class="task-list-item"><label class="task-list-control"><input type="checkbox" disabled/><span class="task-list-indicator"></span></label> <strong>Implement the following APIs</strong></li>
+<li class="task-list-item"><label class="task-list-control"><input type="checkbox" disabled/><span class="task-list-indicator"></span></label> MPI_Scan</li>
+<li class="task-list-item"><label class="task-list-control"><input type="checkbox" disabled/><span class="task-list-indicator"></span></label> MPI_Exscan</li>
+</ul>
+<h2 id="goals-being-removed">Goals Being Removed</h2>
+<p>After considering our progress and discoveries made while working on mpi.js, we've decided to no longer pursue the idea of a "debugging" dashboard. The amount of memory necessary to hold the timeline information necessary to implement such a dashboard is too large to be feasibly completed without detracting from the original project. Since we still need to work on the different routing strategies for reduce, gather, and scatter it is also more likely that we will not have time to implement scan since we want to dedicate time to have interesting data to compare. </p>
+<p>We also dropped "fast" support for async MPI functions (we will keep the slow version). This is because JavaScript is a single-threaded event-driven language, meaning any function when started cannot be interrupted. Thus, when the user code is running, messages cannot be received. While we found a way around it (by explicitly descheduling the user code, and delegating the server to re-trigger a new event for the remainder of the user code to be resumed after any messages are checked for), it is incredibly complex and inefficient. We decided that the speed of this cannot be improved due to the nature of JavaScript. Thus, while all async function calls will behave correctly and be supported, they are highly discouraged.</p>
+<h2 id="issues-that-concern-us">Issues that Concern Us</h2>
+<p>Not much. In the proposal feedback, we are recommended to perform more performance analysis and comparison. We plan to do this in architectural optimizations. Since in our system, local communications are fast and global communications are slow between machines, we wish to implement and benchmark several versions of the reduce function. Specifically, we want to use ring reduce locally first, and then tree reduce between the machines. </p>
+<p>We also wish to explore the possibility of workers not being fully connected by channels within a machine, and the routing optimizations that we can perform in that system hierarchy. Finally, we will run the baseline of having websockets connect every worker (in the worst case scenario) and compare it to the optimized versions.</p>
+<p>Suggestions on any other ideas for performance optimizations and comparisons that can be done is welcome and appreciated.</p>
+<h2 id="intentions-for-poster-session">Intentions For Poster Session</h2>
+<p>Our intention is to use our in-development dashboard as our main presentation tool. Since it shows a break down of time a process spends sending, receiving, waiting, and actually computing it's a great way to visually show the relative speed up we are providing to a program. We also plan to show some pre-captured measurements from the dashboard so that the demo doesn't have to manually run through every variation of our mpi configurations we want to analyze.</p>
+<h2 id="updated-schedule">Updated SCHEDULE</h2>
+<table>
+<thead>
+<tr>
+<th>Date</th>
+<th>Sean</th>
+<th>David</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>3/28</td>
+<td>Submit Proposal</td>
+<td>Submit Proposal</td>
+</tr>
+<tr>
+<td>4/10</td>
+<td>Set up P2P</td>
+<td>Set up Basics API</td>
+</tr>
+<tr>
+<td>4/11</td>
+<td>Finish JS transplanter</td>
+<td>Set up route forwarding data</td>
+</tr>
+<tr>
+<td>4/13</td>
+<td>Live Dashboard</td>
+<td>Set up Websocket support with current API</td>
+</tr>
+<tr>
+<td>4/17 (By Checkpoint)</td>
+<td>Set up routing local protocol options</td>
+<td>Set up global protocol options</td>
+</tr>
+<tr>
+<td>4/24</td>
+<td>Gather, Scatter</td>
+<td>Reduce/Broadcast</td>
+</tr>
+<tr>
+<td>5/3</td>
+<td>Set up local results downloader</td>
+<td></td>
+</tr>
+<tr>
+<td>5/4</td>
+<td>Submit Report</td>
+<td>Submit Report</td>
+</tr>
+<tr>
+<td>5/6</td>
+<td>Demo Day</td>
+<td>Demo Day</td>
+</tr>
+</tbody>
+</table>
+<h2 id="about-us">ABOUT US</h2>
+<h3 id="sean-haoxians">Sean (haoxians)</h3>
+<p><a href="https://github.com/SeanSun6814">Sean</a></p>
+<h3 id="david-drudo">David (drudo)</h3>
+<p><a href="https://github.com/1CoolDavid">David</a></p>
+
+
+
+
+
+
+
+
+
+
+
+
+                
+              </article>
+            </div>
+          
+          
+<script>var target=document.getElementById(location.hash.slice(1));target&&target.name&&(target.checked=target.name.startsWith("__tabbed_"))</script>
+        </div>
+        
+          <button type="button" class="md-top md-icon" data-md-component="top" hidden>
+  
+  <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M13 20h-2V8l-5.5 5.5-1.42-1.42L12 4.16l7.92 7.92-1.42 1.42L13 8v12Z"/></svg>
+  Back to top
+</button>
+        
+      </main>
+      
+        <footer class="md-footer">
+  
+  <div class="md-footer-meta md-typeset">
+    <div class="md-footer-meta__inner md-grid">
+      <div class="md-copyright">
+  
+    <div class="md-copyright__highlight">
+      Copyright &copy; 2024 the-parallel-gods
+
+    </div>
+  
+  
+    Made with
+    <a href="https://squidfunk.github.io/mkdocs-material/" target="_blank" rel="noopener">
+      Material for MkDocs
+    </a>
+  
+</div>
+      
+    </div>
+  </div>
+</footer>
+      
+    </div>
+    <div class="md-dialog" data-md-component="dialog">
+      <div class="md-dialog__inner md-typeset"></div>
+    </div>
+    
+    
+      <div class="md-consent" data-md-component="consent" id="__consent" hidden>
+        <div class="md-consent__overlay"></div>
+        <aside class="md-consent__inner">
+          <form class="md-consent__form md-grid md-typeset" name="consent">
+            
+
+
+
+
+  
+
+
+<h4>Cookie consent</h4>
+<p>We don't use cookies, is that okay?</p>
+<input class="md-toggle" type="checkbox" id="__settings" >
+<div class="md-consent__settings">
+  <ul class="task-list">
+    
+  </ul>
+</div>
+<div class="md-consent__controls">
+  
+    
+      <button class="md-button md-button--primary">Accept</button>
+    
+    
+    
+  
+    
+    
+    
+      <label class="md-button" for="__settings">Manage settings</label>
+    
+  
+</div>
+          </form>
+        </aside>
+      </div>
+      <script>var consent=__md_get("__consent");if(consent)for(var input of document.forms.consent.elements)input.name&&(input.checked=consent[input.name]||!1);else"file:"!==location.protocol&&setTimeout(function(){document.querySelector("[data-md-component=consent]").hidden=!1},250);var action,form=document.forms.consent;for(action of["submit","reset"])form.addEventListener(action,function(e){if(e.preventDefault(),"reset"===e.type)for(var n of document.forms.consent.elements)n.name&&(n.checked=!1);__md_set("__consent",Object.fromEntries(Array.from(new FormData(form).keys()).map(function(e){return[e,!0]}))),location.hash="",location.reload()})</script>
+    
+    <script id="__config" type="application/json">{"base": "..", "features": ["navigation.instant", "navigation.tracking", "navigation.expand", "navigation.top"], "search": "../assets/javascripts/workers/search.b8dbb3d2.min.js", "translations": {"clipboard.copied": "Copied to clipboard", "clipboard.copy": "Copy to clipboard", "search.result.more.one": "1 more on this page", "search.result.more.other": "# more on this page", "search.result.none": "No matching documents", "search.result.one": "1 matching document", "search.result.other": "# matching documents", "search.result.placeholder": "Type to start searching", "search.result.term.missing": "Missing", "select.version": "Select version"}}</script>
+    
+    
+      <script src="../assets/javascripts/bundle.dd8806f2.min.js"></script>
+      
+    
+  </body>
+</html>

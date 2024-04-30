@@ -1,0 +1,1503 @@
+
+<!doctype html>
+<html lang="en" class="no-js">
+  <head>
+    
+      <meta charset="utf-8">
+      <meta name="viewport" content="width=device-width,initial-scale=1">
+      
+      
+      
+        <link rel="canonical" href="https://the-parallel-gods.github.io/mpi.js/final/">
+      
+      
+        <link rel="prev" href="../milestone/">
+      
+      
+        <link rel="next" href="../docs/">
+      
+      
+      <link rel="icon" href="../assets/images/favicon.png">
+      <meta name="generator" content="mkdocs-1.6.0, mkdocs-material-9.5.20">
+    
+    
+      
+        <title>Final Report - MPI.js</title>
+      
+    
+    
+      <link rel="stylesheet" href="../assets/stylesheets/main.66ac8b77.min.css">
+      
+      
+
+
+    
+    
+      
+    
+    
+      
+        
+        
+        <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+        <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Roboto:300,300i,400,400i,700,700i%7CRoboto+Mono:400,400i,700,700i&display=fallback">
+        <style>:root{--md-text-font:"Roboto";--md-code-font:"Roboto Mono"}</style>
+      
+    
+    
+    <script>__md_scope=new URL("..",location),__md_hash=e=>[...e].reduce((e,_)=>(e<<5)-e+_.charCodeAt(0),0),__md_get=(e,_=localStorage,t=__md_scope)=>JSON.parse(_.getItem(t.pathname+"."+e)),__md_set=(e,_,t=localStorage,a=__md_scope)=>{try{t.setItem(a.pathname+"."+e,JSON.stringify(_))}catch(e){}}</script>
+    
+      
+
+    
+    
+    
+  </head>
+  
+  
+    <body dir="ltr">
+  
+    
+    <input class="md-toggle" data-md-toggle="drawer" type="checkbox" id="__drawer" autocomplete="off">
+    <input class="md-toggle" data-md-toggle="search" type="checkbox" id="__search" autocomplete="off">
+    <label class="md-overlay" for="__drawer"></label>
+    <div data-md-component="skip">
+      
+        
+        <a href="#project-mpijs" class="md-skip">
+          Skip to content
+        </a>
+      
+    </div>
+    <div data-md-component="announce">
+      
+    </div>
+    
+    
+      
+
+  
+
+<header class="md-header md-header--shadow" data-md-component="header">
+  <nav class="md-header__inner md-grid" aria-label="Header">
+    <a href=".." title="MPI.js" class="md-header__button md-logo" aria-label="MPI.js" data-md-component="logo">
+      
+  
+  <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M12 8a3 3 0 0 0 3-3 3 3 0 0 0-3-3 3 3 0 0 0-3 3 3 3 0 0 0 3 3m0 3.54C9.64 9.35 6.5 8 3 8v11c3.5 0 6.64 1.35 9 3.54 2.36-2.19 5.5-3.54 9-3.54V8c-3.5 0-6.64 1.35-9 3.54Z"/></svg>
+
+    </a>
+    <label class="md-header__button md-icon" for="__drawer">
+      
+      <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M3 6h18v2H3V6m0 5h18v2H3v-2m0 5h18v2H3v-2Z"/></svg>
+    </label>
+    <div class="md-header__title" data-md-component="header-title">
+      <div class="md-header__ellipsis">
+        <div class="md-header__topic">
+          <span class="md-ellipsis">
+            MPI.js
+          </span>
+        </div>
+        <div class="md-header__topic" data-md-component="header-topic">
+          <span class="md-ellipsis">
+            
+              Final Report
+            
+          </span>
+        </div>
+      </div>
+    </div>
+    
+    
+      <script>var media,input,key,value,palette=__md_get("__palette");if(palette&&palette.color){"(prefers-color-scheme)"===palette.color.media&&(media=matchMedia("(prefers-color-scheme: light)"),input=document.querySelector(media.matches?"[data-md-color-media='(prefers-color-scheme: light)']":"[data-md-color-media='(prefers-color-scheme: dark)']"),palette.color.media=input.getAttribute("data-md-color-media"),palette.color.scheme=input.getAttribute("data-md-color-scheme"),palette.color.primary=input.getAttribute("data-md-color-primary"),palette.color.accent=input.getAttribute("data-md-color-accent"));for([key,value]of Object.entries(palette.color))document.body.setAttribute("data-md-color-"+key,value)}</script>
+    
+    
+    
+      <label class="md-header__button md-icon" for="__search">
+        
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M9.5 3A6.5 6.5 0 0 1 16 9.5c0 1.61-.59 3.09-1.56 4.23l.27.27h.79l5 5-1.5 1.5-5-5v-.79l-.27-.27A6.516 6.516 0 0 1 9.5 16 6.5 6.5 0 0 1 3 9.5 6.5 6.5 0 0 1 9.5 3m0 2C7 5 5 7 5 9.5S7 14 9.5 14 14 12 14 9.5 12 5 9.5 5Z"/></svg>
+      </label>
+      <div class="md-search" data-md-component="search" role="dialog">
+  <label class="md-search__overlay" for="__search"></label>
+  <div class="md-search__inner" role="search">
+    <form class="md-search__form" name="search">
+      <input type="text" class="md-search__input" name="query" aria-label="Search" placeholder="Search" autocapitalize="off" autocorrect="off" autocomplete="off" spellcheck="false" data-md-component="search-query" required>
+      <label class="md-search__icon md-icon" for="__search">
+        
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M9.5 3A6.5 6.5 0 0 1 16 9.5c0 1.61-.59 3.09-1.56 4.23l.27.27h.79l5 5-1.5 1.5-5-5v-.79l-.27-.27A6.516 6.516 0 0 1 9.5 16 6.5 6.5 0 0 1 3 9.5 6.5 6.5 0 0 1 9.5 3m0 2C7 5 5 7 5 9.5S7 14 9.5 14 14 12 14 9.5 12 5 9.5 5Z"/></svg>
+        
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M20 11v2H8l5.5 5.5-1.42 1.42L4.16 12l7.92-7.92L13.5 5.5 8 11h12Z"/></svg>
+      </label>
+      <nav class="md-search__options" aria-label="Search">
+        
+        <button type="reset" class="md-search__icon md-icon" title="Clear" aria-label="Clear" tabindex="-1">
+          
+          <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M19 6.41 17.59 5 12 10.59 6.41 5 5 6.41 10.59 12 5 17.59 6.41 19 12 13.41 17.59 19 19 17.59 13.41 12 19 6.41Z"/></svg>
+        </button>
+      </nav>
+      
+    </form>
+    <div class="md-search__output">
+      <div class="md-search__scrollwrap" data-md-scrollfix>
+        <div class="md-search-result" data-md-component="search-result">
+          <div class="md-search-result__meta">
+            Initializing search
+          </div>
+          <ol class="md-search-result__list" role="presentation"></ol>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+    
+    
+  </nav>
+  
+</header>
+    
+    <div class="md-container" data-md-component="container">
+      
+      
+        
+          
+        
+      
+      <main class="md-main" data-md-component="main">
+        <div class="md-main__inner md-grid">
+          
+            
+              
+              <div class="md-sidebar md-sidebar--primary" data-md-component="sidebar" data-md-type="navigation" >
+                <div class="md-sidebar__scrollwrap">
+                  <div class="md-sidebar__inner">
+                    
+
+
+
+<nav class="md-nav md-nav--primary" aria-label="Navigation" data-md-level="0">
+  <label class="md-nav__title" for="__drawer">
+    <a href=".." title="MPI.js" class="md-nav__button md-logo" aria-label="MPI.js" data-md-component="logo">
+      
+  
+  <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M12 8a3 3 0 0 0 3-3 3 3 0 0 0-3-3 3 3 0 0 0-3 3 3 3 0 0 0 3 3m0 3.54C9.64 9.35 6.5 8 3 8v11c3.5 0 6.64 1.35 9 3.54 2.36-2.19 5.5-3.54 9-3.54V8c-3.5 0-6.64 1.35-9 3.54Z"/></svg>
+
+    </a>
+    MPI.js
+  </label>
+  
+  <ul class="md-nav__list" data-md-scrollfix>
+    
+      
+      
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../home/" class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    Home
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+    
+      
+      
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../proposal/" class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    Proposal
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+    
+      
+      
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../milestone/" class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    Milestone
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+    
+      
+      
+  
+  
+    
+  
+  
+  
+    <li class="md-nav__item md-nav__item--active">
+      
+      <input class="md-nav__toggle md-toggle" type="checkbox" id="__toc">
+      
+      
+      
+        <label class="md-nav__link md-nav__link--active" for="__toc">
+          
+  
+  <span class="md-ellipsis">
+    Final Report
+  </span>
+  
+
+          <span class="md-nav__icon md-icon"></span>
+        </label>
+      
+      <a href="./" class="md-nav__link md-nav__link--active">
+        
+  
+  <span class="md-ellipsis">
+    Final Report
+  </span>
+  
+
+      </a>
+      
+        
+
+<nav class="md-nav md-nav--secondary" aria-label="Table of contents">
+  
+  
+  
+  
+    <label class="md-nav__title" for="__toc">
+      <span class="md-nav__icon md-icon"></span>
+      Table of contents
+    </label>
+    <ul class="md-nav__list" data-md-component="toc" data-md-scrollfix>
+      
+        <li class="md-nav__item">
+  <a href="#project-mpijs" class="md-nav__link">
+    <span class="md-ellipsis">
+      PROJECT: MPI.JS
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#url" class="md-nav__link">
+    <span class="md-ellipsis">
+      URL
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#the-vision" class="md-nav__link">
+    <span class="md-ellipsis">
+      THE VISION
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#summary" class="md-nav__link">
+    <span class="md-ellipsis">
+      SUMMARY
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#table-of-contents" class="md-nav__link">
+    <span class="md-ellipsis">
+      Table of Contents
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#background" class="md-nav__link">
+    <span class="md-ellipsis">
+      BACKGROUND
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="BACKGROUND">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#processes-inside-a-browser-are-very-isolated" class="md-nav__link">
+    <span class="md-ellipsis">
+      Processes inside a browser are very isolated
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#javascript-is-event-driven-single-threaded-language" class="md-nav__link">
+    <span class="md-ellipsis">
+      JavaScript is event-driven single-threaded language
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#the-browser-cannot-create-a-websocket-server" class="md-nav__link">
+    <span class="md-ellipsis">
+      The browser cannot create a WebSocket server
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#browser-comes-with-a-ui" class="md-nav__link">
+    <span class="md-ellipsis">
+      Browser comes with a UI
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#system-architecture" class="md-nav__link">
+    <span class="md-ellipsis">
+      SYSTEM ARCHITECTURE
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="SYSTEM ARCHITECTURE">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#address-naming" class="md-nav__link">
+    <span class="md-ellipsis">
+      Address naming
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#websocket-server" class="md-nav__link">
+    <span class="md-ellipsis">
+      WebSocket Server
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#static-file-server" class="md-nav__link">
+    <span class="md-ellipsis">
+      Static File Server
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#global-router" class="md-nav__link">
+    <span class="md-ellipsis">
+      Global Router
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#node-router" class="md-nav__link">
+    <span class="md-ellipsis">
+      Node Router
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#doubly-indexed-database" class="md-nav__link">
+    <span class="md-ellipsis">
+      Doubly Indexed Database
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#real-time-dashboard" class="md-nav__link">
+    <span class="md-ellipsis">
+      Real-time Dashboard
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#optimization" class="md-nav__link">
+    <span class="md-ellipsis">
+      OPTIMIZATION
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="OPTIMIZATION">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#single-source-multiple-receive-ssmr" class="md-nav__link">
+    <span class="md-ellipsis">
+      Single Source Multiple Receive (SSMR)
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#local-allreduce-optimization" class="md-nav__link">
+    <span class="md-ellipsis">
+      Local Allreduce Optimization
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#global-optimization" class="md-nav__link">
+    <span class="md-ellipsis">
+      Global Optimization
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#latency-hiding" class="md-nav__link">
+    <span class="md-ellipsis">
+      Latency Hiding
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#results" class="md-nav__link">
+    <span class="md-ellipsis">
+      RESULTS
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="RESULTS">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#local-tests" class="md-nav__link">
+    <span class="md-ellipsis">
+      Local Tests
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="Local Tests">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#local-allreduce" class="md-nav__link">
+    <span class="md-ellipsis">
+      Local Allreduce
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#local-barrier" class="md-nav__link">
+    <span class="md-ellipsis">
+      Local Barrier
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#local-bcast" class="md-nav__link">
+    <span class="md-ellipsis">
+      Local Bcast
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#global-tests" class="md-nav__link">
+    <span class="md-ellipsis">
+      Global Tests
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="Global Tests">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#global-broadcast" class="md-nav__link">
+    <span class="md-ellipsis">
+      Global Broadcast
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#global-barrier" class="md-nav__link">
+    <span class="md-ellipsis">
+      Global Barrier
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="Global Barrier">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#global-reduce" class="md-nav__link">
+    <span class="md-ellipsis">
+      Global Reduce
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#conclusion" class="md-nav__link">
+    <span class="md-ellipsis">
+      Conclusion
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#contribution" class="md-nav__link">
+    <span class="md-ellipsis">
+      Contribution
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="Contribution">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#sean-haoxians-50" class="md-nav__link">
+    <span class="md-ellipsis">
+      Sean (haoxians) - 50%
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#david-drudo-50" class="md-nav__link">
+    <span class="md-ellipsis">
+      David (drudo) - 50%
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+    </ul>
+  
+</nav>
+      
+    </li>
+  
+
+    
+      
+      
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../docs/" class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    Docs
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+    
+  </ul>
+</nav>
+                  </div>
+                </div>
+              </div>
+            
+            
+              
+              <div class="md-sidebar md-sidebar--secondary" data-md-component="sidebar" data-md-type="toc" >
+                <div class="md-sidebar__scrollwrap">
+                  <div class="md-sidebar__inner">
+                    
+
+<nav class="md-nav md-nav--secondary" aria-label="Table of contents">
+  
+  
+  
+  
+    <label class="md-nav__title" for="__toc">
+      <span class="md-nav__icon md-icon"></span>
+      Table of contents
+    </label>
+    <ul class="md-nav__list" data-md-component="toc" data-md-scrollfix>
+      
+        <li class="md-nav__item">
+  <a href="#project-mpijs" class="md-nav__link">
+    <span class="md-ellipsis">
+      PROJECT: MPI.JS
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#url" class="md-nav__link">
+    <span class="md-ellipsis">
+      URL
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#the-vision" class="md-nav__link">
+    <span class="md-ellipsis">
+      THE VISION
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#summary" class="md-nav__link">
+    <span class="md-ellipsis">
+      SUMMARY
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#table-of-contents" class="md-nav__link">
+    <span class="md-ellipsis">
+      Table of Contents
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#background" class="md-nav__link">
+    <span class="md-ellipsis">
+      BACKGROUND
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="BACKGROUND">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#processes-inside-a-browser-are-very-isolated" class="md-nav__link">
+    <span class="md-ellipsis">
+      Processes inside a browser are very isolated
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#javascript-is-event-driven-single-threaded-language" class="md-nav__link">
+    <span class="md-ellipsis">
+      JavaScript is event-driven single-threaded language
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#the-browser-cannot-create-a-websocket-server" class="md-nav__link">
+    <span class="md-ellipsis">
+      The browser cannot create a WebSocket server
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#browser-comes-with-a-ui" class="md-nav__link">
+    <span class="md-ellipsis">
+      Browser comes with a UI
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#system-architecture" class="md-nav__link">
+    <span class="md-ellipsis">
+      SYSTEM ARCHITECTURE
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="SYSTEM ARCHITECTURE">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#address-naming" class="md-nav__link">
+    <span class="md-ellipsis">
+      Address naming
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#websocket-server" class="md-nav__link">
+    <span class="md-ellipsis">
+      WebSocket Server
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#static-file-server" class="md-nav__link">
+    <span class="md-ellipsis">
+      Static File Server
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#global-router" class="md-nav__link">
+    <span class="md-ellipsis">
+      Global Router
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#node-router" class="md-nav__link">
+    <span class="md-ellipsis">
+      Node Router
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#doubly-indexed-database" class="md-nav__link">
+    <span class="md-ellipsis">
+      Doubly Indexed Database
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#real-time-dashboard" class="md-nav__link">
+    <span class="md-ellipsis">
+      Real-time Dashboard
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#optimization" class="md-nav__link">
+    <span class="md-ellipsis">
+      OPTIMIZATION
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="OPTIMIZATION">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#single-source-multiple-receive-ssmr" class="md-nav__link">
+    <span class="md-ellipsis">
+      Single Source Multiple Receive (SSMR)
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#local-allreduce-optimization" class="md-nav__link">
+    <span class="md-ellipsis">
+      Local Allreduce Optimization
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#global-optimization" class="md-nav__link">
+    <span class="md-ellipsis">
+      Global Optimization
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#latency-hiding" class="md-nav__link">
+    <span class="md-ellipsis">
+      Latency Hiding
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#results" class="md-nav__link">
+    <span class="md-ellipsis">
+      RESULTS
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="RESULTS">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#local-tests" class="md-nav__link">
+    <span class="md-ellipsis">
+      Local Tests
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="Local Tests">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#local-allreduce" class="md-nav__link">
+    <span class="md-ellipsis">
+      Local Allreduce
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#local-barrier" class="md-nav__link">
+    <span class="md-ellipsis">
+      Local Barrier
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#local-bcast" class="md-nav__link">
+    <span class="md-ellipsis">
+      Local Bcast
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#global-tests" class="md-nav__link">
+    <span class="md-ellipsis">
+      Global Tests
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="Global Tests">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#global-broadcast" class="md-nav__link">
+    <span class="md-ellipsis">
+      Global Broadcast
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#global-barrier" class="md-nav__link">
+    <span class="md-ellipsis">
+      Global Barrier
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="Global Barrier">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#global-reduce" class="md-nav__link">
+    <span class="md-ellipsis">
+      Global Reduce
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#conclusion" class="md-nav__link">
+    <span class="md-ellipsis">
+      Conclusion
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#contribution" class="md-nav__link">
+    <span class="md-ellipsis">
+      Contribution
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="Contribution">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#sean-haoxians-50" class="md-nav__link">
+    <span class="md-ellipsis">
+      Sean (haoxians) - 50%
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#david-drudo-50" class="md-nav__link">
+    <span class="md-ellipsis">
+      David (drudo) - 50%
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+    </ul>
+  
+</nav>
+                  </div>
+                </div>
+              </div>
+            
+          
+          
+            <div class="md-content" data-md-component="content">
+              <article class="md-content__inner md-typeset">
+                
+                  
+
+
+  <h1>Final Report</h1>
+
+<h2 id="project-mpijs">PROJECT: MPI.JS</h2>
+<p><em>MPI, now on the web.</em></p>
+<!-- You should write up your final project report in the style of a research paper. Please go into detail
+regarding the analysis that you did throughout your project, including any initial approaches
+that did not work well (and how you diagnosed and fixed their performance problems), etc. To
+go into this amount of detail, a typical report might be roughly 10 pages long (double-spaced,
+including figures), although that is just a ballpark estimate (we will not be counting pages).
+While you have flexibility in how you structure you report, we suggest that you include the
+following sections. (You are also encouraged to provide more detail if you wish.) Note that
+some of the information in your final writeup can be pulled directly from your proposal if it is
+still accurate. -->
+
+<h2 id="url">URL</h2>
+<p><a href="https://the-parallel-gods.github.io/mpi.js/home/">https://the-parallel-gods.github.io/mpi.js/home/</a></p>
+<h2 id="the-vision">THE VISION</h2>
+<blockquote>
+<p><strong>Our mission is to revolutionize impractical distributed computing by providing a browser-based MPI implementation that empowers researchers and developers to seamlessly explore parallel programming concepts and deploy distributed applications across diverse platforms.</strong></p>
+</blockquote>
+<h2 id="summary">SUMMARY</h2>
+<!-- SUMMARY: A short (no more than a paragraph) project summary. If applicable, the sum-
+mary should list your project deliverables (including what you plan to show at the paral-
+lelism competition) and what machines they ran on. Here are some examples:
+* We implemented smooth particle hydrodynamics in CUDA on the GPU and in ISPC
+on the CPU and compared the performance of the two implementations.
+* We parallelized a chess bot. Our 64 core implementation on Bridges-2 achieves a 40x
+speedup and won several games on an internet chess server.
+* We accelerated image processing operations using the GPU. Given the speed
+of our implementation, we demonstrate that a brute-force approach to breaking
+CAPTCHAS is effective. -->
+
+<p><strong>We want to create an MPI library in the browser using JavaScript, implement some of the APIs (bcast, barrier, all_reduce, ...), use them to run MPI programs, and optimize the MPI collective APIs given the browser environment.</strong></p>
+<p>We have created a 40-page long documentation website for MPI developers here: </p>
+<p><a href="https://the-parallel-gods.github.io/mpi.js/docs/">https://the-parallel-gods.github.io/mpi.js/docs/</a></p>
+<p><img alt="" src="../images/mpi_sys_arch.png" /></p>
+<h2 id="table-of-contents">Table of Contents</h2>
+<ul>
+<li><a href="#project-mpijs">PROJECT: MPI.JS</a></li>
+<li><a href="#url">URL</a></li>
+<li><a href="#the-vision">THE VISION</a></li>
+<li><a href="#summary">SUMMARY</a></li>
+<li><a href="#table-of-contents">Table of Contents</a></li>
+<li><a href="#background">BACKGROUND</a></li>
+<li><a href="#processes-inside-a-browser-are-very-isolated">Processes inside a browser are very isolated</a></li>
+<li><a href="#javascript-is-event-driven-single-threaded-language">JavaScript is event-driven single-threaded language</a></li>
+<li><a href="#the-browser-cannot-create-a-websocket-server">The browser cannot create a WebSocket server</a></li>
+<li><a href="#browser-comes-with-a-ui">Browser comes with a UI</a></li>
+<li><a href="#system-architecture">SYSTEM ARCHITECTURE</a></li>
+<li><a href="#address-naming">Address naming</a></li>
+<li><a href="#websocket-server">WebSocket Server</a></li>
+<li><a href="#static-file-server">Static File Server</a></li>
+<li><a href="#global-router">Global Router</a></li>
+<li><a href="#node-router">Node Router</a></li>
+<li><a href="#doubly-indexed-database">Doubly Indexed Database</a></li>
+<li><a href="#real-time-dashboard">Real-time Dashboard</a></li>
+<li><a href="#optimization">OPTIMIZATION</a></li>
+<li><a href="#single-source-multiple-receive-ssmr">Single Source Multiple Receive (SSMR)</a></li>
+<li><a href="#local-allreduce-optimization">Local Allreduce Optimization</a></li>
+<li><a href="#global-optimization">Global Optimization</a></li>
+<li><a href="#latency-hiding">Latency Hiding</a></li>
+<li><a href="#results">RESULTS</a></li>
+<li><a href="#local-tests">Local Tests</a><ul>
+<li><a href="#local-allreduce">Local Allreduce</a></li>
+<li><a href="#local-barrier">Local Barrier</a></li>
+<li><a href="#local-bcast">Local Bcast</a></li>
+</ul>
+</li>
+<li><a href="#global-tests">Global Tests</a><ul>
+<li><a href="#global-broadcast">Global Broadcast</a></li>
+</ul>
+</li>
+<li><a href="#global-barrier">Global Barrier</a><ul>
+<li><a href="#global-reduce">Global Reduce</a></li>
+</ul>
+</li>
+<li><a href="#conclusion">Conclusion</a></li>
+<li><a href="#contribution">Contribution</a></li>
+<li><a href="#sean-haoxians---50">Sean (haoxians) - 50%</a></li>
+<li><a href="#david-drudo---50">David (drudo) - 50%</a></li>
+</ul>
+<h2 id="background">BACKGROUND</h2>
+<!-- BACKGROUND: Describe the algorithm, application, or system you parallelized in com-
+puter science terms. Figures would be really useful here.
+* What are the key data structures?
+* What are the key operations on these data structures?
+* What are the algorithm’s inputs and outputs?
+* What is the part that computationally expensive and could benefit from paralleliza-
+tion?
+* Break down the workload. Where are the dependencies in the program? How much
+parallelism is there? Is it data-parallel? Where is the locality? Is it amenable to
+SIMD execution? -->
+
+<p>MPI has never been implemented in JavaScript in the browser before, so we are bound to run into many new interesting problems specific to the runtime environment. In this section, we provide some background information on how JavaScript works and describe the challenges it poses. In the next section, we will describe our approach to solving these challenges.</p>
+<h3 id="processes-inside-a-browser-are-very-isolated">Processes inside a browser are very isolated</h3>
+<p>For good security reasons, each process in the browser is very isolated from the others. This means that there is no shared memory between processes, and communication between processes is limited. The only types of communication that are allowed are point-to-point <code>MessageChannel</code>s and <code>BroadcastChannel</code>s. To make things worse, <code>BroadcastChannel</code>s are rate-limited one message per 100ms, which is too slow. Effectively, we are forced to use <code>MessageChannel</code>s for our communication inside a browser.</p>
+<h3 id="javascript-is-event-driven-single-threaded-language">JavaScript is event-driven single-threaded language</h3>
+<p>Normally, JavaScript is designed for UI. What event-driven means in that context is every flow of control is initiated by an event, like a button press. Moreover, since it is single-threaded, no other code gets a chance to run until the function for that event finishes. This is a problem for parallel programming, because we can't just spawn a new thread to do some work in the background. This is a huge limitation when it comes to supporting non-blocking MPI operations.</p>
+<h3 id="the-browser-cannot-create-a-websocket-server">The browser cannot create a WebSocket server</h3>
+<p>In this project, we want to support MPI programs that run across multiple computers over the Internet. Since the browser cannot create raw TCP or UDP sockets, the best option is to use WebSockets, which is a higher-level protocol built on top of TCP. However, since the browser does not have the permission to create servers, we need to have a centralized WebSocket server that all the browsers connect to. This server will be responsible for routing messages between the browsers.</p>
+<h3 id="browser-comes-with-a-ui">Browser comes with a UI</h3>
+<p>Since the browser already provides an HTML UI, we can use it to show the status of the MPI program. In this project, we will take advantage of this by creating a live dashboard that shows the diagnostic information of the MPI program in real-time.</p>
+<h2 id="system-architecture">SYSTEM ARCHITECTURE</h2>
+<!-- APPROACH: Tell us how your implementation works. Your description should be sufficiently
+detailed to provide the course staff a basic understanding of your approach. Again, it might
+be very useful to include a figure here illustrating components of the system and/or their
+mapping to parallel hardware.
+* Describe the technologies used. What language/APIs? What machines did you tar-
+get?
+* Describe how you mapped the problem to your target parallel machine(s). IMPOR-
+TANT: How do the data structures and operations you described in part 2 map to
+machine concepts like cores and threads. (or warps, thread blocks, gangs, etc.)
+* Did you change the original serial algorithm to enable better mapping to a parallel
+machine?
+* If your project involved many iterations of optimization, please describe this process
+as well. What did you try that did not work? How did you arrive at your solu-
+tion? The notes you’ve been writing throughout your project should be helpful here.
+Convince us you worked hard to arrive at a good solution.
+* If you started with an existing piece of code, please mention it (and where it came
+from) here.
+
+ -->
+
+<p>Our system architecture is inspired by network gateways at the global level and hardware architectures at the local level. 
+We design our system to have a centralized WebSocket server that all the browsers connect to as well as a static file server. Inside each browser tab, the system creates many worker processes that run the user MPI code, which are all connected by hot-swappable interconnect architectures.</p>
+<h3 id="address-naming">Address naming</h3>
+<p>Since this project involves significant routing work, here we formally clarify the address naming scheme we use. </p>
+<ul>
+<li>GR_ID: Global Router ID (unique identifier for each browser)</li>
+<li>NR_ID: Node Router ID (local unique identifier for each worker process, starts from 0 for each browser)</li>
+<li>PID: Universal Node Router ID (what user sees; global unique identifier for each worker process, continuous across browsers)</li>
+<li>NR_OFFSET: Node Router Offset (smallest PID in the local worker pool)</li>
+</ul>
+<p>The system is designed this way so that the user can use an abstraction that gives the illusion of every worker process being in the same global network; however, the system under the hood is designed to be as optimized as possible.</p>
+<p>Example system:</p>
+<pre><code>Browser: GR_ID=0
+    Worker: PID=0, NR_ID=0, NR_OFFSET=0
+    Worker: PID=1, NR_ID=1, NR_OFFSET=0
+    Worker: PID=2, NR_ID=2, NR_OFFSET=0
+
+Browser: GR_ID=1
+    Worker: PID=3, NR_ID=0, NR_OFFSET=3
+    Worker: PID=4, NR_ID=1, NR_OFFSET=3
+    Worker: PID=5, NR_ID=2, NR_OFFSET=3
+</code></pre>
+<h3 id="websocket-server">WebSocket Server</h3>
+<p>The WebSocket server is responsible for routing messages between the browser. It assigns each browser a unique GR_ID and keeps track of the global routing table. Since this central server is a point of contention, we designed it to be as lightweight as possible. We also designed our routing protocols to offload as much work as possible to the browser. Each request to the server is a simple JSON object that contains the message and the destination GR_ID. The websocket server uses the SSMR optimization (described later).</p>
+<h3 id="static-file-server">Static File Server</h3>
+<p>The static file server is responsible for serving the user's desired MPI code, the MPI.js library, and the UI files. It is a simple HTTP server that supports hot-loading the user's code into the browser.</p>
+<h3 id="global-router">Global Router</h3>
+<p>Sitting in the Browser's UI process, the Global Router is responsible for routing messages between browsers. Whenever a Node Router wants to send a message to another browser, it delegates the message to the Global Router. The Global Router then forwards the message to the destination browser's Global Router, which then forwards the message to the destination Node Router. When messages get to the Global Router level, the PID and the NR_IDs are abstracted away, and the system only deals with GR_IDs. This is done to make the system more scalable and to hide the complexity of the system at each layer. The Global Router uses SSMR optimization (described later), so if it needs to send the same message to multiple other Global Routers, it only needs to send one message to the WebSocket server.</p>
+<h3 id="node-router">Node Router</h3>
+<p>The Node Router is located in the worker process and is responsible for routing, queueing, and feeding messages to and from the user's MPI code. The Node Router is also handles routing messages between workers within the same browser. The Node Router achieves this with a custom routing table to determine the best route to send a message to another worker process. The Node Router uses SSMR optimization (described later) to reduce the number of messages sent.</p>
+<p>In the best case, the interconnect that connects the Node Routers within the same browser is a crossbar, which allows any message to be sent to any other worker process within one hop. However, when more workers are needed, the number of connections grows quadratically, so we also support a ring and tree interconnect that balance the number of connections and hops.</p>
+<p>When ring or tree interconnects are used, the Node Router also serves as a forwarder for messages that need to be sent to another worker. If a node isn't directly connected to the destination node, it will send it to someone closer to the destination, who will then forward it to the destination.</p>
+<h3 id="doubly-indexed-database">Doubly Indexed Database</h3>
+<p>Whenever a Node Router receives a message, it needs to feed that message to the user's MPI code. In our JavaScript MPI implementation, we skip the back and forth checking that actual MPI implementations do in order to improve performance. Instead, we directly deposit the message into a queue. Since the system is in a browser, where memory usage is already very high without MPI, we delegate the responsibility of not overflowing the queue to the MPI user. Since JavaScript is single-threaded and thread-safe, we can construct a very performant ProducerConsumer queue without locks.</p>
+<p>The logic is as follows: when we receive a message with a tag and src_pid, we check the receiverDB if there is a user waiting for that message. If there is, we directly call the user's callback. If there isn't, we deposit the message into the messageDB. When the user calls a receive function, we check the messageDB for that message. If it is there, we directly call the user's callback. If it isn't, we deposit the user's callback into the receiverDB.</p>
+<!-- ```python
+# Pseudo code
+msg_queue = DB()
+receiver_queue = DB()
+
+def on_message(msg, tag, src_pid):
+    if receiver_queue.has(tag, src_pid): # O(1)
+        receiver.call(msg) # found someone waiting for this message
+    else:
+        msg_queue.add(msg, tag, src_pid) # O(1)
+
+def user_request_recv(tag, src_pid, callback):
+    if msg_queue.has(tag, src_pid):
+        # continue on user code with received message
+        callback(msg_queue.call(tag, src_pid)) # O(1)
+    else:
+        # when the message arrives, it'll call my callback
+        receiver_queue.add(tag, src_pid, callback) # O(1)
+
+``` -->
+
+<p>Our focus then shifts to making the queue as efficient as possible, since many messages can be waiting there. This would have been simple, if not for the tags and src_pids of the messages. MPI supports having users receive messages with only specific tags and from specific processes. If the number of messages in the queue is very high, the search through all of them to find the right message will be very slow. Our solution is to use a doubly indexed database. When a object is deposited into the queue, it is saved in memory, and we insert the object's tag and src_pid into two separate indices that point to the object. This way, no matter if the user requests according to tag or src_pid, all operations are <code>O(1)</code>.</p>
+<h3 id="real-time-dashboard">Real-time Dashboard</h3>
+<p>One of the key features of our system is the real-time dashboard. The dashboard shows the number of messages sent and received by each worker process, and the proportion of time spent on each MPI operation. The dashboard is updated in real-time, so the user can see how their MPI program is performing, and interpret the animations to debug or optimize their code.</p>
+<p><img alt="" src="../images/milestone-dashboard.png" /></p>
+<!-- One of the key structures we implemented to further our analogy of individual tabs acting as cores of a cpu were interconnects. Designed as a custom routing table, mpi.js supports a ring, tree, and crossbar interconnect for analysis. Our interconnects define the potential routes a node can use when sending messages across the local or global network of processes. The primary challenge when applying these interconnects to a highly distributed, parallel environment was setting a scheme where "node ids" required as little translation as possible to reduce any potential unnecessary overhead during sends and receives. Our "trick" to solve this is to have two sets of routers that help enable fast and efficient communication between nodes without burdening each tab to calculate the optimal route necessary for broadcast, reduce, or any other function. Our "Node Router" focuses on handling messages within a local network. This is how messages between tabs on the same browser are handled. If a message needs to be sent to another a machine and go across our global network we designed a "Global Router." The Global Router is connected to a GR network that on initialization does a handshake so that the centralized GR server knows all the routing information necessary. This allows the Global Routers to focus most of their computation on choosing how to forward incoming messages to the Node Router and leave most of the complex routing information to the central server. The "GR Server" has a modifiable routing table to ensure flexibility and fast forwarding. This server is also responsible for the designation of global identifiers that are essential in operations such as reduce and gather/scatter. This structure of routers allows for a divide-and-conquer break down of routing operations so that no one process is overburdened and our MPI worker tabs can remain primarily focused on strict computation unless specifically awaiting for a particular message. -->
+
+<h2 id="optimization">OPTIMIZATION</h2>
+<h3 id="single-source-multiple-receive-ssmr">Single Source Multiple Receive (SSMR)</h3>
+<p><img alt="" src="../images/ssmr.png" /></p>
+<p>One of the key optimizations we implemented was Single Source Multiple Receive. We observed that during a broadcast operation, the same message is sent to multiple workers. But since some messages are forwarded multiple times, the same message is sent multiple times. This is a waste of bandwidth.</p>
+<p>Thus, we propose to change the destination field of the message to hold multiple destinations. This way, when a message is sent, it is sent to multiple destinations at once. Each forwarder along the way will first check if the message is meant for them, and if it is, they will first consume the message before forwarding it. Finally, the forwarding router will check if the message needs to be sent along multiple paths to reach all the intended destinations. If it does, it will group the recipients to achieve the minimum number of duplications as depicted above.</p>
+<p>This optimization is implemented at both the local level between the Node Routers and the global level between the Global Routers.
+This optimization is particularly useful when the local interconnect is a ring or a tree. It is also effective at the global level where the resources are more scarce.</p>
+<h3 id="local-allreduce-optimization">Local Allreduce Optimization</h3>
+<p>At the local level, we implemented an optimized allreduce operation using ring reduce. As described in lecture, the strategy uses significantly less bandwidth than the naive allreduce implementation. Particularly, when the interconnect is a ring, the allreduce operation fits perfectly into the ring structure. </p>
+<p>For the tree interconnect, we implemented a optimized version as well. In this case, each layer of the tree reduces at the same time, and the root node broadcasts the result to all the other nodes. This is a significant improvement over the naive allreduce implementation, which would have to send the message to every other node.</p>
+<h3 id="global-optimization">Global Optimization</h3>
+<p>As described before, sending messages over the WebSocket server has high latency and low bandwidth. To reduce the number of messages sent, we implemented a divide-and-conquer strategy for MPI_Reduce and MPI_Barrier. For reduce, for example, first, each machine does its local fast reduce to produce a partial result. Then, the operation is raised to the global level, where each machine sends its partial result to perform a secondary reduce. This way, the number of messages sent over the WebSocket server is decreased significantly.</p>
+<h3 id="latency-hiding">Latency Hiding</h3>
+<p><img alt="" src="../images/bcast_latency.png" /></p>
+<p>Finally, we implemented a latency hiding strategy for the bcast operation. We discovered that the WebSocket is many orders of magnitude slower than the local communication. Thus, we implemented a strategy where the local workers can keep working if permitted by correctness. This way, the latency of sending messages over the WebSocket server significantly overlaps. We found that the bandwidth isn't the primary bottleneck, so this strategy is particularly effective.</p>
+<p>In this example, node 1 first sends a bcast to everyone, then node 2 sends a bcast to everyone. However, node 1's message reaches node 2 before node 1's bcast reaches everyone on the other machine. Instead of waiting for the message to propagate fully, node 2 can continue working and send its bcast without violating correctness. This way, the latency of the bcast operation is significantly reduced.</p>
+<h2 id="results">RESULTS</h2>
+<!-- RESULTS: How successful were you at achieving your goals? We expect results sections to
+differ from project to project, but we expect your evaluation to be very thorough (your
+project evaluation is a great way to demonstrate you understood topics from this course).
+Here are a few ideas:
+* If your project was optimizing an algorithm, please define how you measured perfor-
+mance. Is it wall-clock time? Speedup? An application specific rate? (e.g., moves
+per second, images/sec)
+* Please also describe your experimental setup. What were the size of the inputs? How
+were requests generated?
+* Provide graphs of speedup or execute time. Please precisely define the configurations
+being compared. Is your baseline single-threaded CPU code? It is an optimized
+parallel implementation for a single CPU?
+* Recall the importance of problem size. Is it important to report results for different
+problem sizes for your project? Do different workloads exhibit different execution
+behavior?
+* IMPORTANT: What limited your speedup? Is it a lack of parallelism? (dependen-
+cies) Communication or synchronization overhead? Data transfer (memory-bound or
+bus transfer bound). Poor SIMD utilization due to divergence? As you try and an-
+swer these questions, we strongly prefer that you provide data and measurements to
+support your conclusions. If you are merely speculating, please state this explicitly.
+Performing a solid analysis of your implementation is a good way to pick up credit
+even if your optimization efforts did not yield the performance you were hoping for.
+* Deeper analysis: Can you break execution time of your algorithm into a number
+of distinct components. What percentage of time is spent in each region? Where is
+there room to improve?
+* Was your choice of machine target sound? (If you chose a GPU, would a CPU have
+been a better choice? Or vice versa.) -->
+
+<h3 id="local-tests">Local Tests</h3>
+<p>Due to limited space, we only show the speedup graphs here. For the full results, please see <a href="https://github.com/the-parallel-gods/mpi.js/tree/main/docs/images/benchmarks">https://github.com/the-parallel-gods/mpi.js/tree/main/docs/images/benchmarks</a>.</p>
+<p>In the following tests, we run the MPI operations on a single browser with multiple workers. The speedup is calculated by comparing the time taken for the unoptimized version and the optimized version. The optimized version has the SSMR and the local allreduce optimization, while the unoptimized version does not.</p>
+<h4 id="local-allreduce">Local Allreduce</h4>
+<p><img alt="" src="../images/benchmarks/Speedup_Local_AllReduce_with_Crossbar_Interconnect_Optimization_Speedup.png" style="display:block;width:75%;margin-left: auto;margin-right: auto;" /></p>
+<p><img alt="" src="../images/benchmarks/Speedup_Local_AllReduce_with_Ring_Interconnect_Optimization_Speedup.png" style="display:block;width:75%;margin-left: auto;margin-right: auto;" /></p>
+<p><img alt="" src="../images/benchmarks/Speedup_Local_AllReduce_with_Tree_Interconnect_Optimization_Speedup.png" style="display:block;width:75%;margin-left: auto;margin-right: auto;" /></p>
+<p>When using the crossbar interconnect, communication is relatively fast. Because of this, naively sending the message to all other nodes is slightly faster than doing the ring reduce when the number of nodes is small. As a result, the extra overhead of calculating indices in ring reduce is actually 3x slower. However, as the number of nodes increases, the ring reduce becomes steadily faster than the naive reduce. The fastest speedup is 2x with 32 nodes.</p>
+<p>When using the ring interconnect, the ring reduce is also slower than the naive reduce when the number of nodes is small. Again, this signifies the significant overhead of ring reduce. However, as the number of nodes increases, the ring reduce becomes significantly faster than the naive reduce. The fastest speedup recorded is 14x with 32 nodes. Note that the ring reduce has a higher speedup than the crossbar because when the interconnect gets more congested, the crossbar architecture is more efficient than the ring architecture. This is because the crossbar architecture does not involve any message forwarding.</p>
+<p>When using the tree interconnect, the tree reduce is around the same speed as the naive reduce when the number of nodes is small. However, as the number of nodes increases, the tree reduce sees the largest speedup. The fastest speedup is 50x with 32 nodes. While the optimized version perfectly fits the tree architecture's structure, the naive version has to send the message to every other node. Because the tree has a root, a single point of contention, the unoptimized version doesn't know about this contention and results in extreme inefficiency. Due to this contention, the tree architecture is the slowest when using the naive reduce.</p>
+<h4 id="local-barrier">Local Barrier</h4>
+<p><img alt="" src="../images/benchmarks/Speedup_Local_Barrier_with_Crossbar_Interconnect_Optimization_Speedup.png" style="display:block;width:75%;margin-left: auto;margin-right: auto;" /></p>
+<p><img alt="" src="../images/benchmarks/Speedup_Local_Barrier_with_Ring_Interconnect_Optimization_Speedup.png" style="display:block;width:75%;margin-left: auto;margin-right: auto;" /></p>
+<p><img alt="" src="../images/benchmarks/Speedup_Local_Barrier_with_Tree_Interconnect_Optimization_Speedup.png" style="display:block;width:75%;margin-left: auto;margin-right: auto;" /></p>
+<p>In this test, we see that the optimized barrier operation is not significantly different in speed on the crossbar architecture. This is expected since the SSMR optimization doesn't apply if all messages are direct. In the ring and tree architectures, the optimized barrier operation is slightly faster because the "return echo" of the barrier operation can benefit from the SSMR optimization.</p>
+<h4 id="local-bcast">Local Bcast</h4>
+<p><img alt="" src="../images/benchmarks/Speedup_Local_Broadcast_with_Crossbar_Interconnect_Optimization_Speedup.png" style="display:block;width:75%;margin-left: auto;margin-right: auto;" /></p>
+<p><img alt="" src="../images/benchmarks/Speedup_Local_Broadcast_with_Ring_Interconnect_Optimization_Speedup.png" style="display:block;width:75%;margin-left: auto;margin-right: auto;" /></p>
+<p><img alt="" src="../images/benchmarks/Speedup_Local_Broadcast_with_Tree_Interconnect_Optimization_Speedup.png" style="display:block;width:75%;margin-left: auto;margin-right: auto;" /></p>
+<p>When using the crossbar interconnect, the optimized version is ever so slightly slower than the non-optimized version, indicating that SSMR does also have overhead. However, when the number of nodes increases, the optimized version becomes faster, since they don't wait for the message to propagate fully. Instead, the node can choose to start the next operation early. The most that this strategy can save is the "return echo" of the bcast operation, which should save around 2x. This is exactly what we observe.</p>
+<p>When using the ring or tree interconnects, the SSMR and the latency hiding strategy are particularly effective. The fastest speedup is 10x with 32 nodes for ring and 4.5x with 32 nodes for tree. </p>
+<h3 id="global-tests">Global Tests</h3>
+<p>In the following tests, we run the MPI operations on a two browsers with evenly split number of workers. The two browsers are running on the same machine for this test. It demonstrates the same principles as using multiple machines, but with less noise. Running on multiple machines should expect much more slowdown due network latency.</p>
+<p>The speedup is calculated by comparing the time taken for the unoptimized version and the optimized version. The optimized version has the SSMR and the global optimizations, while the unoptimized version does not. 
+Note: the raw time between different operation are not comparable, since they are run for a different number of iterations. </p>
+<h4 id="global-broadcast">Global Broadcast</h4>
+<p><img alt="" src="../images/benchmarks/Time_%28ms%29_Global_Unoptimized_Broadcast_Time.png" style="display:block;width:75%;margin-left: auto;margin-right: auto;" /></p>
+<p><img alt="" src="../images/benchmarks/Time_%28ms%29_Global_Optimized_Broadcast_Time.png" style="display:block;width:75%;margin-left: auto;margin-right: auto;" /></p>
+<p><img alt="" src="../images/benchmarks/Speedup_Global_Broadcast_Optimization_Speedup.png" style="display:block;width:75%;margin-left: auto;margin-right: auto;" /></p>
+<p>The unoptimized global broadcast time is slightly surprising. When there's less than 4 nodes, the operation is very fast. However, as soon as it hits 8 nodes, the operation becomes very slow. The reason for this is because there is some sort of buffer in the low level WebSocket interface. We performed regular send and receive tests, and found that if first 2 back-to-back messages are sent immediately, but any subsequent messages are queued and sent in a group after around 50ms. We reason that this is a optimization that is made by the WebSocket, and it is out of our control. Because of this behavior, we observe the cliff in the graph.</p>
+<p>The optimized global broadcast time is significantly faster than the unoptimized version. First, we avoid the cliff in the graph by condensing all the messages into one message. Second, it uses SSMR avoid the overhead of sending the same message multiple times. The optimized version time graph makes sense, since it only sends one message at a time. The time it takes gradually increases as the number of nodes increases, as expected. 
+As a result, we get some speedup at lower processor counts, but the largest speedup is at higher processor counts. However, the speedup decreases at higher processor counts, since the unoptimized speed is largely constant. The fastest speedup is 100x with 64 nodes.</p>
+<h3 id="global-barrier">Global Barrier</h3>
+<p><img alt="" src="../images/benchmarks/Time_%28ms%29_Global_Unoptimized_Barrier_Time.png" style="display:block;width:75%;margin-left: auto;margin-right: auto;" /></p>
+<p><img alt="" src="../images/benchmarks/Time_%28ms%29_Global_Optimized_Barrier_Time.png" style="display:block;width:75%;margin-left: auto;margin-right: auto;" /></p>
+<p><img alt="" src="../images/benchmarks/Speedup_Global_Barrier_Optimization_Speedup.png" style="display:block;width:75%;margin-left: auto;margin-right: auto;" /></p>
+<p>Again, we observe the cliff in the unoptimized global barrier time at 8 nodes. This is likely due to the same reason as described above. The optimized global barrier avoids this cliff by first performing a barrier locally, then performing a secondary barrier globally. This way, the number of messages sent over the WebSocket server is reduced significantly. True, there are now two stages of barriers, but this is still faster since it reduces the bottleneck. The optimized version time graph makes sense, since it gradually increases as the number of nodes increases. 
+As a result, we get some speedup at lower processor counts, but the largest speedup is at higher processor counts. However, the speedup decreases at higher processor counts, since the unoptimized speed is largely constant. The fastest speedup is 230x with 64 nodes.</p>
+<h4 id="global-reduce">Global Reduce</h4>
+<p><img alt="" src="../images/benchmarks/Time_%28ms%29_Global_Unoptimized_Reduce_Time.png" style="display:block;width:75%;margin-left: auto;margin-right: auto;" /></p>
+<p><img alt="" src="../images/benchmarks/Time_%28ms%29_Global_Optimized_Reduce_Time.png" style="display:block;width:75%;margin-left: auto;margin-right: auto;" /></p>
+<p><img alt="" src="../images/benchmarks/Speedup_Global_Reduce_Optimization_Speedup.png" style="display:block;width:75%;margin-left: auto;margin-right: auto;" /></p>
+<p>The unoptimized global reduce time is slow, with an upward trend as the number of nodes increases. This is because the operation is naive and sends more data as there are more nodes. Interestingly, the optimized version uses around the same time up till 16 nodes, then starts to significantly slow down. We suspect that this is because of the machine that we are using only having 20 cores. Thus, the OS is forced to context switch, and since reduce is a computation heavy operation (unlike barrier and bcast), this slows down the operation. As a result, the speedup is fastest when there are 16 nodes, at a little over 50x.</p>
+<h2 id="conclusion">Conclusion</h2>
+<p>This project is much larger and more complex than we initially anticipated. We learned a lot not only about MPI, but also about the browser environment, identifying relevant bottlenecks, and optimizing for interconnects. In the end, this project has over 3000 lines of code, including the library and documentation. 
+Although we could not implement the non-blocking APIs (due to the single-threaded nature of JS), we spent the time to optimize the collective APIs instead. We are proud of the results we achieved. </p>
+<p>As planned in the proposal, we ran a MPI program on our system (the sqrt program provided in asst4), and found our system to only perform ~10x slower than the <code>-O3</code> optimized C version. This is a significant achievement, considering the overhead of running a scripted language in the browser. We also compared using local channels and global WebSocket channels, and found that the global channels are significantly slower (and thus, we optimized accordingly).</p>
+<p>This project is truly one-of-a-kind, there is really not much out there that does what it does. We hope our work not only served as a good learning experience for us, but also could be inspiring to others in the community.</p>
+<p>Here's the documentation link again for this project:</p>
+<p><a href="https://the-parallel-gods.github.io/mpi.js/docs/">https://the-parallel-gods.github.io/mpi.js/docs/</a></p>
+<h2 id="contribution">Contribution</h2>
+<h3 id="sean-haoxians-50">Sean (haoxians) - 50%</h3>
+<ul class="task-list">
+<li class="task-list-item"><label class="task-list-control"><input type="checkbox" disabled checked/><span class="task-list-indicator"></span></label> MPI front end</li>
+</ul>
+<p><a href="https://github.com/SeanSun6814">Sean</a></p>
+<h3 id="david-drudo-50">David (drudo) - 50%</h3>
+<ul class="task-list">
+<li class="task-list-item"><label class="task-list-control"><input type="checkbox" disabled checked/><span class="task-list-indicator"></span></label> MPI backend end</li>
+</ul>
+<p><a href="https://github.com/1CoolDavid">David</a></p>
+
+
+
+
+
+
+
+
+
+
+
+
+                
+              </article>
+            </div>
+          
+          
+<script>var target=document.getElementById(location.hash.slice(1));target&&target.name&&(target.checked=target.name.startsWith("__tabbed_"))</script>
+        </div>
+        
+          <button type="button" class="md-top md-icon" data-md-component="top" hidden>
+  
+  <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M13 20h-2V8l-5.5 5.5-1.42-1.42L12 4.16l7.92 7.92-1.42 1.42L13 8v12Z"/></svg>
+  Back to top
+</button>
+        
+      </main>
+      
+        <footer class="md-footer">
+  
+  <div class="md-footer-meta md-typeset">
+    <div class="md-footer-meta__inner md-grid">
+      <div class="md-copyright">
+  
+    <div class="md-copyright__highlight">
+      Copyright &copy; 2024 the-parallel-gods
+
+    </div>
+  
+  
+    Made with
+    <a href="https://squidfunk.github.io/mkdocs-material/" target="_blank" rel="noopener">
+      Material for MkDocs
+    </a>
+  
+</div>
+      
+    </div>
+  </div>
+</footer>
+      
+    </div>
+    <div class="md-dialog" data-md-component="dialog">
+      <div class="md-dialog__inner md-typeset"></div>
+    </div>
+    
+    
+      <div class="md-consent" data-md-component="consent" id="__consent" hidden>
+        <div class="md-consent__overlay"></div>
+        <aside class="md-consent__inner">
+          <form class="md-consent__form md-grid md-typeset" name="consent">
+            
+
+
+
+
+  
+
+
+<h4>Cookie consent</h4>
+<p>We don't use cookies, is that okay?</p>
+<input class="md-toggle" type="checkbox" id="__settings" >
+<div class="md-consent__settings">
+  <ul class="task-list">
+    
+  </ul>
+</div>
+<div class="md-consent__controls">
+  
+    
+      <button class="md-button md-button--primary">Accept</button>
+    
+    
+    
+  
+    
+    
+    
+      <label class="md-button" for="__settings">Manage settings</label>
+    
+  
+</div>
+          </form>
+        </aside>
+      </div>
+      <script>var consent=__md_get("__consent");if(consent)for(var input of document.forms.consent.elements)input.name&&(input.checked=consent[input.name]||!1);else"file:"!==location.protocol&&setTimeout(function(){document.querySelector("[data-md-component=consent]").hidden=!1},250);var action,form=document.forms.consent;for(action of["submit","reset"])form.addEventListener(action,function(e){if(e.preventDefault(),"reset"===e.type)for(var n of document.forms.consent.elements)n.name&&(n.checked=!1);__md_set("__consent",Object.fromEntries(Array.from(new FormData(form).keys()).map(function(e){return[e,!0]}))),location.hash="",location.reload()})</script>
+    
+    <script id="__config" type="application/json">{"base": "..", "features": ["navigation.instant", "navigation.tracking", "navigation.expand", "navigation.top"], "search": "../assets/javascripts/workers/search.b8dbb3d2.min.js", "translations": {"clipboard.copied": "Copied to clipboard", "clipboard.copy": "Copy to clipboard", "search.result.more.one": "1 more on this page", "search.result.more.other": "# more on this page", "search.result.none": "No matching documents", "search.result.one": "1 matching document", "search.result.other": "# matching documents", "search.result.placeholder": "Type to start searching", "search.result.term.missing": "Missing", "select.version": "Select version"}}</script>
+    
+    
+      <script src="../assets/javascripts/bundle.dd8806f2.min.js"></script>
+      
+    
+  </body>
+</html>

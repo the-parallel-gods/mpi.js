@@ -1,0 +1,4046 @@
+
+<!doctype html>
+<html lang="en" class="no-js">
+  <head>
+    
+      <meta charset="utf-8">
+      <meta name="viewport" content="width=device-width,initial-scale=1">
+      
+      
+      
+        <link rel="canonical" href="https://the-parallel-gods.github.io/mpi.js/docs/">
+      
+      
+        <link rel="prev" href="../final/">
+      
+      
+      
+      <link rel="icon" href="../assets/images/favicon.png">
+      <meta name="generator" content="mkdocs-1.6.0, mkdocs-material-9.5.20">
+    
+    
+      
+        <title>Docs - MPI.js</title>
+      
+    
+    
+      <link rel="stylesheet" href="../assets/stylesheets/main.66ac8b77.min.css">
+      
+      
+
+
+    
+    
+      
+    
+    
+      
+        
+        
+        <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+        <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Roboto:300,300i,400,400i,700,700i%7CRoboto+Mono:400,400i,700,700i&display=fallback">
+        <style>:root{--md-text-font:"Roboto";--md-code-font:"Roboto Mono"}</style>
+      
+    
+    
+    <script>__md_scope=new URL("..",location),__md_hash=e=>[...e].reduce((e,_)=>(e<<5)-e+_.charCodeAt(0),0),__md_get=(e,_=localStorage,t=__md_scope)=>JSON.parse(_.getItem(t.pathname+"."+e)),__md_set=(e,_,t=localStorage,a=__md_scope)=>{try{t.setItem(a.pathname+"."+e,JSON.stringify(_))}catch(e){}}</script>
+    
+      
+
+    
+    
+    
+  </head>
+  
+  
+    <body dir="ltr">
+  
+    
+    <input class="md-toggle" data-md-toggle="drawer" type="checkbox" id="__drawer" autocomplete="off">
+    <input class="md-toggle" data-md-toggle="search" type="checkbox" id="__search" autocomplete="off">
+    <label class="md-overlay" for="__drawer"></label>
+    <div data-md-component="skip">
+      
+        
+        <a href="#classes" class="md-skip">
+          Skip to content
+        </a>
+      
+    </div>
+    <div data-md-component="announce">
+      
+    </div>
+    
+    
+      
+
+  
+
+<header class="md-header md-header--shadow" data-md-component="header">
+  <nav class="md-header__inner md-grid" aria-label="Header">
+    <a href=".." title="MPI.js" class="md-header__button md-logo" aria-label="MPI.js" data-md-component="logo">
+      
+  
+  <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M12 8a3 3 0 0 0 3-3 3 3 0 0 0-3-3 3 3 0 0 0-3 3 3 3 0 0 0 3 3m0 3.54C9.64 9.35 6.5 8 3 8v11c3.5 0 6.64 1.35 9 3.54 2.36-2.19 5.5-3.54 9-3.54V8c-3.5 0-6.64 1.35-9 3.54Z"/></svg>
+
+    </a>
+    <label class="md-header__button md-icon" for="__drawer">
+      
+      <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M3 6h18v2H3V6m0 5h18v2H3v-2m0 5h18v2H3v-2Z"/></svg>
+    </label>
+    <div class="md-header__title" data-md-component="header-title">
+      <div class="md-header__ellipsis">
+        <div class="md-header__topic">
+          <span class="md-ellipsis">
+            MPI.js
+          </span>
+        </div>
+        <div class="md-header__topic" data-md-component="header-topic">
+          <span class="md-ellipsis">
+            
+              Docs
+            
+          </span>
+        </div>
+      </div>
+    </div>
+    
+    
+      <script>var media,input,key,value,palette=__md_get("__palette");if(palette&&palette.color){"(prefers-color-scheme)"===palette.color.media&&(media=matchMedia("(prefers-color-scheme: light)"),input=document.querySelector(media.matches?"[data-md-color-media='(prefers-color-scheme: light)']":"[data-md-color-media='(prefers-color-scheme: dark)']"),palette.color.media=input.getAttribute("data-md-color-media"),palette.color.scheme=input.getAttribute("data-md-color-scheme"),palette.color.primary=input.getAttribute("data-md-color-primary"),palette.color.accent=input.getAttribute("data-md-color-accent"));for([key,value]of Object.entries(palette.color))document.body.setAttribute("data-md-color-"+key,value)}</script>
+    
+    
+    
+      <label class="md-header__button md-icon" for="__search">
+        
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M9.5 3A6.5 6.5 0 0 1 16 9.5c0 1.61-.59 3.09-1.56 4.23l.27.27h.79l5 5-1.5 1.5-5-5v-.79l-.27-.27A6.516 6.516 0 0 1 9.5 16 6.5 6.5 0 0 1 3 9.5 6.5 6.5 0 0 1 9.5 3m0 2C7 5 5 7 5 9.5S7 14 9.5 14 14 12 14 9.5 12 5 9.5 5Z"/></svg>
+      </label>
+      <div class="md-search" data-md-component="search" role="dialog">
+  <label class="md-search__overlay" for="__search"></label>
+  <div class="md-search__inner" role="search">
+    <form class="md-search__form" name="search">
+      <input type="text" class="md-search__input" name="query" aria-label="Search" placeholder="Search" autocapitalize="off" autocorrect="off" autocomplete="off" spellcheck="false" data-md-component="search-query" required>
+      <label class="md-search__icon md-icon" for="__search">
+        
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M9.5 3A6.5 6.5 0 0 1 16 9.5c0 1.61-.59 3.09-1.56 4.23l.27.27h.79l5 5-1.5 1.5-5-5v-.79l-.27-.27A6.516 6.516 0 0 1 9.5 16 6.5 6.5 0 0 1 3 9.5 6.5 6.5 0 0 1 9.5 3m0 2C7 5 5 7 5 9.5S7 14 9.5 14 14 12 14 9.5 12 5 9.5 5Z"/></svg>
+        
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M20 11v2H8l5.5 5.5-1.42 1.42L4.16 12l7.92-7.92L13.5 5.5 8 11h12Z"/></svg>
+      </label>
+      <nav class="md-search__options" aria-label="Search">
+        
+        <button type="reset" class="md-search__icon md-icon" title="Clear" aria-label="Clear" tabindex="-1">
+          
+          <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M19 6.41 17.59 5 12 10.59 6.41 5 5 6.41 10.59 12 5 17.59 6.41 19 12 13.41 17.59 19 19 17.59 13.41 12 19 6.41Z"/></svg>
+        </button>
+      </nav>
+      
+    </form>
+    <div class="md-search__output">
+      <div class="md-search__scrollwrap" data-md-scrollfix>
+        <div class="md-search-result" data-md-component="search-result">
+          <div class="md-search-result__meta">
+            Initializing search
+          </div>
+          <ol class="md-search-result__list" role="presentation"></ol>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+    
+    
+  </nav>
+  
+</header>
+    
+    <div class="md-container" data-md-component="container">
+      
+      
+        
+          
+        
+      
+      <main class="md-main" data-md-component="main">
+        <div class="md-main__inner md-grid">
+          
+            
+              
+              <div class="md-sidebar md-sidebar--primary" data-md-component="sidebar" data-md-type="navigation" >
+                <div class="md-sidebar__scrollwrap">
+                  <div class="md-sidebar__inner">
+                    
+
+
+
+<nav class="md-nav md-nav--primary" aria-label="Navigation" data-md-level="0">
+  <label class="md-nav__title" for="__drawer">
+    <a href=".." title="MPI.js" class="md-nav__button md-logo" aria-label="MPI.js" data-md-component="logo">
+      
+  
+  <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M12 8a3 3 0 0 0 3-3 3 3 0 0 0-3-3 3 3 0 0 0-3 3 3 3 0 0 0 3 3m0 3.54C9.64 9.35 6.5 8 3 8v11c3.5 0 6.64 1.35 9 3.54 2.36-2.19 5.5-3.54 9-3.54V8c-3.5 0-6.64 1.35-9 3.54Z"/></svg>
+
+    </a>
+    MPI.js
+  </label>
+  
+  <ul class="md-nav__list" data-md-scrollfix>
+    
+      
+      
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../home/" class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    Home
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+    
+      
+      
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../proposal/" class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    Proposal
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+    
+      
+      
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../milestone/" class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    Milestone
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+    
+      
+      
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../final/" class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    Final Report
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+    
+      
+      
+  
+  
+    
+  
+  
+  
+    <li class="md-nav__item md-nav__item--active">
+      
+      <input class="md-nav__toggle md-toggle" type="checkbox" id="__toc">
+      
+      
+      
+        <label class="md-nav__link md-nav__link--active" for="__toc">
+          
+  
+  <span class="md-ellipsis">
+    Docs
+  </span>
+  
+
+          <span class="md-nav__icon md-icon"></span>
+        </label>
+      
+      <a href="./" class="md-nav__link md-nav__link--active">
+        
+  
+  <span class="md-ellipsis">
+    Docs
+  </span>
+  
+
+      </a>
+      
+        
+
+<nav class="md-nav md-nav--secondary" aria-label="Table of contents">
+  
+  
+  
+  
+    <label class="md-nav__title" for="__toc">
+      <span class="md-nav__icon md-icon"></span>
+      Table of contents
+    </label>
+    <ul class="md-nav__list" data-md-component="toc" data-md-scrollfix>
+      
+        <li class="md-nav__item">
+  <a href="#classes" class="md-nav__link">
+    <span class="md-ellipsis">
+      Classes
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#functions" class="md-nav__link">
+    <span class="md-ellipsis">
+      Functions
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#typedefs" class="md-nav__link">
+    <span class="md-ellipsis">
+      Typedefs
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#diagnostics" class="md-nav__link">
+    <span class="md-ellipsis">
+      Diagnostics
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="Diagnostics">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#new-diagnostics" class="md-nav__link">
+    <span class="md-ellipsis">
+      new Diagnostics()
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#diagnosticsadd_send" class="md-nav__link">
+    <span class="md-ellipsis">
+      diagnostics.add_send
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#diagnosticsadd_recv" class="md-nav__link">
+    <span class="md-ellipsis">
+      diagnostics.add_recv
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#diagnosticsprofile-function" class="md-nav__link">
+    <span class="md-ellipsis">
+      diagnostics.profile ⇒ function
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#diagnosticsflush" class="md-nav__link">
+    <span class="md-ellipsis">
+      diagnostics.flush
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#diagnosticsconfiguresmartdashboard-enabled-period" class="md-nav__link">
+    <span class="md-ellipsis">
+      diagnostics.configure(smartdashboard, enabled, period)
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#mpi_request" class="md-nav__link">
+    <span class="md-ellipsis">
+      MPI_Request
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="MPI_Request">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#new-mpi_requestdone" class="md-nav__link">
+    <span class="md-ellipsis">
+      new MPI_Request(done)
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#mpi_requestset_test_callbackcallback-mpi_request" class="md-nav__link">
+    <span class="md-ellipsis">
+      mpI_Request.set_test_callback(callback) ⇒ MPI_Request
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#mpi_requestset_wait_callbackcallback-mpi_request" class="md-nav__link">
+    <span class="md-ellipsis">
+      mpI_Request.set_wait_callback(callback) ⇒ MPI_Request
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#mpi_requesttest-promiseboolean" class="md-nav__link">
+    <span class="md-ellipsis">
+      mpI_Request.test() ⇒ Promise.&lt;boolean&gt;
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#mpi_requestwait" class="md-nav__link">
+    <span class="md-ellipsis">
+      mpI_Request.wait() ⇒
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#packet" class="md-nav__link">
+    <span class="md-ellipsis">
+      Packet
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="Packet">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#new-packetsrc_pid-dest_pid_arr-tag-data" class="md-nav__link">
+    <span class="md-ellipsis">
+      new Packet(src_pid, dest_pid_arr, tag, data)
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#noderouter" class="md-nav__link">
+    <span class="md-ellipsis">
+      NodeRouter
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="NodeRouter">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#new-noderouternum_proc-my_pid-local_channels-global_channel" class="md-nav__link">
+    <span class="md-ellipsis">
+      new NodeRouter(num_proc, my_pid, local_channels, global_channel)
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#noderoutersend-promisevoid" class="md-nav__link">
+    <span class="md-ellipsis">
+      nodeRouter.send ⇒ Promise.&lt;void&gt;
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#noderouterreceive-promisepacket" class="md-nav__link">
+    <span class="md-ellipsis">
+      nodeRouter.receive ⇒ Promise.&lt;Packet&gt;
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#noderouterreceive_if_available-promisepacket" class="md-nav__link">
+    <span class="md-ellipsis">
+      nodeRouter.receive_if_available ⇒ Promise.&lt;Packet&gt;
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#noderouterpeek-promisepacket" class="md-nav__link">
+    <span class="md-ellipsis">
+      nodeRouter.peek ⇒ Promise.&lt;Packet&gt;
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#map2d" class="md-nav__link">
+    <span class="md-ellipsis">
+      Map2D
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="Map2D">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#new-map2d" class="md-nav__link">
+    <span class="md-ellipsis">
+      new Map2D()
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#map2dadda-b-value" class="md-nav__link">
+    <span class="md-ellipsis">
+      map2D.add(a, b, value)
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#map2dgeta-b-any" class="md-nav__link">
+    <span class="md-ellipsis">
+      map2D.get(a, b) ⇒ any
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#map2dpopa-b-any" class="md-nav__link">
+    <span class="md-ellipsis">
+      map2D.pop(a, b) ⇒ any
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#producerconsumer" class="md-nav__link">
+    <span class="md-ellipsis">
+      ProducerConsumer
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="ProducerConsumer">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#new-producerconsumer" class="md-nav__link">
+    <span class="md-ellipsis">
+      new ProducerConsumer()
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#producerconsumerproduceobject-promisevoid" class="md-nav__link">
+    <span class="md-ellipsis">
+      producerConsumer.produce(object) ⇒ Promise.&lt;void&gt;
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#producerconsumerconsumesrc_pid-tag-promisepacket" class="md-nav__link">
+    <span class="md-ellipsis">
+      producerConsumer.consume(src_pid, tag) ⇒ Promise.&lt;Packet&gt;
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#producerconsumerconsume_if_availablesrc_pid-tag-promisepacket" class="md-nav__link">
+    <span class="md-ellipsis">
+      producerConsumer.consume_if_available(src_pid, tag) ⇒ Promise.&lt;Packet&gt;
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#producerconsumerpeeksrc_pid-tag-promisepacket" class="md-nav__link">
+    <span class="md-ellipsis">
+      producerConsumer.peek(src_pid, tag) ⇒ Promise.&lt;Packet&gt;
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#smartdashboard" class="md-nav__link">
+    <span class="md-ellipsis">
+      SmartDashboard
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="SmartDashboard">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#smartdashboardputpiename-dict-downsample" class="md-nav__link">
+    <span class="md-ellipsis">
+      smartDashboard.putPie(name, dict, downsample)
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#smartdashboardputprogressname-value-downsample" class="md-nav__link">
+    <span class="md-ellipsis">
+      smartDashboard.putProgress(name, value, downsample)
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#smartdashboardputgraphname-value-downsample" class="md-nav__link">
+    <span class="md-ellipsis">
+      smartDashboard.putGraph(name, value, downsample)
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#smartdashboardputstringname-value-downsample" class="md-nav__link">
+    <span class="md-ellipsis">
+      smartDashboard.putString(name, value, downsample)
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#smartdashboardflush" class="md-nav__link">
+    <span class="md-ellipsis">
+      smartDashboard.flush()
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#mpi_barrier-promisevoid" class="md-nav__link">
+    <span class="md-ellipsis">
+      MPI_Barrier() ⇒ Promise.&lt;void&gt;
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#mpi_bcastdata_ptr-root-promisevoid" class="md-nav__link">
+    <span class="md-ellipsis">
+      MPI_Bcast(data_ptr, root) ⇒ Promise.&lt;void&gt;
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#mpi_ibcastdata_ptr-root" class="md-nav__link">
+    <span class="md-ellipsis">
+      MPI_Ibcast(data_ptr, root)
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#mpi_gathersend_ptr-recv_ptr-root-promisevoid" class="md-nav__link">
+    <span class="md-ellipsis">
+      MPI_Gather(send_ptr, recv_ptr, root) ⇒ Promise.&lt;void&gt;
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#mpi_allgathersend_ptr-recv_ptr-promisevoid" class="md-nav__link">
+    <span class="md-ellipsis">
+      MPI_Allgather(send_ptr, recv_ptr) ⇒ Promise.&lt;void&gt;
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#mpi_gathervsend_ptr-recv_ptr-counts-offsets-root-promisevoid" class="md-nav__link">
+    <span class="md-ellipsis">
+      MPI_Gatherv(send_ptr, recv_ptr, counts, offsets, root) ⇒ Promise.&lt;void&gt;
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#mpi_allgathervsend_ptr-recv_ptr-counts-offsets-promisevoid" class="md-nav__link">
+    <span class="md-ellipsis">
+      MPI_Allgatherv(send_ptr, recv_ptr, counts, offsets) ⇒ Promise.&lt;void&gt;
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#reschedulecallback" class="md-nav__link">
+    <span class="md-ellipsis">
+      reschedule(callback)
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#flush_telemetry" class="md-nav__link">
+    <span class="md-ellipsis">
+      flush_telemetry()
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#finish_setup" class="md-nav__link">
+    <span class="md-ellipsis">
+      finish_setup()
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#on_init_messageevent" class="md-nav__link">
+    <span class="md-ellipsis">
+      on_init_message(event)
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#mainmain_fn-worker_self" class="md-nav__link">
+    <span class="md-ellipsis">
+      main(main_fn, worker_self)
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#mpi_comm_rankrank_ptr" class="md-nav__link">
+    <span class="md-ellipsis">
+      MPI_Comm_rank(rank_ptr)
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#mpi_comm_sizesize_ptr" class="md-nav__link">
+    <span class="md-ellipsis">
+      MPI_Comm_size(size_ptr)
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#mpi_init" class="md-nav__link">
+    <span class="md-ellipsis">
+      MPI_Init()
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#mpi_finalize" class="md-nav__link">
+    <span class="md-ellipsis">
+      MPI_Finalize()
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#boxdata-box" class="md-nav__link">
+    <span class="md-ellipsis">
+      box(data) ⇒ Box
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#unboxbox-any" class="md-nav__link">
+    <span class="md-ellipsis">
+      unbox(box) ⇒ any
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#mpi_testrequest-promiseboolean" class="md-nav__link">
+    <span class="md-ellipsis">
+      MPI_Test(request) ⇒ Promise.&lt;boolean&gt;
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#mpi_waitrequest-promisevoid" class="md-nav__link">
+    <span class="md-ellipsis">
+      MPI_Wait(request) ⇒ Promise.&lt;void&gt;
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#mpi_senddata_ptr-dest_pid-start-count-promisevoid" class="md-nav__link">
+    <span class="md-ellipsis">
+      MPI_Send(data_ptr, dest_pid, start, count) ⇒ Promise.&lt;void&gt;
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#mpi_isenddata_ptr-dest_pid-start-count-promisempi_request" class="md-nav__link">
+    <span class="md-ellipsis">
+      MPI_Isend(data_ptr, dest_pid, start, count) ⇒ Promise.&lt;MPI_Request&gt;
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#mpi_recvdata_ptr-src_pid-start-count-promisevoid" class="md-nav__link">
+    <span class="md-ellipsis">
+      MPI_Recv(data_ptr, src_pid, start, count) ⇒ Promise.&lt;void&gt;
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#mpi_irecvdata_ptr-src_pid-start-count-promisempi_request" class="md-nav__link">
+    <span class="md-ellipsis">
+      MPI_Irecv(data_ptr, src_pid, start, count) ⇒ Promise.&lt;MPI_Request&gt;
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#mpi_reducesend_ptr-recv_ptr-operation-promisevoid" class="md-nav__link">
+    <span class="md-ellipsis">
+      MPI_Reduce(send_ptr, recv_ptr, operation) ⇒ Promise.&lt;void&gt;
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#mpi_allreduce_local_optimizedsend_ptr-recv_ptr-operation-promisevoid" class="md-nav__link">
+    <span class="md-ellipsis">
+      MPI_Allreduce_local_optimized(send_ptr, recv_ptr, operation) ⇒ Promise.&lt;void&gt;
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#mpi_allreducesend_ptr-recv_ptr-operation-promisevoid" class="md-nav__link">
+    <span class="md-ellipsis">
+      MPI_Allreduce(send_ptr, recv_ptr, operation) ⇒ Promise.&lt;void&gt;
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#mpi_scattersend_ptr-recv_ptr-root-promisevoid" class="md-nav__link">
+    <span class="md-ellipsis">
+      MPI_Scatter(send_ptr, recv_ptr, root) ⇒ Promise.&lt;void&gt;
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#mpi_scattervsend_ptr-recv_ptr-root-promisevoid" class="md-nav__link">
+    <span class="md-ellipsis">
+      MPI_Scatterv(send_ptr, recv_ptr, root) ⇒ Promise.&lt;void&gt;
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#partitioncount-num_proc-object" class="md-nav__link">
+    <span class="md-ellipsis">
+      partition(count, num_proc) ⇒ Object
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#make_wrapn-function" class="md-nav__link">
+    <span class="md-ellipsis">
+      make_wrap(n) ⇒ function
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#create_crossbarnum_nodes-object" class="md-nav__link">
+    <span class="md-ellipsis">
+      create_crossbar(num_nodes) ⇒ Object
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#create_ringnum_nodes-object" class="md-nav__link">
+    <span class="md-ellipsis">
+      create_ring(num_nodes) ⇒ Object
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#create_tree_pow_of_2num_nodes-object" class="md-nav__link">
+    <span class="md-ellipsis">
+      create_tree_pow_of_2(num_nodes) ⇒ Object
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#create_treenum_nodes-object" class="md-nav__link">
+    <span class="md-ellipsis">
+      create_tree(num_nodes) ⇒ Object
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#box-object" class="md-nav__link">
+    <span class="md-ellipsis">
+      Box : Object
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#config-object" class="md-nav__link">
+    <span class="md-ellipsis">
+      Config : Object
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#key_a-any" class="md-nav__link">
+    <span class="md-ellipsis">
+      Key_A : any
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#key_b-any" class="md-nav__link">
+    <span class="md-ellipsis">
+      Key_B : any
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#smartdashboardtype-pie-progress-graph-string" class="md-nav__link">
+    <span class="md-ellipsis">
+      SmartDashboardType : &#x27;pie&#x27; | &#x27;progress&#x27; | &#x27;graph&#x27; | &#x27;string&#x27;
+    </span>
+  </a>
+  
+</li>
+      
+    </ul>
+  
+</nav>
+      
+    </li>
+  
+
+    
+  </ul>
+</nav>
+                  </div>
+                </div>
+              </div>
+            
+            
+              
+              <div class="md-sidebar md-sidebar--secondary" data-md-component="sidebar" data-md-type="toc" >
+                <div class="md-sidebar__scrollwrap">
+                  <div class="md-sidebar__inner">
+                    
+
+<nav class="md-nav md-nav--secondary" aria-label="Table of contents">
+  
+  
+  
+  
+    <label class="md-nav__title" for="__toc">
+      <span class="md-nav__icon md-icon"></span>
+      Table of contents
+    </label>
+    <ul class="md-nav__list" data-md-component="toc" data-md-scrollfix>
+      
+        <li class="md-nav__item">
+  <a href="#classes" class="md-nav__link">
+    <span class="md-ellipsis">
+      Classes
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#functions" class="md-nav__link">
+    <span class="md-ellipsis">
+      Functions
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#typedefs" class="md-nav__link">
+    <span class="md-ellipsis">
+      Typedefs
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#diagnostics" class="md-nav__link">
+    <span class="md-ellipsis">
+      Diagnostics
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="Diagnostics">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#new-diagnostics" class="md-nav__link">
+    <span class="md-ellipsis">
+      new Diagnostics()
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#diagnosticsadd_send" class="md-nav__link">
+    <span class="md-ellipsis">
+      diagnostics.add_send
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#diagnosticsadd_recv" class="md-nav__link">
+    <span class="md-ellipsis">
+      diagnostics.add_recv
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#diagnosticsprofile-function" class="md-nav__link">
+    <span class="md-ellipsis">
+      diagnostics.profile ⇒ function
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#diagnosticsflush" class="md-nav__link">
+    <span class="md-ellipsis">
+      diagnostics.flush
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#diagnosticsconfiguresmartdashboard-enabled-period" class="md-nav__link">
+    <span class="md-ellipsis">
+      diagnostics.configure(smartdashboard, enabled, period)
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#mpi_request" class="md-nav__link">
+    <span class="md-ellipsis">
+      MPI_Request
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="MPI_Request">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#new-mpi_requestdone" class="md-nav__link">
+    <span class="md-ellipsis">
+      new MPI_Request(done)
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#mpi_requestset_test_callbackcallback-mpi_request" class="md-nav__link">
+    <span class="md-ellipsis">
+      mpI_Request.set_test_callback(callback) ⇒ MPI_Request
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#mpi_requestset_wait_callbackcallback-mpi_request" class="md-nav__link">
+    <span class="md-ellipsis">
+      mpI_Request.set_wait_callback(callback) ⇒ MPI_Request
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#mpi_requesttest-promiseboolean" class="md-nav__link">
+    <span class="md-ellipsis">
+      mpI_Request.test() ⇒ Promise.&lt;boolean&gt;
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#mpi_requestwait" class="md-nav__link">
+    <span class="md-ellipsis">
+      mpI_Request.wait() ⇒
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#packet" class="md-nav__link">
+    <span class="md-ellipsis">
+      Packet
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="Packet">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#new-packetsrc_pid-dest_pid_arr-tag-data" class="md-nav__link">
+    <span class="md-ellipsis">
+      new Packet(src_pid, dest_pid_arr, tag, data)
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#noderouter" class="md-nav__link">
+    <span class="md-ellipsis">
+      NodeRouter
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="NodeRouter">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#new-noderouternum_proc-my_pid-local_channels-global_channel" class="md-nav__link">
+    <span class="md-ellipsis">
+      new NodeRouter(num_proc, my_pid, local_channels, global_channel)
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#noderoutersend-promisevoid" class="md-nav__link">
+    <span class="md-ellipsis">
+      nodeRouter.send ⇒ Promise.&lt;void&gt;
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#noderouterreceive-promisepacket" class="md-nav__link">
+    <span class="md-ellipsis">
+      nodeRouter.receive ⇒ Promise.&lt;Packet&gt;
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#noderouterreceive_if_available-promisepacket" class="md-nav__link">
+    <span class="md-ellipsis">
+      nodeRouter.receive_if_available ⇒ Promise.&lt;Packet&gt;
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#noderouterpeek-promisepacket" class="md-nav__link">
+    <span class="md-ellipsis">
+      nodeRouter.peek ⇒ Promise.&lt;Packet&gt;
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#map2d" class="md-nav__link">
+    <span class="md-ellipsis">
+      Map2D
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="Map2D">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#new-map2d" class="md-nav__link">
+    <span class="md-ellipsis">
+      new Map2D()
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#map2dadda-b-value" class="md-nav__link">
+    <span class="md-ellipsis">
+      map2D.add(a, b, value)
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#map2dgeta-b-any" class="md-nav__link">
+    <span class="md-ellipsis">
+      map2D.get(a, b) ⇒ any
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#map2dpopa-b-any" class="md-nav__link">
+    <span class="md-ellipsis">
+      map2D.pop(a, b) ⇒ any
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#producerconsumer" class="md-nav__link">
+    <span class="md-ellipsis">
+      ProducerConsumer
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="ProducerConsumer">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#new-producerconsumer" class="md-nav__link">
+    <span class="md-ellipsis">
+      new ProducerConsumer()
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#producerconsumerproduceobject-promisevoid" class="md-nav__link">
+    <span class="md-ellipsis">
+      producerConsumer.produce(object) ⇒ Promise.&lt;void&gt;
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#producerconsumerconsumesrc_pid-tag-promisepacket" class="md-nav__link">
+    <span class="md-ellipsis">
+      producerConsumer.consume(src_pid, tag) ⇒ Promise.&lt;Packet&gt;
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#producerconsumerconsume_if_availablesrc_pid-tag-promisepacket" class="md-nav__link">
+    <span class="md-ellipsis">
+      producerConsumer.consume_if_available(src_pid, tag) ⇒ Promise.&lt;Packet&gt;
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#producerconsumerpeeksrc_pid-tag-promisepacket" class="md-nav__link">
+    <span class="md-ellipsis">
+      producerConsumer.peek(src_pid, tag) ⇒ Promise.&lt;Packet&gt;
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#smartdashboard" class="md-nav__link">
+    <span class="md-ellipsis">
+      SmartDashboard
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="SmartDashboard">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#smartdashboardputpiename-dict-downsample" class="md-nav__link">
+    <span class="md-ellipsis">
+      smartDashboard.putPie(name, dict, downsample)
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#smartdashboardputprogressname-value-downsample" class="md-nav__link">
+    <span class="md-ellipsis">
+      smartDashboard.putProgress(name, value, downsample)
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#smartdashboardputgraphname-value-downsample" class="md-nav__link">
+    <span class="md-ellipsis">
+      smartDashboard.putGraph(name, value, downsample)
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#smartdashboardputstringname-value-downsample" class="md-nav__link">
+    <span class="md-ellipsis">
+      smartDashboard.putString(name, value, downsample)
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#smartdashboardflush" class="md-nav__link">
+    <span class="md-ellipsis">
+      smartDashboard.flush()
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#mpi_barrier-promisevoid" class="md-nav__link">
+    <span class="md-ellipsis">
+      MPI_Barrier() ⇒ Promise.&lt;void&gt;
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#mpi_bcastdata_ptr-root-promisevoid" class="md-nav__link">
+    <span class="md-ellipsis">
+      MPI_Bcast(data_ptr, root) ⇒ Promise.&lt;void&gt;
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#mpi_ibcastdata_ptr-root" class="md-nav__link">
+    <span class="md-ellipsis">
+      MPI_Ibcast(data_ptr, root)
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#mpi_gathersend_ptr-recv_ptr-root-promisevoid" class="md-nav__link">
+    <span class="md-ellipsis">
+      MPI_Gather(send_ptr, recv_ptr, root) ⇒ Promise.&lt;void&gt;
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#mpi_allgathersend_ptr-recv_ptr-promisevoid" class="md-nav__link">
+    <span class="md-ellipsis">
+      MPI_Allgather(send_ptr, recv_ptr) ⇒ Promise.&lt;void&gt;
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#mpi_gathervsend_ptr-recv_ptr-counts-offsets-root-promisevoid" class="md-nav__link">
+    <span class="md-ellipsis">
+      MPI_Gatherv(send_ptr, recv_ptr, counts, offsets, root) ⇒ Promise.&lt;void&gt;
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#mpi_allgathervsend_ptr-recv_ptr-counts-offsets-promisevoid" class="md-nav__link">
+    <span class="md-ellipsis">
+      MPI_Allgatherv(send_ptr, recv_ptr, counts, offsets) ⇒ Promise.&lt;void&gt;
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#reschedulecallback" class="md-nav__link">
+    <span class="md-ellipsis">
+      reschedule(callback)
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#flush_telemetry" class="md-nav__link">
+    <span class="md-ellipsis">
+      flush_telemetry()
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#finish_setup" class="md-nav__link">
+    <span class="md-ellipsis">
+      finish_setup()
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#on_init_messageevent" class="md-nav__link">
+    <span class="md-ellipsis">
+      on_init_message(event)
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#mainmain_fn-worker_self" class="md-nav__link">
+    <span class="md-ellipsis">
+      main(main_fn, worker_self)
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#mpi_comm_rankrank_ptr" class="md-nav__link">
+    <span class="md-ellipsis">
+      MPI_Comm_rank(rank_ptr)
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#mpi_comm_sizesize_ptr" class="md-nav__link">
+    <span class="md-ellipsis">
+      MPI_Comm_size(size_ptr)
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#mpi_init" class="md-nav__link">
+    <span class="md-ellipsis">
+      MPI_Init()
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#mpi_finalize" class="md-nav__link">
+    <span class="md-ellipsis">
+      MPI_Finalize()
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#boxdata-box" class="md-nav__link">
+    <span class="md-ellipsis">
+      box(data) ⇒ Box
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#unboxbox-any" class="md-nav__link">
+    <span class="md-ellipsis">
+      unbox(box) ⇒ any
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#mpi_testrequest-promiseboolean" class="md-nav__link">
+    <span class="md-ellipsis">
+      MPI_Test(request) ⇒ Promise.&lt;boolean&gt;
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#mpi_waitrequest-promisevoid" class="md-nav__link">
+    <span class="md-ellipsis">
+      MPI_Wait(request) ⇒ Promise.&lt;void&gt;
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#mpi_senddata_ptr-dest_pid-start-count-promisevoid" class="md-nav__link">
+    <span class="md-ellipsis">
+      MPI_Send(data_ptr, dest_pid, start, count) ⇒ Promise.&lt;void&gt;
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#mpi_isenddata_ptr-dest_pid-start-count-promisempi_request" class="md-nav__link">
+    <span class="md-ellipsis">
+      MPI_Isend(data_ptr, dest_pid, start, count) ⇒ Promise.&lt;MPI_Request&gt;
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#mpi_recvdata_ptr-src_pid-start-count-promisevoid" class="md-nav__link">
+    <span class="md-ellipsis">
+      MPI_Recv(data_ptr, src_pid, start, count) ⇒ Promise.&lt;void&gt;
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#mpi_irecvdata_ptr-src_pid-start-count-promisempi_request" class="md-nav__link">
+    <span class="md-ellipsis">
+      MPI_Irecv(data_ptr, src_pid, start, count) ⇒ Promise.&lt;MPI_Request&gt;
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#mpi_reducesend_ptr-recv_ptr-operation-promisevoid" class="md-nav__link">
+    <span class="md-ellipsis">
+      MPI_Reduce(send_ptr, recv_ptr, operation) ⇒ Promise.&lt;void&gt;
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#mpi_allreduce_local_optimizedsend_ptr-recv_ptr-operation-promisevoid" class="md-nav__link">
+    <span class="md-ellipsis">
+      MPI_Allreduce_local_optimized(send_ptr, recv_ptr, operation) ⇒ Promise.&lt;void&gt;
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#mpi_allreducesend_ptr-recv_ptr-operation-promisevoid" class="md-nav__link">
+    <span class="md-ellipsis">
+      MPI_Allreduce(send_ptr, recv_ptr, operation) ⇒ Promise.&lt;void&gt;
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#mpi_scattersend_ptr-recv_ptr-root-promisevoid" class="md-nav__link">
+    <span class="md-ellipsis">
+      MPI_Scatter(send_ptr, recv_ptr, root) ⇒ Promise.&lt;void&gt;
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#mpi_scattervsend_ptr-recv_ptr-root-promisevoid" class="md-nav__link">
+    <span class="md-ellipsis">
+      MPI_Scatterv(send_ptr, recv_ptr, root) ⇒ Promise.&lt;void&gt;
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#partitioncount-num_proc-object" class="md-nav__link">
+    <span class="md-ellipsis">
+      partition(count, num_proc) ⇒ Object
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#make_wrapn-function" class="md-nav__link">
+    <span class="md-ellipsis">
+      make_wrap(n) ⇒ function
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#create_crossbarnum_nodes-object" class="md-nav__link">
+    <span class="md-ellipsis">
+      create_crossbar(num_nodes) ⇒ Object
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#create_ringnum_nodes-object" class="md-nav__link">
+    <span class="md-ellipsis">
+      create_ring(num_nodes) ⇒ Object
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#create_tree_pow_of_2num_nodes-object" class="md-nav__link">
+    <span class="md-ellipsis">
+      create_tree_pow_of_2(num_nodes) ⇒ Object
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#create_treenum_nodes-object" class="md-nav__link">
+    <span class="md-ellipsis">
+      create_tree(num_nodes) ⇒ Object
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#box-object" class="md-nav__link">
+    <span class="md-ellipsis">
+      Box : Object
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#config-object" class="md-nav__link">
+    <span class="md-ellipsis">
+      Config : Object
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#key_a-any" class="md-nav__link">
+    <span class="md-ellipsis">
+      Key_A : any
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#key_b-any" class="md-nav__link">
+    <span class="md-ellipsis">
+      Key_B : any
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#smartdashboardtype-pie-progress-graph-string" class="md-nav__link">
+    <span class="md-ellipsis">
+      SmartDashboardType : &#x27;pie&#x27; | &#x27;progress&#x27; | &#x27;graph&#x27; | &#x27;string&#x27;
+    </span>
+  </a>
+  
+</li>
+      
+    </ul>
+  
+</nav>
+                  </div>
+                </div>
+              </div>
+            
+          
+          
+            <div class="md-content" data-md-component="content">
+              <article class="md-content__inner md-typeset">
+                
+                  
+
+
+  <h1>Docs</h1>
+
+<h2 id="classes">Classes</h2>
+<dl>
+<dt><a href="#Diagnostics">Diagnostics</a></dt>
+<dd><p>Class that handles the diagnostics for the MPI Core. It is used to profile the time taken by different functions in the MPI Core.</p>
+</dd>
+<dt><a href="#MPI_Request">MPI_Request</a></dt>
+<dd><p>Class that is returned by the non-blocking functions in the MPI Core.
+It can be used to test if the request is done or to wait for the request to be done.</p>
+</dd>
+<dt><a href="#Packet">Packet</a></dt>
+<dd><p>Class for representing a packet that can be sent between NodeRouter instances.</p>
+</dd>
+<dt><a href="#NodeRouter">NodeRouter</a></dt>
+<dd><p>Class for a NodeRouter can be used to send and receive packets between workers on this browser tab.</p>
+</dd>
+<dt><a href="#Map2D">Map2D</a></dt>
+<dd><p>Class for a map that can be accessed by two keys. All operations are O(1).</p>
+</dd>
+<dt><a href="#ProducerConsumer">ProducerConsumer</a></dt>
+<dd><p>Class for a producer-consumer buffer that can be used to send and receive objects between workers.</p>
+</dd>
+<dt><a href="#SmartDashboard">SmartDashboard</a></dt>
+<dd><p>Class that handles the SmartDashboard for the MPI Core.
+SmartDashboard is used to send real-time telemetry data to the main UI process.</p>
+</dd>
+</dl>
+
+<h2 id="functions">Functions</h2>
+<dl>
+<dt><a href="#MPI_Barrier">MPI_Barrier()</a> ⇒ <code>Promise.&lt;void&gt;</code></dt>
+<dd><p>MPI_Barrier is a synchronization function that blocks the processes until all processes have reached
+the barrier. This function is blocking, and it will only return after all the processes have reached
+the barrier.</p>
+<p>If optimization flag is set, SSMR (Single Source Multiple Recipients) will be utilized where applicable.</p>
+</dd>
+<dt><a href="#MPI_Bcast">MPI_Bcast(data_ptr, root)</a> ⇒ <code>Promise.&lt;void&gt;</code></dt>
+<dd><p>MPI_Bcast broadcasts data from the root process to all other processes. This function is blocking,
+and it will only return after all the processes have received the data.</p>
+<p>If optimization flag is set, SSMR (Single Source Multiple Recipients) will be utilized where applicable.</p>
+<p>Another optimizatin made is sending parallel messages. If there is a lot of bcasts from the same 
+gr_id, then the later ones don&#39;t need to wait for the earlier ones to propogate every other gr_id. 
+The root can move on whenever it&#39;s done within the local gr. This parallelism maintains correctness 
+and can offer up to 300x speedup.</p>
+</dd>
+<dt><a href="#MPI_Ibcast">MPI_Ibcast(data_ptr, root)</a></dt>
+<dd><p>MPI_Ibcast broadcasts data from the root process to all other processes. This function is non-blocking,
+and it will return immediately after the data has been broadcasted. The user can use the MPI_Request
+object to test if the broadcast is done, or to wait for the broadcast to be done.</p>
+<p>If optimization flag is set, SSMR (Single Source Multiple Recipients) will be utilized where applicable.</p>
+</dd>
+<dt><a href="#MPI_Gather">MPI_Gather(send_ptr, recv_ptr, root)</a> ⇒ <code>Promise.&lt;void&gt;</code></dt>
+<dd><p>MPI_Gather is a collective operation that gathers data from all processes and stores it in the root process.
+All processes must provide the same count of data.</p>
+</dd>
+<dt><a href="#MPI_Allgather">MPI_Allgather(send_ptr, recv_ptr)</a> ⇒ <code>Promise.&lt;void&gt;</code></dt>
+<dd><p>MPI_Allgather is a collective operation that gathers data from all processes and stores it in all processes.
+All processes must provide the same count of data.</p>
+</dd>
+<dt><a href="#MPI_Gatherv">MPI_Gatherv(send_ptr, recv_ptr, counts, offsets, root)</a> ⇒ <code>Promise.&lt;void&gt;</code></dt>
+<dd><p>MPI_Gatherv is a collective operation that gathers data from all processes and stores it in the root process.
+Each process can provide a different count of data. This information must be provided.</p>
+</dd>
+<dt><a href="#MPI_Allgatherv">MPI_Allgatherv(send_ptr, recv_ptr, counts, offsets)</a> ⇒ <code>Promise.&lt;void&gt;</code></dt>
+<dd><p>MPI_Allgatherv is a collective operation that gathers data from all processes and stores it in all processes.
+Each process can provide a different count of data. This information must be provided.</p>
+</dd>
+<dt><a href="#reschedule">reschedule(callback)</a></dt>
+<dd><p>This function is used to take a function off of the event queue 
+and add it to the back of the event queue.</p>
+<p>Sometimes, the main function is too long, and it blocks any message
+events from being processed. This function allows the main function
+to be paused and other events to be processed. After other queued 
+events are processed, the main function is added back to the end of
+event queue to continue processing.</p>
+</dd>
+<dt><a href="#flush_telemetry">flush_telemetry()</a></dt>
+<dd><p>Sometimes the main function is too long and prevents the telemetry
+from being flushed. This function manually flushes the telemetry.</p>
+</dd>
+<dt><a href="#finish_setup">finish_setup()</a></dt>
+<dd><p>This function is used to finish setting up this worker after
+the initial configuration is received.</p>
+</dd>
+<dt><a href="#on_init_message">on_init_message(event)</a></dt>
+<dd><p>This function is used to receive a message from the main process
+in the initialization phase. After initialization is complete, this
+function is no longer used.</p>
+</dd>
+<dt><a href="#main">main(main_fn, worker_self)</a></dt>
+<dd><p>The entry point for user code. The user supplies its main function, 
+as well as the worker object itself.</p>
+<p>This function sets up all the necessary components for the worker
+to run.</p>
+</dd>
+<dt><a href="#MPI_Comm_rank">MPI_Comm_rank(rank_ptr)</a></dt>
+<dd><p>MPI function to obtain the rank of the current process.</p>
+</dd>
+<dt><a href="#MPI_Comm_size">MPI_Comm_size(size_ptr)</a></dt>
+<dd><p>MPI function to obtain the number of processes.</p>
+</dd>
+<dt><a href="#MPI_Init">MPI_Init()</a></dt>
+<dd><p>MPI function to initialize the MPI environment.</p>
+</dd>
+<dt><a href="#MPI_Finalize">MPI_Finalize()</a></dt>
+<dd><p>MPI function to finalize and finish the MPI environment.</p>
+</dd>
+<dt><a href="#box">box(data)</a> ⇒ <code><a href="#Box">Box</a></code></dt>
+<dd><p>Function to wrap data in a box.</p>
+</dd>
+<dt><a href="#unbox">unbox(box)</a> ⇒ <code>any</code></dt>
+<dd><p>Function to unbox data from a box.</p>
+</dd>
+<dt><a href="#MPI_Test">MPI_Test(request)</a> ⇒ <code>Promise.&lt;boolean&gt;</code></dt>
+<dd><p>MPI_Test tests if the request is done. Regardless of whether the request is done or not,
+the callback should immediately return a boolean.</p>
+</dd>
+<dt><a href="#MPI_Wait">MPI_Wait(request)</a> ⇒ <code>Promise.&lt;void&gt;</code></dt>
+<dd><p>MPI_Wait waits for the request to be done. The callback should return a promise that resolves
+when the request is done.</p>
+</dd>
+<dt><a href="#MPI_Send">MPI_Send(data_ptr, dest_pid, start, count)</a> ⇒ <code>Promise.&lt;void&gt;</code></dt>
+<dd><p>MPI_Send sends data to another process. This function is blocking, and it will only return
+after the receiver confirms that it has received the data.</p>
+<p>start and count are optional parameters that allow the user to specify a slice of the array
+to send. Only use these parameters if the data is an array.</p>
+</dd>
+<dt><a href="#MPI_Isend">MPI_Isend(data_ptr, dest_pid, start, count)</a> ⇒ <code><a href="#MPI_Request">Promise.&lt;MPI_Request&gt;</a></code></dt>
+<dd><p>MPI_Isend sends data to another process. This function is non-blocking, and it will return
+immediately after sending the data. The user can use the MPI_Request object to test if the
+buffer is ready to be reused.</p>
+<p>start and count are optional parameters that allow the user to specify a slice of the array
+to send. Only use these parameters if the data is an array.</p>
+</dd>
+<dt><a href="#MPI_Recv">MPI_Recv(data_ptr, src_pid, start, count)</a> ⇒ <code>Promise.&lt;void&gt;</code></dt>
+<dd><p>MPI_Recv receives data from another process. This function is blocking, and it will only return
+after the data has been received.</p>
+<p>start and count are optional parameters that allow the user to specify a slice of the array
+to receive. Only use these parameters if the data is an array.</p>
+</dd>
+<dt><a href="#MPI_Irecv">MPI_Irecv(data_ptr, src_pid, start, count)</a> ⇒ <code><a href="#MPI_Request">Promise.&lt;MPI_Request&gt;</a></code></dt>
+<dd><p>MPI_Irecv receives data from another process. This function is non-blocking, and it will return
+immediately after receiving the data. The user can use the MPI_Request object to test if the
+receive is done, or to wait for the receive to be done.</p>
+<p>start and count are optional parameters that allow the user to specify a slice of the array
+to receive. Only use these parameters if the data is an array.</p>
+</dd>
+<dt><a href="#MPI_Reduce">MPI_Reduce(send_ptr, recv_ptr, operation)</a> ⇒ <code>Promise.&lt;void&gt;</code></dt>
+<dd><p>MPI_Reduce is a collective operation that combines the data from all processes in the communicator
+and returns the result to a single process. The root process will receive the result.</p>
+<p>The operation is function performed on the data pointed to by the data_ptr. The operation is defined by the
+operation parameter.</p>
+<p>The optimized version does a local reduce and then send the local results to the root process for a final
+reduce in order to minimize communication bandwidth.</p>
+<p>TODO: Future idea: If not a crossbar interconnect, try to reduce along the way.</p>
+</dd>
+<dt><a href="#MPI_Allreduce_local_optimized">MPI_Allreduce_local_optimized(send_ptr, recv_ptr, operation)</a> ⇒ <code>Promise.&lt;void&gt;</code></dt>
+<dd><p>This function only performs a all_reduce operation in the local group of processes.
+It detects the type of interconnect and uses the appropriate strategy to perform the
+all_reduce operation most efficiently. The speedup is more significant when the array
+size is large.</p>
+<p>Specifically, it uses the ring allreduce strategy for crossbar and ring interconnects,
+and the tree allreduce strategy for the tree interconnect.</p>
+</dd>
+<dt><a href="#MPI_Allreduce">MPI_Allreduce(send_ptr, recv_ptr, operation)</a> ⇒ <code>Promise.&lt;void&gt;</code></dt>
+<dd><p>MPI_Allreduce is a collective operation that combines the data from all processes in the communicator
+and returns the result to all processes. The result is stored in the recv_ptr box.</p>
+<p>If the optimized flag is set, and the operation is limited to the local group of processes, then
+the allreduce operation is performed using the optimized strategy depending on the interconnect type.
+If the operation spans multiple groups of processes, then the a local reduce is performed first, and
+a secondary reduce is performed between the groups to save bandwidth. This can have many times speedup
+when the array size or number of processors is large.</p>
+</dd>
+<dt><a href="#MPI_Scatter">MPI_Scatter(send_ptr, recv_ptr, root)</a> ⇒ <code>Promise.&lt;void&gt;</code></dt>
+<dd><p>MPI_Scatter is a collective operation that scatters data from the root process to all other processes.
+All processes must provide the same count of data.</p>
+</dd>
+<dt><a href="#MPI_Scatterv">MPI_Scatterv(send_ptr, recv_ptr, root)</a> ⇒ <code>Promise.&lt;void&gt;</code></dt>
+<dd><p>MPI_Scatterv is a collective operation that scatters data from the root process to all other processes.
+All processes must provide the same count of data.</p>
+</dd>
+<dt><a href="#partition">partition(count, num_proc)</a> ⇒ <code>Object</code></dt>
+<dd><p>This function partitions the work equally to the number of processors.</p>
+<p>For example, if there is 6 work and 4 processors, the function will return
+[2, 2, 1, 1] and [0, 2, 4, 5].</p>
+<p>Note that it will not return [2, 2, 2, 0] and [0, 2, 4, 6] because the work 
+is not evenly distributed. The result will have difference of at most 1.</p>
+</dd>
+<dt><a href="#make_wrap">make_wrap(n)</a> ⇒ <code>function</code></dt>
+<dd><p>This function makes a wrap function that wraps the index around the array.</p>
+</dd>
+<dt><a href="#create_crossbar">create_crossbar(num_nodes)</a> ⇒ <code>Object</code></dt>
+<dd><p>This function creates channels between all pairs of workers.
+This function does not create the channels object, but rather
+pairs of ints that represent the workers that are connected.</p>
+<p>This function also provides the routing table for each node, 
+so they know where to send messages when they need to communicate
+with different nodes.</p>
+</dd>
+<dt><a href="#create_ring">create_ring(num_nodes)</a> ⇒ <code>Object</code></dt>
+<dd><p>This function creates channels between some pairs of workers.
+This function does not create the channels object, but rather
+pairs of ints that represent the workers that are connected.</p>
+<p>The pattern being created is a ring structure.</p>
+<p>This function also provides the routing table for each node,
+so they know where to send messages when they need to communicate
+with different nodes.</p>
+<p>For example, if we have 4 workers, the following channels will be created:</p>
+<p>0 &lt;---&gt; 1</p>
+<p>1 &lt;---&gt; 2</p>
+<p>2 &lt;---&gt; 3</p>
+<p>3 &lt;---&gt; 0</p>
+<p>For N workers, the number of channels created is O(N)</p>
+<p>The longest path between any two workers is O(N)</p>
+</dd>
+<dt><a href="#create_tree_pow_of_2">create_tree_pow_of_2(num_nodes)</a> ⇒ <code>Object</code></dt>
+<dd><p>This function creates channels between some pairs of workers.
+This function does not create the channels object, but rather
+pairs of ints that represent the workers that are connected.</p>
+<p>The pattern being created is a tree structure.</p>
+<p>This function also provides the routing table for each node,
+so they know where to send messages when they need to communicate
+with different nodes.</p>
+<p>Important note: This function only works when the number of workers
+is a power of 2.</p>
+<p>For example, if we have 8 workers, the following channels will be created:</p>
+<p>0 &lt;---&gt; 1</p>
+<p>2 &lt;---&gt; 3</p>
+<p>4 &lt;---&gt; 5</p>
+<p>6 &lt;---&gt; 7</p>
+<p>0 &lt;---&gt; 2</p>
+<p>4 &lt;---&gt; 6</p>
+<p>0 &lt;---&gt; 4</p>
+<p>For N workers, the number of channels created is O(N)</p>
+<p>The longest path between any two workers is O(log(N))</p>
+</dd>
+<dt><a href="#create_tree">create_tree(num_nodes)</a> ⇒ <code>Object</code></dt>
+<dd><p>This function creates channels between some pairs of workers.
+This function does not create the channels object, but rather
+pairs of ints that represent the workers that are connected.</p>
+<p>The pattern being created is a tree structure.</p>
+<p>This function also provides the routing table for each node,
+so they know where to send messages when they need to communicate
+with different nodes.</p>
+<p>This function works for any number of workers, even if it is not a power of 2.</p>
+<p>For example, if we have 7 workers, the following channels will be created:</p>
+<p>0 &lt;---&gt; 1</p>
+<p>2 &lt;---&gt; 3</p>
+<p>4 &lt;---&gt; 5</p>
+<p>0 &lt;---&gt; 2</p>
+<p>4 &lt;---&gt; 6</p>
+<p>0 &lt;---&gt; 4</p>
+<p>For N workers, the number of channels created is O(N)</p>
+<p>The longest path between any two workers is O(log(N))</p>
+</dd>
+</dl>
+
+<h2 id="typedefs">Typedefs</h2>
+<dl>
+<dt><a href="#Box">Box</a> : <code>Object</code></dt>
+<dd><p>A box holds data. This is used to pass data between functions by reference.</p>
+</dd>
+<dt><a href="#Config">Config</a> : <code>Object</code></dt>
+<dd><p>config</p>
+</dd>
+<dt><a href="#Key_A">Key_A</a> : <code>any</code></dt>
+<dd></dd>
+<dt><a href="#Key_B">Key_B</a> : <code>any</code></dt>
+<dd></dd>
+<dt><a href="#SmartDashboardType">SmartDashboardType</a> : <code>&#x27;pie&#x27;</code> | <code>&#x27;progress&#x27;</code> | <code>&#x27;graph&#x27;</code> | <code>&#x27;string&#x27;</code></dt>
+<dd></dd>
+</dl>
+
+<p><a name="Diagnostics"></a></p>
+<h2 id="diagnostics">Diagnostics</h2>
+<p>Class that handles the diagnostics for the MPI Core. It is used to profile the time taken by different functions in the MPI Core.</p>
+<p><strong>Kind</strong>: global class  </p>
+<ul>
+<li><a href="#Diagnostics">Diagnostics</a><ul>
+<li><a href="#new_Diagnostics_new">new Diagnostics()</a></li>
+<li><a href="#Diagnostics+add_send">.add_send</a></li>
+<li><a href="#Diagnostics+add_recv">.add_recv</a></li>
+<li><a href="#Diagnostics+profile">.profile</a> ⇒ <code>function</code></li>
+<li><a href="#Diagnostics+flush">.flush</a></li>
+<li><a href="#Diagnostics+configure">.configure(smartdashboard, enabled, period)</a></li>
+</ul>
+</li>
+</ul>
+<p><a name="new_Diagnostics_new"></a></p>
+<h3 id="new-diagnostics">new Diagnostics()</h3>
+<p>Nothing is done here because the configuration is done by the configure function.</p>
+<p><a name="Diagnostics+add_send"></a></p>
+<h3 id="diagnosticsadd_send">diagnostics.add_send</h3>
+<p>Diagnostic function to count the number of sends in node_router.</p>
+<p><strong>Kind</strong>: instance property of <a href="#Diagnostics"><code>Diagnostics</code></a><br />
+<a name="Diagnostics+add_recv"></a></p>
+<h3 id="diagnosticsadd_recv">diagnostics.add_recv</h3>
+<p>Diagnostic function to count the number of receives in node_router.</p>
+<p><strong>Kind</strong>: instance property of <a href="#Diagnostics"><code>Diagnostics</code></a><br />
+<a name="Diagnostics+profile"></a></p>
+<h3 id="diagnosticsprofile-function">diagnostics.profile ⇒ <code>function</code></h3>
+<p>This function is a decorator that profiles the time taken by a function.</p>
+<p><strong>Kind</strong>: instance property of <a href="#Diagnostics"><code>Diagnostics</code></a><br />
+<strong>Returns</strong>: <code>function</code> - A new function that profiles the time taken by the original function.  </p>
+<table>
+<thead>
+<tr>
+<th>Param</th>
+<th>Type</th>
+<th>Description</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>fn</td>
+<td><code>function</code></td>
+<td>The function to profile.</td>
+</tr>
+</tbody>
+</table>
+<p><a name="Diagnostics+flush"></a></p>
+<h3 id="diagnosticsflush">diagnostics.flush</h3>
+<p>This function is used to flush the diagnostics to the SmartDashboard.
+It sends the total time used by each function and the delta time used by each function.</p>
+<p><strong>Kind</strong>: instance property of <a href="#Diagnostics"><code>Diagnostics</code></a><br />
+<a name="Diagnostics+configure"></a></p>
+<h3 id="diagnosticsconfiguresmartdashboard-enabled-period">diagnostics.configure(smartdashboard, enabled, period)</h3>
+<p>This function is used to configure the diagnostics. The configuration is done 
+here after the object is created because many functions use the profile function
+of this class before the smartdashboard is created.</p>
+<p><strong>Kind</strong>: instance method of <a href="#Diagnostics"><code>Diagnostics</code></a>  </p>
+<table>
+<thead>
+<tr>
+<th>Param</th>
+<th>Type</th>
+<th>Default</th>
+<th>Description</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>smartdashboard</td>
+<td><a href="#SmartDashboard"><code>SmartDashboard</code></a></td>
+<td></td>
+<td>The SmartDashboard object to send the diagnostics to.</td>
+</tr>
+<tr>
+<td>enabled</td>
+<td><code>boolean</code></td>
+<td></td>
+<td>Whether the diagnostics are collected or not.</td>
+</tr>
+<tr>
+<td>period</td>
+<td><code>number</code></td>
+<td><code>250</code></td>
+<td>The period at which the diagnostics are sent to the SmartDashboard.</td>
+</tr>
+</tbody>
+</table>
+<p><a name="MPI_Request"></a></p>
+<h2 id="mpi_request">MPI_Request</h2>
+<p>Class that is returned by the non-blocking functions in the MPI Core.
+It can be used to test if the request is done or to wait for the request to be done.</p>
+<p><strong>Kind</strong>: global class  </p>
+<ul>
+<li><a href="#MPI_Request">MPI_Request</a><ul>
+<li><a href="#new_MPI_Request_new">new MPI_Request(done)</a></li>
+<li><a href="#MPI_Request+set_test_callback">.set_test_callback(callback)</a> ⇒ <a href="#MPI_Request"><code>MPI_Request</code></a></li>
+<li><a href="#MPI_Request+set_wait_callback">.set_wait_callback(callback)</a> ⇒ <a href="#MPI_Request"><code>MPI_Request</code></a></li>
+<li><a href="#MPI_Request+test">.test()</a> ⇒ <code>Promise.&lt;boolean&gt;</code></li>
+<li><a href="#MPI_Request+wait">.wait()</a> ⇒</li>
+</ul>
+</li>
+</ul>
+<p><a name="new_MPI_Request_new"></a></p>
+<h3 id="new-mpi_requestdone">new MPI_Request(done)</h3>
+<table>
+<thead>
+<tr>
+<th>Param</th>
+<th>Type</th>
+<th>Default</th>
+<th>Description</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>done</td>
+<td><code>boolean</code></td>
+<td><code>false</code></td>
+<td>Whether the request is done or not.</td>
+</tr>
+</tbody>
+</table>
+<p><a name="MPI_Request+set_test_callback"></a></p>
+<h3 id="mpi_requestset_test_callbackcallback-mpi_request">mpI_Request.set_test_callback(callback) ⇒ <a href="#MPI_Request"><code>MPI_Request</code></a></h3>
+<p>Set the test callback for the MPI_Request. 
+This callback is used to test if the request is done.
+Regardless of whether the request is done or not, 
+the callback should immediately return a boolean.</p>
+<p><strong>Kind</strong>: instance method of <a href="#MPI_Request"><code>MPI_Request</code></a><br />
+<strong>Returns</strong>: <a href="#MPI_Request"><code>MPI_Request</code></a> - The current MPI_Request object.  </p>
+<table>
+<thead>
+<tr>
+<th>Param</th>
+<th>Type</th>
+<th>Description</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>callback</td>
+<td><code>function</code></td>
+<td>The callback to set.</td>
+</tr>
+</tbody>
+</table>
+<p><a name="MPI_Request+set_wait_callback"></a></p>
+<h3 id="mpi_requestset_wait_callbackcallback-mpi_request">mpI_Request.set_wait_callback(callback) ⇒ <a href="#MPI_Request"><code>MPI_Request</code></a></h3>
+<p>Set the wait callback for the MPI_Request.
+This callback is used to wait for the request to be done.
+The callback should return a promise that resolves when the request is done.</p>
+<p><strong>Kind</strong>: instance method of <a href="#MPI_Request"><code>MPI_Request</code></a><br />
+<strong>Returns</strong>: <a href="#MPI_Request"><code>MPI_Request</code></a> - The current MPI_Request object.  </p>
+<table>
+<thead>
+<tr>
+<th>Param</th>
+<th>Type</th>
+<th>Description</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>callback</td>
+<td><code>function</code></td>
+<td>The callback to set.</td>
+</tr>
+</tbody>
+</table>
+<p><a name="MPI_Request+test"></a></p>
+<h3 id="mpi_requesttest-promiseboolean">mpI_Request.test() ⇒ <code>Promise.&lt;boolean&gt;</code></h3>
+<p>Test if the request is done. Regardless of whether the request is done or not,
+the callback should immediately return a boolean.</p>
+<p><strong>Kind</strong>: instance method of <a href="#MPI_Request"><code>MPI_Request</code></a><br />
+<strong>Returns</strong>: <code>Promise.&lt;boolean&gt;</code> - A promise that resolves when the test is done, indicating whether the request is done.<br />
+<a name="MPI_Request+wait"></a></p>
+<h3 id="mpi_requestwait">mpI_Request.wait() ⇒</h3>
+<p>Wait for the request to be done. 
+The callback should return a promise that resolves when the request is done.</p>
+<p><strong>Kind</strong>: instance method of <a href="#MPI_Request"><code>MPI_Request</code></a><br />
+<strong>Returns</strong>: A promise that resolves when the request is done.<br />
+<a name="Packet"></a></p>
+<h2 id="packet">Packet</h2>
+<p>Class for representing a packet that can be sent between NodeRouter instances.</p>
+<p><strong>Kind</strong>: global class<br />
+<a name="new_Packet_new"></a></p>
+<h3 id="new-packetsrc_pid-dest_pid_arr-tag-data">new Packet(src_pid, dest_pid_arr, tag, data)</h3>
+<table>
+<thead>
+<tr>
+<th>Param</th>
+<th>Type</th>
+<th>Description</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>src_pid</td>
+<td><code>number</code></td>
+<td>The source pid of the packet.</td>
+</tr>
+<tr>
+<td>dest_pid_arr</td>
+<td><code>Array.&lt;number&gt;</code></td>
+<td>The destination pids of the packet.</td>
+</tr>
+<tr>
+<td>tag</td>
+<td><code>string</code></td>
+<td>The tag of the packet.</td>
+</tr>
+<tr>
+<td>data</td>
+<td><code>any</code></td>
+<td>The data of the packet.</td>
+</tr>
+</tbody>
+</table>
+<p><a name="NodeRouter"></a></p>
+<h2 id="noderouter">NodeRouter</h2>
+<p>Class for a NodeRouter can be used to send and receive packets between workers on this browser tab.</p>
+<p><strong>Kind</strong>: global class  </p>
+<ul>
+<li><a href="#NodeRouter">NodeRouter</a><ul>
+<li><a href="#new_NodeRouter_new">new NodeRouter(num_proc, my_pid, local_channels, global_channel)</a></li>
+<li><a href="#NodeRouter+send">.send</a> ⇒ <code>Promise.&lt;void&gt;</code></li>
+<li><a href="#NodeRouter+receive">.receive</a> ⇒ <a href="#Packet"><code>Promise.&lt;Packet&gt;</code></a></li>
+<li><a href="#NodeRouter+receive_if_available">.receive_if_available</a> ⇒ <a href="#Packet"><code>Promise.&lt;Packet&gt;</code></a></li>
+<li><a href="#NodeRouter+peek">.peek</a> ⇒ <a href="#Packet"><code>Promise.&lt;Packet&gt;</code></a></li>
+</ul>
+</li>
+</ul>
+<p><a name="new_NodeRouter_new"></a></p>
+<h3 id="new-noderouternum_proc-my_pid-local_channels-global_channel">new NodeRouter(num_proc, my_pid, local_channels, global_channel)</h3>
+<table>
+<thead>
+<tr>
+<th>Param</th>
+<th>Type</th>
+<th>Description</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>num_proc</td>
+<td><code>number</code></td>
+<td>number of workers</td>
+</tr>
+<tr>
+<td>my_pid</td>
+<td><code>number</code></td>
+<td>the pid of this worker</td>
+</tr>
+<tr>
+<td>local_channels</td>
+<td><code>Record.&lt;number, MessagePort&gt;</code></td>
+<td>channels to peers on the my local node</td>
+</tr>
+<tr>
+<td>global_channel</td>
+<td><code>WorkerGlobalScope</code></td>
+<td>channel to main manager on this node</td>
+</tr>
+</tbody>
+</table>
+<p><a name="NodeRouter+send"></a></p>
+<h3 id="noderoutersend-promisevoid">nodeRouter.send ⇒ <code>Promise.&lt;void&gt;</code></h3>
+<p>Send a packet to the destination pids. This is a non-blocking function that 
+returns immediately after sending the packet. The receiving worker can
+only receive this packet if it is listening for packets with the same tag or ANY tag.</p>
+<p>Send to your own pid if you want to send to the global router.</p>
+<p><strong>Kind</strong>: instance property of <a href="#NodeRouter"><code>NodeRouter</code></a><br />
+<strong>Returns</strong>: <code>Promise.&lt;void&gt;</code> - A promise that resolves when the packet is sent.  </p>
+<table>
+<thead>
+<tr>
+<th>Param</th>
+<th>Type</th>
+<th>Description</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>dest_pid_arr</td>
+<td><code>Array.&lt;number&gt;</code></td>
+<td>The destination pids of the packet.</td>
+</tr>
+<tr>
+<td>tag</td>
+<td><code>string</code></td>
+<td>The tag of the packet. Default is "NA".</td>
+</tr>
+<tr>
+<td>data</td>
+<td><code>any</code></td>
+<td>The data of the packet. Default is "".</td>
+</tr>
+</tbody>
+</table>
+<p><a name="NodeRouter+receive"></a></p>
+<h3 id="noderouterreceive-promisepacket">nodeRouter.receive ⇒ <a href="#Packet"><code>Promise.&lt;Packet&gt;</code></a></h3>
+<p>Receive a packet from a specific source pid with a specific tag. This is a blocking function
+that waits until a packet is received from the specified source pid with the specified tag.</p>
+<p><strong>Kind</strong>: instance property of <a href="#NodeRouter"><code>NodeRouter</code></a><br />
+<strong>Returns</strong>: <a href="#Packet"><code>Promise.&lt;Packet&gt;</code></a> - A promise that resolves to the received packet.  </p>
+<table>
+<thead>
+<tr>
+<th>Param</th>
+<th>Type</th>
+<th>Description</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>src_pid</td>
+<td><code>number</code></td>
+<td>The source pid of the packet. Default is null, which means any source pid.</td>
+</tr>
+<tr>
+<td>tag</td>
+<td><code>string</code></td>
+<td>The tag of the packet. Default is null, which means any tag.</td>
+</tr>
+</tbody>
+</table>
+<p><a name="NodeRouter+receive_if_available"></a></p>
+<h3 id="noderouterreceive_if_available-promisepacket">nodeRouter.receive_if_available ⇒ <a href="#Packet"><code>Promise.&lt;Packet&gt;</code></a></h3>
+<p>Receive a packet from a specific source pid with a specific tag. This is a non-blocking function
+that returns immediately if a packet is not available from the specified source pid with the specified tag.</p>
+<p><strong>Kind</strong>: instance property of <a href="#NodeRouter"><code>NodeRouter</code></a><br />
+<strong>Returns</strong>: <a href="#Packet"><code>Promise.&lt;Packet&gt;</code></a> - A promise that resolves to the received packet if available, otherwise null.  </p>
+<table>
+<thead>
+<tr>
+<th>Param</th>
+<th>Type</th>
+<th>Description</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>src_pid</td>
+<td><code>number</code></td>
+<td>The source pid of the packet. Default is null, which means any source pid.</td>
+</tr>
+<tr>
+<td>tag</td>
+<td><code>string</code></td>
+<td>The tag of the packet. Default is null, which means any tag.</td>
+</tr>
+</tbody>
+</table>
+<p><a name="NodeRouter+peek"></a></p>
+<h3 id="noderouterpeek-promisepacket">nodeRouter.peek ⇒ <a href="#Packet"><code>Promise.&lt;Packet&gt;</code></a></h3>
+<p>Peek at the packet from a specific source pid with a specific tag. This is a non-blocking function
+that returns immediately if a packet is not available from the specified source pid with the specified tag.</p>
+<p>This function will not remove the packet from the buffer.</p>
+<p><strong>Kind</strong>: instance property of <a href="#NodeRouter"><code>NodeRouter</code></a><br />
+<strong>Returns</strong>: <a href="#Packet"><code>Promise.&lt;Packet&gt;</code></a> - A promise that resolves to the received packet if available, otherwise null.  </p>
+<table>
+<thead>
+<tr>
+<th>Param</th>
+<th>Type</th>
+<th>Description</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>src_pid</td>
+<td><code>number</code></td>
+<td>The source pid of the packet. Default is null, which means any source pid.</td>
+</tr>
+<tr>
+<td>tag</td>
+<td><code>string</code></td>
+<td>The tag of the packet. Default is null, which means any tag.</td>
+</tr>
+</tbody>
+</table>
+<p><a name="Map2D"></a></p>
+<h2 id="map2d">Map2D</h2>
+<p>Class for a map that can be accessed by two keys. All operations are O(1).</p>
+<p><strong>Kind</strong>: global class  </p>
+<ul>
+<li><a href="#Map2D">Map2D</a><ul>
+<li><a href="#new_Map2D_new">new Map2D()</a></li>
+<li><a href="#Map2D+add">.add(a, b, value)</a></li>
+<li><a href="#Map2D+get">.get(a, b)</a> ⇒ <code>any</code></li>
+<li><a href="#Map2D+pop">.pop(a, b)</a> ⇒ <code>any</code></li>
+</ul>
+</li>
+</ul>
+<p><a name="new_Map2D_new"></a></p>
+<h3 id="new-map2d">new Map2D()</h3>
+<p>The ab_map sorts values by a, then by b. ab_map: a -&gt; b -&gt; [value_arr]</p>
+<p>The ba_map sorts values by b, then by a. ba_map: b -&gt; a -&gt; [value_arr]</p>
+<p>When adding a value, it is added to both maps.
+When searching for a value with a certain a_key, the ab_map is searched.
+When searching for a value with a certain b_key, the ba_map is searched.
+When a value is popped, it is popped from both maps.</p>
+<p>At the cost of twice as many pointers, this allows every operation to be O(1).</p>
+<p><a name="Map2D+add"></a></p>
+<h3 id="map2dadda-b-value">map2D.add(a, b, value)</h3>
+<p>Add a value to the map with a and b keys.</p>
+<p>Complexity: O(1)</p>
+<p><strong>Kind</strong>: instance method of <a href="#Map2D"><code>Map2D</code></a>  </p>
+<table>
+<thead>
+<tr>
+<th>Param</th>
+<th>Type</th>
+<th>Description</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>a</td>
+<td><a href="#Key_A"><code>Key_A</code></a></td>
+<td>The first key.</td>
+</tr>
+<tr>
+<td>b</td>
+<td><a href="#Key_B"><code>Key_B</code></a></td>
+<td>The second key.</td>
+</tr>
+<tr>
+<td>value</td>
+<td><code>any</code></td>
+<td>The value to add.</td>
+</tr>
+</tbody>
+</table>
+<p><a name="Map2D+get"></a></p>
+<h3 id="map2dgeta-b-any">map2D.get(a, b) ⇒ <code>any</code></h3>
+<p>Get a value from the map with a and b keys. If any key is null, it is a wildcard.
+Wildcard keys mean it will return the first value it sees, ignoring the 
+requirement of that key.</p>
+<p>Complexity: O(1)</p>
+<p><strong>Kind</strong>: instance method of <a href="#Map2D"><code>Map2D</code></a><br />
+<strong>Returns</strong>: <code>any</code> - The value found. If no value is found, it returns null.  </p>
+<table>
+<thead>
+<tr>
+<th>Param</th>
+<th>Type</th>
+<th>Default</th>
+<th>Description</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>a</td>
+<td><a href="#Key_A"><code>Key_A</code></a></td>
+<td><code></code></td>
+<td>The first key. Default is null, which means wildcard.</td>
+</tr>
+<tr>
+<td>b</td>
+<td><a href="#Key_B"><code>Key_B</code></a></td>
+<td><code></code></td>
+<td>The second key. Default is null, which means wildcard.</td>
+</tr>
+</tbody>
+</table>
+<p><a name="Map2D+pop"></a></p>
+<h3 id="map2dpopa-b-any">map2D.pop(a, b) ⇒ <code>any</code></h3>
+<p>Pop a value from the map with a and b keys. If any key is null, it is a wildcard.
+Wildcard keys mean it will return the first value it sees, ignoring the 
+requirement of that key.</p>
+<p>If a value is foundk, the value is removed from the data structure.</p>
+<p>Complexity: O(1)</p>
+<p><strong>Kind</strong>: instance method of <a href="#Map2D"><code>Map2D</code></a><br />
+<strong>Returns</strong>: <code>any</code> - The value found. If no value is found, it returns null.  </p>
+<table>
+<thead>
+<tr>
+<th>Param</th>
+<th>Type</th>
+<th>Default</th>
+<th>Description</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>a</td>
+<td><a href="#Key_A"><code>Key_A</code></a></td>
+<td><code></code></td>
+<td>The first key. Default is null, which means wildcard.</td>
+</tr>
+<tr>
+<td>b</td>
+<td><a href="#Key_B"><code>Key_B</code></a></td>
+<td><code></code></td>
+<td>The second key. Default is null, which means wildcard.</td>
+</tr>
+</tbody>
+</table>
+<p><a name="ProducerConsumer"></a></p>
+<h2 id="producerconsumer">ProducerConsumer</h2>
+<p>Class for a producer-consumer buffer that can be used to send and receive objects between workers.</p>
+<p><strong>Kind</strong>: global class  </p>
+<ul>
+<li><a href="#ProducerConsumer">ProducerConsumer</a><ul>
+<li><a href="#new_ProducerConsumer_new">new ProducerConsumer()</a></li>
+<li><a href="#ProducerConsumer+produce">.produce(object)</a> ⇒ <code>Promise.&lt;void&gt;</code></li>
+<li><a href="#ProducerConsumer+consume">.consume(src_pid, tag)</a> ⇒ <a href="#Packet"><code>Promise.&lt;Packet&gt;</code></a></li>
+<li><a href="#ProducerConsumer+consume_if_available">.consume_if_available(src_pid, tag)</a> ⇒ <a href="#Packet"><code>Promise.&lt;Packet&gt;</code></a></li>
+<li><a href="#ProducerConsumer+peek">.peek(src_pid, tag)</a> ⇒ <a href="#Packet"><code>Promise.&lt;Packet&gt;</code></a></li>
+</ul>
+</li>
+</ul>
+<p><a name="new_ProducerConsumer_new"></a></p>
+<h3 id="new-producerconsumer">new ProducerConsumer()</h3>
+<p>Uses two Map2D objects to store the buffer and the callbacks.
+This way, each call to produce and consume is O(1).</p>
+<p>TLDR: 
+For each msg that arrives, it O(1) searches for matching callbacks in callbacks Map2D that can match it. 
+If no one can take it, the msg will be added to the msgs Map2D.</p>
+<p>For each consumer callback that is received, it O(1) searches for a msg that can match it. 
+If no such msg is found, the callback will be added to the callbacks Map2D.</p>
+<p><a name="ProducerConsumer+produce"></a></p>
+<h3 id="producerconsumerproduceobject-promisevoid">producerConsumer.produce(object) ⇒ <code>Promise.&lt;void&gt;</code></h3>
+<p>Add a packet to the buffer. If a callback is waiting for a packet with the a matching pid and tag,
+the callback will be called with the packet. Otherwise, the packet will be added to the buffer.</p>
+<p><strong>Kind</strong>: instance method of <a href="#ProducerConsumer"><code>ProducerConsumer</code></a><br />
+<strong>Returns</strong>: <code>Promise.&lt;void&gt;</code> - A promise that resolves when the packet is added to the buffer.  </p>
+<table>
+<thead>
+<tr>
+<th>Param</th>
+<th>Type</th>
+<th>Description</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>object</td>
+<td><a href="#Packet"><code>Packet</code></a></td>
+<td>The object to add to the buffer.</td>
+</tr>
+</tbody>
+</table>
+<p><a name="ProducerConsumer+consume"></a></p>
+<h3 id="producerconsumerconsumesrc_pid-tag-promisepacket">producerConsumer.consume(src_pid, tag) ⇒ <a href="#Packet"><code>Promise.&lt;Packet&gt;</code></a></h3>
+<p>Get a packet from the buffer. If a packet is available with the a matching pid and tag,
+the packet will be returned. Otherwise, the consumer will wait until a packet is available.</p>
+<p><strong>Kind</strong>: instance method of <a href="#ProducerConsumer"><code>ProducerConsumer</code></a><br />
+<strong>Returns</strong>: <a href="#Packet"><code>Promise.&lt;Packet&gt;</code></a> - A promise that resolves to the received packet.  </p>
+<table>
+<thead>
+<tr>
+<th>Param</th>
+<th>Type</th>
+<th>Default</th>
+<th>Description</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>src_pid</td>
+<td><code>number</code></td>
+<td><code></code></td>
+<td>The source pid of the packet. Default is null, which means any source pid.</td>
+</tr>
+<tr>
+<td>tag</td>
+<td><code>string</code></td>
+<td><code>null</code></td>
+<td>The tag of the packet. Default is null, which means any tag.</td>
+</tr>
+</tbody>
+</table>
+<p><a name="ProducerConsumer+consume_if_available"></a></p>
+<h3 id="producerconsumerconsume_if_availablesrc_pid-tag-promisepacket">producerConsumer.consume_if_available(src_pid, tag) ⇒ <a href="#Packet"><code>Promise.&lt;Packet&gt;</code></a></h3>
+<p>Get a packet from the buffer if available. If a packet is available with the a matching pid and tag,
+the packet will be returned. Otherwise, null will be returned immediately. This is a non-blocking function.</p>
+<p><strong>Kind</strong>: instance method of <a href="#ProducerConsumer"><code>ProducerConsumer</code></a><br />
+<strong>Returns</strong>: <a href="#Packet"><code>Promise.&lt;Packet&gt;</code></a> - A promise that resolves to the received packet if available, otherwise null.  </p>
+<table>
+<thead>
+<tr>
+<th>Param</th>
+<th>Type</th>
+<th>Default</th>
+<th>Description</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>src_pid</td>
+<td><code>number</code></td>
+<td><code></code></td>
+<td>The source pid of the packet. Default is null, which means any source pid.</td>
+</tr>
+<tr>
+<td>tag</td>
+<td><code>string</code></td>
+<td><code>null</code></td>
+<td>The tag of the packet. Default is null, which means any tag.</td>
+</tr>
+</tbody>
+</table>
+<p><a name="ProducerConsumer+peek"></a></p>
+<h3 id="producerconsumerpeeksrc_pid-tag-promisepacket">producerConsumer.peek(src_pid, tag) ⇒ <a href="#Packet"><code>Promise.&lt;Packet&gt;</code></a></h3>
+<p>Peek at the packet from the buffer. This is a non-blocking function that returns immediately.
+This function will not remove the packet from the buffer.</p>
+<p><strong>Kind</strong>: instance method of <a href="#ProducerConsumer"><code>ProducerConsumer</code></a><br />
+<strong>Returns</strong>: <a href="#Packet"><code>Promise.&lt;Packet&gt;</code></a> - A promise that resolves to the received packet if available, otherwise null.  </p>
+<table>
+<thead>
+<tr>
+<th>Param</th>
+<th>Type</th>
+<th>Default</th>
+<th>Description</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>src_pid</td>
+<td><code>number</code></td>
+<td><code></code></td>
+<td>The source pid of the packet. Default is null, which means any source pid.</td>
+</tr>
+<tr>
+<td>tag</td>
+<td><code>string</code></td>
+<td><code>null</code></td>
+<td>The tag of the packet. Default is null, which means any tag.</td>
+</tr>
+</tbody>
+</table>
+<p><a name="SmartDashboard"></a></p>
+<h2 id="smartdashboard">SmartDashboard</h2>
+<p>Class that handles the SmartDashboard for the MPI Core.
+SmartDashboard is used to send real-time telemetry data to the main UI process.</p>
+<p><strong>Kind</strong>: global class  </p>
+<ul>
+<li><a href="#SmartDashboard">SmartDashboard</a><ul>
+<li><a href="#SmartDashboard+putPie">.putPie(name, dict, downsample)</a></li>
+<li><a href="#SmartDashboard+putProgress">.putProgress(name, value, downsample)</a></li>
+<li><a href="#SmartDashboard+putGraph">.putGraph(name, value, downsample)</a></li>
+<li><a href="#SmartDashboard+putString">.putString(name, value, downsample)</a></li>
+<li><a href="#SmartDashboard+flush">.flush()</a></li>
+</ul>
+</li>
+</ul>
+<p><a name="SmartDashboard+putPie"></a></p>
+<h3 id="smartdashboardputpiename-dict-downsample">smartDashboard.putPie(name, dict, downsample)</h3>
+<p>This function is used to put a pie chart in the SmartDashboard.</p>
+<p>Downsample means to only keep the most recent data point.
+This is useful for real-time, but should be turned off for logs.</p>
+<p><strong>Kind</strong>: instance method of <a href="#SmartDashboard"><code>SmartDashboard</code></a>  </p>
+<table>
+<thead>
+<tr>
+<th>Param</th>
+<th>Type</th>
+<th>Default</th>
+<th>Description</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>name</td>
+<td><code>string</code></td>
+<td></td>
+<td>The name of the pie chart.</td>
+</tr>
+<tr>
+<td>dict</td>
+<td><code>Record.&lt;string, number&gt;</code></td>
+<td></td>
+<td>The data for the pie chart.</td>
+</tr>
+<tr>
+<td>downsample</td>
+<td><code>boolean</code></td>
+<td><code>true</code></td>
+<td>Whether to downsample the data or not.</td>
+</tr>
+</tbody>
+</table>
+<p><a name="SmartDashboard+putProgress"></a></p>
+<h3 id="smartdashboardputprogressname-value-downsample">smartDashboard.putProgress(name, value, downsample)</h3>
+<p>This function is used to put a progress bar in the SmartDashboard.</p>
+<p>Downsample means to only keep the most recent data point.
+This is useful for real-time, but should be turned off for logs.</p>
+<p><strong>Kind</strong>: instance method of <a href="#SmartDashboard"><code>SmartDashboard</code></a>  </p>
+<table>
+<thead>
+<tr>
+<th>Param</th>
+<th>Type</th>
+<th>Default</th>
+<th>Description</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>name</td>
+<td><code>string</code></td>
+<td></td>
+<td>The name of the progress bar.</td>
+</tr>
+<tr>
+<td>value</td>
+<td><code>number</code></td>
+<td></td>
+<td>The value of the progress bar.</td>
+</tr>
+<tr>
+<td>downsample</td>
+<td><code>boolean</code></td>
+<td><code>true</code></td>
+<td>Whether to downsample the data or not.</td>
+</tr>
+</tbody>
+</table>
+<p><a name="SmartDashboard+putGraph"></a></p>
+<h3 id="smartdashboardputgraphname-value-downsample">smartDashboard.putGraph(name, value, downsample)</h3>
+<p>This function is used to put a graph in the SmartDashboard.</p>
+<p>Downsample means to only keep the most recent data point.
+This is useful for real-time, but should be turned off for logs.</p>
+<p><strong>Kind</strong>: instance method of <a href="#SmartDashboard"><code>SmartDashboard</code></a>  </p>
+<table>
+<thead>
+<tr>
+<th>Param</th>
+<th>Type</th>
+<th>Default</th>
+<th>Description</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>name</td>
+<td><code>string</code></td>
+<td></td>
+<td>The name of the graph.</td>
+</tr>
+<tr>
+<td>value</td>
+<td><code>number</code></td>
+<td></td>
+<td>The value of the graph.</td>
+</tr>
+<tr>
+<td>downsample</td>
+<td><code>boolean</code></td>
+<td><code>true</code></td>
+<td>Whether to downsample the data or not.</td>
+</tr>
+</tbody>
+</table>
+<p><a name="SmartDashboard+putString"></a></p>
+<h3 id="smartdashboardputstringname-value-downsample">smartDashboard.putString(name, value, downsample)</h3>
+<p>This function is used to put a string in the SmartDashboard.</p>
+<p>Downsample means to only keep the most recent data point.
+This is useful for real-time, but should be turned off for logs.</p>
+<p><strong>Kind</strong>: instance method of <a href="#SmartDashboard"><code>SmartDashboard</code></a>  </p>
+<table>
+<thead>
+<tr>
+<th>Param</th>
+<th>Type</th>
+<th>Default</th>
+<th>Description</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>name</td>
+<td><code>string</code></td>
+<td></td>
+<td>The name of the string.</td>
+</tr>
+<tr>
+<td>value</td>
+<td><code>string</code></td>
+<td></td>
+<td>The value of the string.</td>
+</tr>
+<tr>
+<td>downsample</td>
+<td><code>boolean</code></td>
+<td><code>true</code></td>
+<td>Whether to downsample the data or not.</td>
+</tr>
+</tbody>
+</table>
+<p><a name="SmartDashboard+flush"></a></p>
+<h3 id="smartdashboardflush">smartDashboard.flush()</h3>
+<p>This function is used to flush the SmartDashboard.</p>
+<p>Every time a variable is updated, SmartDashboard will try to flush the data,
+but it will only flush if the period has passed.</p>
+<p>So if variables are not updated frequently, some data may not be flushed.
+Use this function to force a flush.</p>
+<p>A force flush does not respect the min period.
+A normal flush respects the min period, and can be called as frequently as you want.</p>
+<p><strong>Kind</strong>: instance method of <a href="#SmartDashboard"><code>SmartDashboard</code></a><br />
+<a name="MPI_Barrier"></a></p>
+<h2 id="mpi_barrier-promisevoid">MPI_Barrier() ⇒ <code>Promise.&lt;void&gt;</code></h2>
+<p>MPI_Barrier is a synchronization function that blocks the processes until all processes have reached
+the barrier. This function is blocking, and it will only return after all the processes have reached
+the barrier.</p>
+<p>If optimization flag is set, SSMR (Single Source Multiple Recipients) will be utilized where applicable.</p>
+<p><strong>Kind</strong>: global function<br />
+<strong>Returns</strong>: <code>Promise.&lt;void&gt;</code> - A promise that resolves when all the processes have reached the barrier.<br />
+<a name="MPI_Bcast"></a></p>
+<h2 id="mpi_bcastdata_ptr-root-promisevoid">MPI_Bcast(data_ptr, root) ⇒ <code>Promise.&lt;void&gt;</code></h2>
+<p>MPI_Bcast broadcasts data from the root process to all other processes. This function is blocking,
+and it will only return after all the processes have received the data.</p>
+<p>If optimization flag is set, SSMR (Single Source Multiple Recipients) will be utilized where applicable.</p>
+<p>Another optimizatin made is sending parallel messages. If there is a lot of bcasts from the same 
+gr_id, then the later ones don't need to wait for the earlier ones to propogate every other gr_id. 
+The root can move on whenever it's done within the local gr. This parallelism maintains correctness 
+and can offer up to 300x speedup.</p>
+<p><strong>Kind</strong>: global function<br />
+<strong>Returns</strong>: <code>Promise.&lt;void&gt;</code> - A promise that resolves when the data has been broadcasted.  </p>
+<table>
+<thead>
+<tr>
+<th>Param</th>
+<th>Type</th>
+<th>Description</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>data_ptr</td>
+<td><a href="#Box"><code>Box</code></a></td>
+<td>The data to broadcast.</td>
+</tr>
+<tr>
+<td>root</td>
+<td><code>number</code></td>
+<td>The root process ID.</td>
+</tr>
+</tbody>
+</table>
+<p><a name="MPI_Ibcast"></a></p>
+<h2 id="mpi_ibcastdata_ptr-root">MPI_Ibcast(data_ptr, root)</h2>
+<p>MPI_Ibcast broadcasts data from the root process to all other processes. This function is non-blocking,
+and it will return immediately after the data has been broadcasted. The user can use the MPI_Request
+object to test if the broadcast is done, or to wait for the broadcast to be done.</p>
+<p>If optimization flag is set, SSMR (Single Source Multiple Recipients) will be utilized where applicable.</p>
+<p><strong>Kind</strong>: global function  </p>
+<table>
+<thead>
+<tr>
+<th>Param</th>
+<th>Type</th>
+<th>Description</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>data_ptr</td>
+<td><a href="#Box"><code>Box</code></a></td>
+<td>The data to broadcast.</td>
+</tr>
+<tr>
+<td>root</td>
+<td><code>number</code></td>
+<td>The root process ID that broadcasts the data.</td>
+</tr>
+</tbody>
+</table>
+<p><a name="MPI_Gather"></a></p>
+<h2 id="mpi_gathersend_ptr-recv_ptr-root-promisevoid">MPI_Gather(send_ptr, recv_ptr, root) ⇒ <code>Promise.&lt;void&gt;</code></h2>
+<p>MPI_Gather is a collective operation that gathers data from all processes and stores it in the root process.
+All processes must provide the same count of data.</p>
+<p><strong>Kind</strong>: global function<br />
+<strong>Returns</strong>: <code>Promise.&lt;void&gt;</code> - A promise that resolves when the gather is done.  </p>
+<table>
+<thead>
+<tr>
+<th>Param</th>
+<th>Type</th>
+<th>Description</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>send_ptr</td>
+<td><a href="#Box"><code>Box</code></a></td>
+<td>The data to gather.</td>
+</tr>
+<tr>
+<td>recv_ptr</td>
+<td><a href="#Box"><code>Box</code></a></td>
+<td>The box to store the gathered data.</td>
+</tr>
+<tr>
+<td>root</td>
+<td><code>number</code></td>
+<td>The root process ID that gathers the data.</td>
+</tr>
+</tbody>
+</table>
+<p><a name="MPI_Allgather"></a></p>
+<h2 id="mpi_allgathersend_ptr-recv_ptr-promisevoid">MPI_Allgather(send_ptr, recv_ptr) ⇒ <code>Promise.&lt;void&gt;</code></h2>
+<p>MPI_Allgather is a collective operation that gathers data from all processes and stores it in all processes.
+All processes must provide the same count of data.</p>
+<p><strong>Kind</strong>: global function<br />
+<strong>Returns</strong>: <code>Promise.&lt;void&gt;</code> - A promise that resolves when the gather is done.  </p>
+<table>
+<thead>
+<tr>
+<th>Param</th>
+<th>Type</th>
+<th>Description</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>send_ptr</td>
+<td><a href="#Box"><code>Box</code></a></td>
+<td>The data to gather.</td>
+</tr>
+<tr>
+<td>recv_ptr</td>
+<td><a href="#Box"><code>Box</code></a></td>
+<td>The box to store the gathered data.</td>
+</tr>
+</tbody>
+</table>
+<p><a name="MPI_Gatherv"></a></p>
+<h2 id="mpi_gathervsend_ptr-recv_ptr-counts-offsets-root-promisevoid">MPI_Gatherv(send_ptr, recv_ptr, counts, offsets, root) ⇒ <code>Promise.&lt;void&gt;</code></h2>
+<p>MPI_Gatherv is a collective operation that gathers data from all processes and stores it in the root process.
+Each process can provide a different count of data. This information must be provided.</p>
+<p><strong>Kind</strong>: global function<br />
+<strong>Returns</strong>: <code>Promise.&lt;void&gt;</code> - A promise that resolves when the gather is done.  </p>
+<table>
+<thead>
+<tr>
+<th>Param</th>
+<th>Type</th>
+<th>Description</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>send_ptr</td>
+<td><a href="#Box"><code>Box</code></a></td>
+<td>The data to gather.</td>
+</tr>
+<tr>
+<td>recv_ptr</td>
+<td><a href="#Box"><code>Box</code></a></td>
+<td>The box to store the gathered data.</td>
+</tr>
+<tr>
+<td>counts</td>
+<td><code>Array.&lt;number&gt;</code></td>
+<td>The count of data to gather from each process.</td>
+</tr>
+<tr>
+<td>offsets</td>
+<td><code>Array.&lt;number&gt;</code></td>
+<td>The offset to store the data in the recv_ptr.</td>
+</tr>
+<tr>
+<td>root</td>
+<td><code>number</code></td>
+<td>The root process ID that gathers the data.</td>
+</tr>
+</tbody>
+</table>
+<p><a name="MPI_Allgatherv"></a></p>
+<h2 id="mpi_allgathervsend_ptr-recv_ptr-counts-offsets-promisevoid">MPI_Allgatherv(send_ptr, recv_ptr, counts, offsets) ⇒ <code>Promise.&lt;void&gt;</code></h2>
+<p>MPI_Allgatherv is a collective operation that gathers data from all processes and stores it in all processes.
+Each process can provide a different count of data. This information must be provided.</p>
+<p><strong>Kind</strong>: global function<br />
+<strong>Returns</strong>: <code>Promise.&lt;void&gt;</code> - A promise that resolves when the gather is done.  </p>
+<table>
+<thead>
+<tr>
+<th>Param</th>
+<th>Type</th>
+<th>Description</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>send_ptr</td>
+<td><a href="#Box"><code>Box</code></a></td>
+<td>The data to gather.</td>
+</tr>
+<tr>
+<td>recv_ptr</td>
+<td><a href="#Box"><code>Box</code></a></td>
+<td>The box to store the gathered data.</td>
+</tr>
+<tr>
+<td>counts</td>
+<td><code>Array.&lt;number&gt;</code></td>
+<td>The count of data to gather from each process.</td>
+</tr>
+<tr>
+<td>offsets</td>
+<td><code>Array.&lt;number&gt;</code></td>
+<td>The offset to store the data in the recv_ptr.</td>
+</tr>
+</tbody>
+</table>
+<p><a name="reschedule"></a></p>
+<h2 id="reschedulecallback">reschedule(callback)</h2>
+<p>This function is used to take a function off of the event queue 
+and add it to the back of the event queue.</p>
+<p>Sometimes, the main function is too long, and it blocks any message
+events from being processed. This function allows the main function
+to be paused and other events to be processed. After other queued 
+events are processed, the main function is added back to the end of
+event queue to continue processing.</p>
+<p><strong>Kind</strong>: global function  </p>
+<table>
+<thead>
+<tr>
+<th>Param</th>
+<th>Type</th>
+<th>Description</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>callback</td>
+<td><code>function</code></td>
+<td>The function to pause and reschedule.</td>
+</tr>
+</tbody>
+</table>
+<p><a name="flush_telemetry"></a></p>
+<h2 id="flush_telemetry">flush_telemetry()</h2>
+<p>Sometimes the main function is too long and prevents the telemetry
+from being flushed. This function manually flushes the telemetry.</p>
+<p><strong>Kind</strong>: global function<br />
+<a name="finish_setup"></a></p>
+<h2 id="finish_setup">finish_setup()</h2>
+<p>This function is used to finish setting up this worker after
+the initial configuration is received.</p>
+<p><strong>Kind</strong>: global function<br />
+<a name="on_init_message"></a></p>
+<h2 id="on_init_messageevent">on_init_message(event)</h2>
+<p>This function is used to receive a message from the main process
+in the initialization phase. After initialization is complete, this
+function is no longer used.</p>
+<p><strong>Kind</strong>: global function  </p>
+<table>
+<thead>
+<tr>
+<th>Param</th>
+<th>Type</th>
+<th>Description</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>event</td>
+<td><code>MessageEvent</code></td>
+<td>The message event from the main process.</td>
+</tr>
+</tbody>
+</table>
+<p><a name="main"></a></p>
+<h2 id="mainmain_fn-worker_self">main(main_fn, worker_self)</h2>
+<p>The entry point for user code. The user supplies its main function, 
+as well as the worker object itself.</p>
+<p>This function sets up all the necessary components for the worker
+to run.</p>
+<p><strong>Kind</strong>: global function  </p>
+<table>
+<thead>
+<tr>
+<th>Param</th>
+<th>Type</th>
+<th>Description</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>main_fn</td>
+<td><code>function</code></td>
+<td>The main function of the user.</td>
+</tr>
+<tr>
+<td>worker_self</td>
+<td><code>WorkerGlobalScope</code></td>
+<td>The worker object itself.</td>
+</tr>
+</tbody>
+</table>
+<p><a name="MPI_Comm_rank"></a></p>
+<h2 id="mpi_comm_rankrank_ptr">MPI_Comm_rank(rank_ptr)</h2>
+<p>MPI function to obtain the rank of the current process.</p>
+<p><strong>Kind</strong>: global function  </p>
+<table>
+<thead>
+<tr>
+<th>Param</th>
+<th>Type</th>
+<th>Description</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>rank_ptr</td>
+<td><a href="#Box"><code>Box</code></a></td>
+<td>A box to store the rank of the current process.</td>
+</tr>
+</tbody>
+</table>
+<p><a name="MPI_Comm_size"></a></p>
+<h2 id="mpi_comm_sizesize_ptr">MPI_Comm_size(size_ptr)</h2>
+<p>MPI function to obtain the number of processes.</p>
+<p><strong>Kind</strong>: global function  </p>
+<table>
+<thead>
+<tr>
+<th>Param</th>
+<th>Type</th>
+<th>Description</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>size_ptr</td>
+<td><a href="#Box"><code>Box</code></a></td>
+<td>A box to store the number of processes.</td>
+</tr>
+</tbody>
+</table>
+<p><a name="MPI_Init"></a></p>
+<h2 id="mpi_init">MPI_Init()</h2>
+<p>MPI function to initialize the MPI environment.</p>
+<p><strong>Kind</strong>: global function<br />
+<a name="MPI_Finalize"></a></p>
+<h2 id="mpi_finalize">MPI_Finalize()</h2>
+<p>MPI function to finalize and finish the MPI environment.</p>
+<p><strong>Kind</strong>: global function<br />
+<a name="box"></a></p>
+<h2 id="boxdata-box">box(data) ⇒ <a href="#Box"><code>Box</code></a></h2>
+<p>Function to wrap data in a box.</p>
+<p><strong>Kind</strong>: global function<br />
+<strong>Returns</strong>: <a href="#Box"><code>Box</code></a> - A box containing the data.  </p>
+<table>
+<thead>
+<tr>
+<th>Param</th>
+<th>Type</th>
+<th>Description</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>data</td>
+<td><code>any</code></td>
+<td>The data to wrap in a box.</td>
+</tr>
+</tbody>
+</table>
+<p><a name="unbox"></a></p>
+<h2 id="unboxbox-any">unbox(box) ⇒ <code>any</code></h2>
+<p>Function to unbox data from a box.</p>
+<p><strong>Kind</strong>: global function<br />
+<strong>Returns</strong>: <code>any</code> - The data from the box.  </p>
+<table>
+<thead>
+<tr>
+<th>Param</th>
+<th>Type</th>
+<th>Description</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>box</td>
+<td><a href="#Box"><code>Box</code></a></td>
+<td>The box containing the data.</td>
+</tr>
+</tbody>
+</table>
+<p><a name="MPI_Test"></a></p>
+<h2 id="mpi_testrequest-promiseboolean">MPI_Test(request) ⇒ <code>Promise.&lt;boolean&gt;</code></h2>
+<p>MPI_Test tests if the request is done. Regardless of whether the request is done or not,
+the callback should immediately return a boolean.</p>
+<p><strong>Kind</strong>: global function<br />
+<strong>Returns</strong>: <code>Promise.&lt;boolean&gt;</code> - A promise that resolves when the test is done, indicating whether the request is done.  </p>
+<table>
+<thead>
+<tr>
+<th>Param</th>
+<th>Type</th>
+<th>Description</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>request</td>
+<td><a href="#MPI_Request"><code>MPI_Request</code></a></td>
+<td>The request to test.</td>
+</tr>
+</tbody>
+</table>
+<p><a name="MPI_Wait"></a></p>
+<h2 id="mpi_waitrequest-promisevoid">MPI_Wait(request) ⇒ <code>Promise.&lt;void&gt;</code></h2>
+<p>MPI_Wait waits for the request to be done. The callback should return a promise that resolves
+when the request is done.</p>
+<p><strong>Kind</strong>: global function<br />
+<strong>Returns</strong>: <code>Promise.&lt;void&gt;</code> - A promise that resolves when the request is done.  </p>
+<table>
+<thead>
+<tr>
+<th>Param</th>
+<th>Type</th>
+<th>Description</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>request</td>
+<td><a href="#MPI_Request"><code>MPI_Request</code></a></td>
+<td>The request to wait for.</td>
+</tr>
+</tbody>
+</table>
+<p><a name="MPI_Send"></a></p>
+<h2 id="mpi_senddata_ptr-dest_pid-start-count-promisevoid">MPI_Send(data_ptr, dest_pid, start, count) ⇒ <code>Promise.&lt;void&gt;</code></h2>
+<p>MPI_Send sends data to another process. This function is blocking, and it will only return
+after the receiver confirms that it has received the data.</p>
+<p>start and count are optional parameters that allow the user to specify a slice of the array
+to send. Only use these parameters if the data is an array.</p>
+<p><strong>Kind</strong>: global function<br />
+<strong>Returns</strong>: <code>Promise.&lt;void&gt;</code> - A promise that resolves when the data has been sent.  </p>
+<table>
+<thead>
+<tr>
+<th>Param</th>
+<th>Type</th>
+<th>Description</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>data_ptr</td>
+<td><a href="#Box"><code>Box</code></a></td>
+<td>The data to send.</td>
+</tr>
+<tr>
+<td>dest_pid</td>
+<td><code>number</code></td>
+<td>The destination process ID.</td>
+</tr>
+<tr>
+<td>start</td>
+<td><code>number</code></td>
+<td>The start index of the data to send. Default is 0 if only count is specified.</td>
+</tr>
+<tr>
+<td>count</td>
+<td><code>number</code></td>
+<td>The number of elements to send. Only use if data is an array.</td>
+</tr>
+</tbody>
+</table>
+<p><a name="MPI_Isend"></a></p>
+<h2 id="mpi_isenddata_ptr-dest_pid-start-count-promisempi_request">MPI_Isend(data_ptr, dest_pid, start, count) ⇒ <a href="#MPI_Request"><code>Promise.&lt;MPI_Request&gt;</code></a></h2>
+<p>MPI_Isend sends data to another process. This function is non-blocking, and it will return
+immediately after sending the data. The user can use the MPI_Request object to test if the
+buffer is ready to be reused.</p>
+<p>start and count are optional parameters that allow the user to specify a slice of the array
+to send. Only use these parameters if the data is an array.</p>
+<p><strong>Kind</strong>: global function<br />
+<strong>Returns</strong>: <a href="#MPI_Request"><code>Promise.&lt;MPI_Request&gt;</code></a> - A promise that indicates that the data has been sent.  </p>
+<table>
+<thead>
+<tr>
+<th>Param</th>
+<th>Type</th>
+<th>Description</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>data_ptr</td>
+<td><a href="#Box"><code>Box</code></a></td>
+<td>The data to send.</td>
+</tr>
+<tr>
+<td>dest_pid</td>
+<td><code>number</code></td>
+<td>The destination process ID.</td>
+</tr>
+<tr>
+<td>start</td>
+<td><code>number</code></td>
+<td>The start index of the data to send. Default is 0 if only count is specified.</td>
+</tr>
+<tr>
+<td>count</td>
+<td><code>number</code></td>
+<td>The number of elements to send. Only use if data is an array.</td>
+</tr>
+</tbody>
+</table>
+<p><a name="MPI_Recv"></a></p>
+<h2 id="mpi_recvdata_ptr-src_pid-start-count-promisevoid">MPI_Recv(data_ptr, src_pid, start, count) ⇒ <code>Promise.&lt;void&gt;</code></h2>
+<p>MPI_Recv receives data from another process. This function is blocking, and it will only return
+after the data has been received.</p>
+<p>start and count are optional parameters that allow the user to specify a slice of the array
+to receive. Only use these parameters if the data is an array.</p>
+<p><strong>Kind</strong>: global function<br />
+<strong>Returns</strong>: <code>Promise.&lt;void&gt;</code> - A promise that resolves when the data has been received.  </p>
+<table>
+<thead>
+<tr>
+<th>Param</th>
+<th>Type</th>
+<th>Description</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>data_ptr</td>
+<td><a href="#Box"><code>Box</code></a></td>
+<td>The box to store the received data.</td>
+</tr>
+<tr>
+<td>src_pid</td>
+<td><code>number</code></td>
+<td>The source process ID. Default is null to receive from any process.</td>
+</tr>
+<tr>
+<td>start</td>
+<td><code>number</code></td>
+<td>The start index of the data to receive. Default is 0 if only count is specified.</td>
+</tr>
+<tr>
+<td>count</td>
+<td><code>number</code></td>
+<td>The number of elements to receive. Only use if data is an array.</td>
+</tr>
+</tbody>
+</table>
+<p><a name="MPI_Irecv"></a></p>
+<h2 id="mpi_irecvdata_ptr-src_pid-start-count-promisempi_request">MPI_Irecv(data_ptr, src_pid, start, count) ⇒ <a href="#MPI_Request"><code>Promise.&lt;MPI_Request&gt;</code></a></h2>
+<p>MPI_Irecv receives data from another process. This function is non-blocking, and it will return
+immediately after receiving the data. The user can use the MPI_Request object to test if the
+receive is done, or to wait for the receive to be done.</p>
+<p>start and count are optional parameters that allow the user to specify a slice of the array
+to receive. Only use these parameters if the data is an array.</p>
+<p><strong>Kind</strong>: global function<br />
+<strong>Returns</strong>: <a href="#MPI_Request"><code>Promise.&lt;MPI_Request&gt;</code></a> - A promise that indicates that the data has been received.  </p>
+<table>
+<thead>
+<tr>
+<th>Param</th>
+<th>Type</th>
+<th>Description</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>data_ptr</td>
+<td><a href="#Box"><code>Box</code></a></td>
+<td>The box to store the received data.</td>
+</tr>
+<tr>
+<td>src_pid</td>
+<td><code>number</code></td>
+<td>The source process ID. Default is null to receive from any process.</td>
+</tr>
+<tr>
+<td>start</td>
+<td><code>number</code></td>
+<td>The start index of the data to receive. Default is 0 if only count is specified.</td>
+</tr>
+<tr>
+<td>count</td>
+<td><code>number</code></td>
+<td>The number of elements to receive. Only use if data is an array.</td>
+</tr>
+</tbody>
+</table>
+<p><a name="MPI_Reduce"></a></p>
+<h2 id="mpi_reducesend_ptr-recv_ptr-operation-promisevoid">MPI_Reduce(send_ptr, recv_ptr, operation) ⇒ <code>Promise.&lt;void&gt;</code></h2>
+<p>MPI_Reduce is a collective operation that combines the data from all processes in the communicator
+and returns the result to a single process. The root process will receive the result.</p>
+<p>The operation is function performed on the data pointed to by the data_ptr. The operation is defined by the
+operation parameter.</p>
+<p>The optimized version does a local reduce and then send the local results to the root process for a final
+reduce in order to minimize communication bandwidth.</p>
+<p>TODO: Future idea: If not a crossbar interconnect, try to reduce along the way.</p>
+<p><strong>Kind</strong>: global function<br />
+<strong>Returns</strong>: <code>Promise.&lt;void&gt;</code> - A promise that resolves when reduce is done.  </p>
+<table>
+<thead>
+<tr>
+<th>Param</th>
+<th>Type</th>
+<th>Description</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>send_ptr</td>
+<td><a href="#Box"><code>Box</code></a></td>
+<td>The boxed data array to reduce.</td>
+</tr>
+<tr>
+<td>recv_ptr</td>
+<td><a href="#Box"><code>Box</code></a></td>
+<td>The box to store the result array.</td>
+</tr>
+<tr>
+<td>operation</td>
+<td><code>function</code></td>
+<td>The operation to perform on the data.</td>
+</tr>
+</tbody>
+</table>
+<p><a name="MPI_Allreduce_local_optimized"></a></p>
+<h2 id="mpi_allreduce_local_optimizedsend_ptr-recv_ptr-operation-promisevoid">MPI_Allreduce_local_optimized(send_ptr, recv_ptr, operation) ⇒ <code>Promise.&lt;void&gt;</code></h2>
+<p>This function only performs a all_reduce operation in the local group of processes.
+It detects the type of interconnect and uses the appropriate strategy to perform the
+all_reduce operation most efficiently. The speedup is more significant when the array
+size is large.</p>
+<p>Specifically, it uses the ring allreduce strategy for crossbar and ring interconnects,
+and the tree allreduce strategy for the tree interconnect.</p>
+<p><strong>Kind</strong>: global function<br />
+<strong>Returns</strong>: <code>Promise.&lt;void&gt;</code> - A promise that resolves when reduce is done.  </p>
+<table>
+<thead>
+<tr>
+<th>Param</th>
+<th>Type</th>
+<th>Description</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>send_ptr</td>
+<td><a href="#Box"><code>Box</code></a></td>
+<td>The boxed data array to reduce.</td>
+</tr>
+<tr>
+<td>recv_ptr</td>
+<td><a href="#Box"><code>Box</code></a></td>
+<td>The box to store the result array.</td>
+</tr>
+<tr>
+<td>operation</td>
+<td><code>function</code></td>
+<td>The operation to perform on the data.</td>
+</tr>
+</tbody>
+</table>
+<p><a name="MPI_Allreduce"></a></p>
+<h2 id="mpi_allreducesend_ptr-recv_ptr-operation-promisevoid">MPI_Allreduce(send_ptr, recv_ptr, operation) ⇒ <code>Promise.&lt;void&gt;</code></h2>
+<p>MPI_Allreduce is a collective operation that combines the data from all processes in the communicator
+and returns the result to all processes. The result is stored in the recv_ptr box.</p>
+<p>If the optimized flag is set, and the operation is limited to the local group of processes, then
+the allreduce operation is performed using the optimized strategy depending on the interconnect type.
+If the operation spans multiple groups of processes, then the a local reduce is performed first, and
+a secondary reduce is performed between the groups to save bandwidth. This can have many times speedup
+when the array size or number of processors is large.</p>
+<p><strong>Kind</strong>: global function<br />
+<strong>Returns</strong>: <code>Promise.&lt;void&gt;</code> - A promise that resolves when reduce is done.  </p>
+<table>
+<thead>
+<tr>
+<th>Param</th>
+<th>Type</th>
+<th>Description</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>send_ptr</td>
+<td><a href="#Box"><code>Box</code></a></td>
+<td>The boxed data array to reduce.</td>
+</tr>
+<tr>
+<td>recv_ptr</td>
+<td><a href="#Box"><code>Box</code></a></td>
+<td>The box to store the result array.</td>
+</tr>
+<tr>
+<td>operation</td>
+<td><code>function</code></td>
+<td>The operation to perform on the data.</td>
+</tr>
+</tbody>
+</table>
+<p><a name="MPI_Scatter"></a></p>
+<h2 id="mpi_scattersend_ptr-recv_ptr-root-promisevoid">MPI_Scatter(send_ptr, recv_ptr, root) ⇒ <code>Promise.&lt;void&gt;</code></h2>
+<p>MPI_Scatter is a collective operation that scatters data from the root process to all other processes.
+All processes must provide the same count of data.</p>
+<p><strong>Kind</strong>: global function<br />
+<strong>Returns</strong>: <code>Promise.&lt;void&gt;</code> - A promise that resolves when the scatter is done.  </p>
+<table>
+<thead>
+<tr>
+<th>Param</th>
+<th>Type</th>
+<th>Description</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>send_ptr</td>
+<td><a href="#Box"><code>Box</code></a></td>
+<td>The data to scatter.</td>
+</tr>
+<tr>
+<td>recv_ptr</td>
+<td><a href="#Box"><code>Box</code></a></td>
+<td>The box to store the scattered data.</td>
+</tr>
+<tr>
+<td>root</td>
+<td><code>number</code></td>
+<td>The root process ID that gathers the data.</td>
+</tr>
+</tbody>
+</table>
+<p><a name="MPI_Scatterv"></a></p>
+<h2 id="mpi_scattervsend_ptr-recv_ptr-root-promisevoid">MPI_Scatterv(send_ptr, recv_ptr, root) ⇒ <code>Promise.&lt;void&gt;</code></h2>
+<p>MPI_Scatterv is a collective operation that scatters data from the root process to all other processes.
+All processes must provide the same count of data.</p>
+<p><strong>Kind</strong>: global function<br />
+<strong>Returns</strong>: <code>Promise.&lt;void&gt;</code> - A promise that resolves when the scatter is done.  </p>
+<table>
+<thead>
+<tr>
+<th>Param</th>
+<th>Type</th>
+<th>Description</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>send_ptr</td>
+<td><a href="#Box"><code>Box</code></a></td>
+<td>The data to scatter.</td>
+</tr>
+<tr>
+<td>recv_ptr</td>
+<td><a href="#Box"><code>Box</code></a></td>
+<td>The box to store the scattered data.</td>
+</tr>
+<tr>
+<td>root</td>
+<td><code>number</code></td>
+<td>The root process ID that gathers the data.</td>
+</tr>
+</tbody>
+</table>
+<p><a name="partition"></a></p>
+<h2 id="partitioncount-num_proc-object">partition(count, num_proc) ⇒ <code>Object</code></h2>
+<p>This function partitions the work equally to the number of processors.</p>
+<p>For example, if there is 6 work and 4 processors, the function will return
+[2, 2, 1, 1] and [0, 2, 4, 5].</p>
+<p>Note that it will not return [2, 2, 2, 0] and [0, 2, 4, 6] because the work 
+is not evenly distributed. The result will have difference of at most 1.</p>
+<p><strong>Kind</strong>: global function<br />
+<strong>Returns</strong>: <code>Object</code> - The sizes and start indexes of the work.  </p>
+<table>
+<thead>
+<tr>
+<th>Param</th>
+<th>Type</th>
+<th>Description</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>count</td>
+<td><code>number</code></td>
+<td>The total number of work.</td>
+</tr>
+<tr>
+<td>num_proc</td>
+<td><code>number</code></td>
+<td>The number of processors.</td>
+</tr>
+</tbody>
+</table>
+<p><a name="make_wrap"></a></p>
+<h2 id="make_wrapn-function">make_wrap(n) ⇒ <code>function</code></h2>
+<p>This function makes a wrap function that wraps the index around the array.</p>
+<p><strong>Kind</strong>: global function<br />
+<strong>Returns</strong>: <code>function</code> - The wrap function that wraps the index around the array.  </p>
+<table>
+<thead>
+<tr>
+<th>Param</th>
+<th>Type</th>
+<th>Description</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>n</td>
+<td><code>number</code></td>
+<td>The size of the array.</td>
+</tr>
+</tbody>
+</table>
+<p><a name="create_crossbar"></a></p>
+<h2 id="create_crossbarnum_nodes-object">create_crossbar(num_nodes) ⇒ <code>Object</code></h2>
+<p>This function creates channels between all pairs of workers.
+This function does not create the channels object, but rather
+pairs of ints that represent the workers that are connected.</p>
+<p>This function also provides the routing table for each node, 
+so they know where to send messages when they need to communicate
+with different nodes.</p>
+<p><strong>Kind</strong>: global function<br />
+<strong>Returns</strong>: <code>Object</code> - The result routing computation  </p>
+<table>
+<thead>
+<tr>
+<th>Param</th>
+<th>Type</th>
+<th>Description</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>num_nodes</td>
+<td><code>number</code></td>
+<td>number of workers locally that needs to connect</td>
+</tr>
+</tbody>
+</table>
+<p><a name="create_ring"></a></p>
+<h2 id="create_ringnum_nodes-object">create_ring(num_nodes) ⇒ <code>Object</code></h2>
+<p>This function creates channels between some pairs of workers.
+This function does not create the channels object, but rather
+pairs of ints that represent the workers that are connected.</p>
+<p>The pattern being created is a ring structure.</p>
+<p>This function also provides the routing table for each node,
+so they know where to send messages when they need to communicate
+with different nodes.</p>
+<p>For example, if we have 4 workers, the following channels will be created:</p>
+<p>0 &lt;---&gt; 1</p>
+<p>1 &lt;---&gt; 2</p>
+<p>2 &lt;---&gt; 3</p>
+<p>3 &lt;---&gt; 0</p>
+<p>For N workers, the number of channels created is O(N)</p>
+<p>The longest path between any two workers is O(N)</p>
+<p><strong>Kind</strong>: global function<br />
+<strong>Returns</strong>: <code>Object</code> - The result routing computation  </p>
+<table>
+<thead>
+<tr>
+<th>Param</th>
+<th>Type</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>num_nodes</td>
+<td><code>number</code></td>
+</tr>
+</tbody>
+</table>
+<p><a name="create_tree_pow_of_2"></a></p>
+<h2 id="create_tree_pow_of_2num_nodes-object">create_tree_pow_of_2(num_nodes) ⇒ <code>Object</code></h2>
+<p>This function creates channels between some pairs of workers.
+This function does not create the channels object, but rather
+pairs of ints that represent the workers that are connected.</p>
+<p>The pattern being created is a tree structure.</p>
+<p>This function also provides the routing table for each node,
+so they know where to send messages when they need to communicate
+with different nodes.</p>
+<p>Important note: This function only works when the number of workers
+is a power of 2.</p>
+<p>For example, if we have 8 workers, the following channels will be created:</p>
+<p>0 &lt;---&gt; 1</p>
+<p>2 &lt;---&gt; 3</p>
+<p>4 &lt;---&gt; 5</p>
+<p>6 &lt;---&gt; 7</p>
+<p>0 &lt;---&gt; 2</p>
+<p>4 &lt;---&gt; 6</p>
+<p>0 &lt;---&gt; 4</p>
+<p>For N workers, the number of channels created is O(N)</p>
+<p>The longest path between any two workers is O(log(N))</p>
+<p><strong>Kind</strong>: global function<br />
+<strong>Returns</strong>: <code>Object</code> - The result routing computation  </p>
+<table>
+<thead>
+<tr>
+<th>Param</th>
+<th>Type</th>
+<th>Description</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>num_nodes</td>
+<td><code>number</code></td>
+<td>number of workers locally that needs to connect</td>
+</tr>
+</tbody>
+</table>
+<p><a name="create_tree"></a></p>
+<h2 id="create_treenum_nodes-object">create_tree(num_nodes) ⇒ <code>Object</code></h2>
+<p>This function creates channels between some pairs of workers.
+This function does not create the channels object, but rather
+pairs of ints that represent the workers that are connected.</p>
+<p>The pattern being created is a tree structure.</p>
+<p>This function also provides the routing table for each node,
+so they know where to send messages when they need to communicate
+with different nodes.</p>
+<p>This function works for any number of workers, even if it is not a power of 2.</p>
+<p>For example, if we have 7 workers, the following channels will be created:</p>
+<p>0 &lt;---&gt; 1</p>
+<p>2 &lt;---&gt; 3</p>
+<p>4 &lt;---&gt; 5</p>
+<p>0 &lt;---&gt; 2</p>
+<p>4 &lt;---&gt; 6</p>
+<p>0 &lt;---&gt; 4</p>
+<p>For N workers, the number of channels created is O(N)</p>
+<p>The longest path between any two workers is O(log(N))</p>
+<p><strong>Kind</strong>: global function<br />
+<strong>Returns</strong>: <code>Object</code> - The result routing computation  </p>
+<table>
+<thead>
+<tr>
+<th>Param</th>
+<th>Type</th>
+<th>Description</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>num_nodes</td>
+<td><code>number</code></td>
+<td>number of workers locally that needs to connect</td>
+</tr>
+</tbody>
+</table>
+<p><a name="Box"></a></p>
+<h2 id="box-object">Box : <code>Object</code></h2>
+<p>A box holds data. This is used to pass data between functions by reference.</p>
+<p><strong>Kind</strong>: global typedef<br />
+<a name="Config"></a></p>
+<h2 id="config-object">Config : <code>Object</code></h2>
+<p>config</p>
+<p><strong>Kind</strong>: global typedef<br />
+<a name="Key_A"></a></p>
+<h2 id="key_a-any">Key_A : <code>any</code></h2>
+<p><strong>Kind</strong>: global typedef<br />
+<a name="Key_B"></a></p>
+<h2 id="key_b-any">Key_B : <code>any</code></h2>
+<p><strong>Kind</strong>: global typedef<br />
+<a name="SmartDashboardType"></a></p>
+<h2 id="smartdashboardtype-pie-progress-graph-string">SmartDashboardType : <code>&#x27;pie&#x27;</code> | <code>&#x27;progress&#x27;</code> | <code>&#x27;graph&#x27;</code> | <code>&#x27;string&#x27;</code></h2>
+<p><strong>Kind</strong>: global typedef  </p>
+
+
+
+
+
+
+
+
+
+
+
+
+                
+              </article>
+            </div>
+          
+          
+<script>var target=document.getElementById(location.hash.slice(1));target&&target.name&&(target.checked=target.name.startsWith("__tabbed_"))</script>
+        </div>
+        
+          <button type="button" class="md-top md-icon" data-md-component="top" hidden>
+  
+  <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M13 20h-2V8l-5.5 5.5-1.42-1.42L12 4.16l7.92 7.92-1.42 1.42L13 8v12Z"/></svg>
+  Back to top
+</button>
+        
+      </main>
+      
+        <footer class="md-footer">
+  
+  <div class="md-footer-meta md-typeset">
+    <div class="md-footer-meta__inner md-grid">
+      <div class="md-copyright">
+  
+    <div class="md-copyright__highlight">
+      Copyright &copy; 2024 the-parallel-gods
+
+    </div>
+  
+  
+    Made with
+    <a href="https://squidfunk.github.io/mkdocs-material/" target="_blank" rel="noopener">
+      Material for MkDocs
+    </a>
+  
+</div>
+      
+    </div>
+  </div>
+</footer>
+      
+    </div>
+    <div class="md-dialog" data-md-component="dialog">
+      <div class="md-dialog__inner md-typeset"></div>
+    </div>
+    
+    
+      <div class="md-consent" data-md-component="consent" id="__consent" hidden>
+        <div class="md-consent__overlay"></div>
+        <aside class="md-consent__inner">
+          <form class="md-consent__form md-grid md-typeset" name="consent">
+            
+
+
+
+
+  
+
+
+<h4>Cookie consent</h4>
+<p>We don't use cookies, is that okay?</p>
+<input class="md-toggle" type="checkbox" id="__settings" >
+<div class="md-consent__settings">
+  <ul class="task-list">
+    
+  </ul>
+</div>
+<div class="md-consent__controls">
+  
+    
+      <button class="md-button md-button--primary">Accept</button>
+    
+    
+    
+  
+    
+    
+    
+      <label class="md-button" for="__settings">Manage settings</label>
+    
+  
+</div>
+          </form>
+        </aside>
+      </div>
+      <script>var consent=__md_get("__consent");if(consent)for(var input of document.forms.consent.elements)input.name&&(input.checked=consent[input.name]||!1);else"file:"!==location.protocol&&setTimeout(function(){document.querySelector("[data-md-component=consent]").hidden=!1},250);var action,form=document.forms.consent;for(action of["submit","reset"])form.addEventListener(action,function(e){if(e.preventDefault(),"reset"===e.type)for(var n of document.forms.consent.elements)n.name&&(n.checked=!1);__md_set("__consent",Object.fromEntries(Array.from(new FormData(form).keys()).map(function(e){return[e,!0]}))),location.hash="",location.reload()})</script>
+    
+    <script id="__config" type="application/json">{"base": "..", "features": ["navigation.instant", "navigation.tracking", "navigation.expand", "navigation.top"], "search": "../assets/javascripts/workers/search.b8dbb3d2.min.js", "translations": {"clipboard.copied": "Copied to clipboard", "clipboard.copy": "Copy to clipboard", "search.result.more.one": "1 more on this page", "search.result.more.other": "# more on this page", "search.result.none": "No matching documents", "search.result.one": "1 matching document", "search.result.other": "# matching documents", "search.result.placeholder": "Type to start searching", "search.result.term.missing": "Missing", "select.version": "Select version"}}</script>
+    
+    
+      <script src="../assets/javascripts/bundle.dd8806f2.min.js"></script>
+      
+    
+  </body>
+</html>
