@@ -47,7 +47,7 @@ _MPI, now on the web._
 * [x] **Compare different communication methods (channels/WebSockets) between local threads**
 * [x] **Use WebSockets to connect MPI nodes across multiple computers**
 * [x] **Optimize for memory usage by using clever message-routing techniques**
-* [ ] **Run benchmarks on all variations of our API**
+* [x] **Run benchmarks on all variations of our API**
 * [x] **Make a live dashboard that shows how many msgs/sec are happening in real-time**
 
 ## About us

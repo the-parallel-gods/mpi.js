@@ -19,6 +19,7 @@ extra:
       We don't use cookies, is that okay?
 
 markdown_extensions:
+  - attr_list
   - pymdownx.tasklist:
       custom_checkbox: true
 
@@ -29,5 +30,5 @@ nav:
   - Home: home.md
   - Proposal: proposal.md
   - Milestone: milestone.md
-  - Final: final.md
+  - Final Report: final.md
   - Docs: docs.md

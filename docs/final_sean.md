@@ -10,11 +10,11 @@ following sections. (You are also encouraged to provide more detail if you wish.
 some of the information in your final writeup can be pulled directly from your proposal if it is
 still accurate. -->
 
-## URL
+## **URL**
 
 [https://the-parallel-gods.github.io/mpi.js/home/](https://the-parallel-gods.github.io/mpi.js/home/)
 
-## SUMMARY
+## **SUMMARY**
 
 <!-- SUMMARY: A short (no more than a paragraph) project summary. If applicable, the sum-
 mary should list your project deliverables (including what you plan to show at the paral-
@@ -28,10 +28,6 @@ of our implementation, we demonstrate that a brute-force approach to breaking
 CAPTCHAS is effective. -->
 
 **We want to create an MPI library in the browser using JavaScript, implement some of the APIs (bcast, barrier, all\_reduce, ...), use them to run MPI programs, and optimize the MPI collective APIs given the browser environment.**
-
-![](./images/mpi_sys_arch.png)
-
-This project contains >3000 lines of code and documentation.
 
 ## BACKGROUND
 
@@ -65,7 +61,7 @@ In this project, we want to support MPI programs that run across multiple comput
 
 Since the browser already provides an HTML UI, we can use it to show the status of the MPI program. In this project, we will take advantage of this by creating a live dashboard that shows the diagnostic information of the MPI program in real-time.
 
-## SYSTEM ARCHITECTURE
+## APPROACH
 
 <!-- APPROACH: Tell us how your implementation works. Your description should be sufficiently
 detailed to provide the course staff a basic understanding of your approach. Again, it might
@@ -87,6 +83,7 @@ from) here.
 
  -->
 
+![](./images/mpi_sys_arch.png)
 
 Our system architecture is inspired by network gateways at the global level and hardware architectures at the local level. 
 We design our system to have a centralized WebSocket server that all the browsers connect to as well as a static file server. Inside each browser tab, the system creates many worker processes that run the user MPI code, which are all connected by hot-swappable interconnect architectures.
@@ -97,22 +94,22 @@ Since this project involves significant routing work, here we formally clarify t
 
 * GR_ID: Global Router ID (unique identifier for each browser)
 * NR_ID: Node Router ID (local unique identifier for each worker process, starts from 0 for each browser)
-* PID: Node Router ID (what user sees; global unique identifier for each worker process, continuous across browsers)
-* NR_OFFSET: Node Router Offset (smallest PID in the local worker pool)
+* PID: Node Router ID (global unique identifier for each worker process, continuous across browsers)
+* NR_OFFSET: Node Router Offset (smallest PID in the local network)
 
 The system is designed this way so that the user can use an abstraction that gives the illusion of every worker process being in the same global network; however, the system under the hood is designed to be as optimized as possible.
 
 Example system:
 ```
-Browser: GR_ID=0
-    Worker: PID=0, NR_ID=0, NR_OFFSET=0
-    Worker: PID=1, NR_ID=1, NR_OFFSET=0
-    Worker: PID=2, NR_ID=2, NR_OFFSET=0
+Browser 1: GR_ID=0
+    Worker 1: PID=0, NR_ID=0, NR_OFFSET=0
+    Worker 2: PID=1, NR_ID=1, NR_OFFSET=0
+    Worker 3: PID=2, NR_ID=2, NR_OFFSET=0
 
-Browser: GR_ID=1
-    Worker: PID=3, NR_ID=0, NR_OFFSET=3
-    Worker: PID=4, NR_ID=1, NR_OFFSET=3
-    Worker: PID=5, NR_ID=2, NR_OFFSET=3
+Browser 2: GR_ID=1
+    Worker 1: PID=3, NR_ID=0, NR_OFFSET=3
+    Worker 2: PID=4, NR_ID=1, NR_OFFSET=3
+    Worker 3: PID=5, NR_ID=2, NR_OFFSET=3
 ```
 ### WebSocket Server
 
@@ -132,66 +129,43 @@ In the worker process, there is a Node Router is responsible for routing, queuei
 
 In the best case, the interconnect that connects the Node Routers within the same browser is a crossbar, which allows any message to be sent to any other worker process with one hop. However, when more workers are needed, the number of connections grows quadratically, so we also support ring and tree interconnects that balance the number of connections and the number of hops.
 
-When ring or tree interconnects are used, the Node Router also serves as a forwarder for messages that need to be sent to another worker. If a node isn't directly connected to the destination node, it will send it to someone closer to the destination, who will then forward it to the destination.
-
 ### Doubly Indexed Database
 
 Whenever a Node Router receives a message, it needs to feed that message to the user's MPI code. In our JavaScript MPI implementation, we skip the back and forth checking that actual MPI implementations do, in order to improve performance. Instead, we directly deposit the message into a queue. Since the system is in a browser, where memory usage is already very high without MPI, we delegate the responsibility of not overflowing the queue to the MPI user. Since JavaScript is single-threaded and thread-safe, we can construct a very performant ProducerConsumer queue without locks. 
-
-The logic is as follows: when we receive a message with tag and src_pid, we check the receiverDB if there is a user waiting for that message. If there is, we directly call the user's callback. If there isn't, we deposit the message into the messageDB. When the user calls a receive function, we check the messageDB for the message. If it is there, we directly call the user's callback. If it isn't, we deposit the user's callback into the receiverDB. 
-
-<!-- ```python
+```python
 # Pseudo code
 msg_queue = DB()
-receiver_queue = DB()
+recv_queue = DB()
 
 def on_message(msg, tag, src_pid):
-    if receiver_queue.has(tag, src_pid): # O(1)
-        receiver.call(msg) # found someone waiting for this message
+    if recv_queue.has(tag, src_pid):
+        recv_queue.call(msg)
     else:
-        msg_queue.add(msg, tag, src_pid) # O(1)
+        msg_queue.add(msg, tag, src_pid)
 
 def user_request_recv(tag, src_pid, callback):
     if msg_queue.has(tag, src_pid):
-        # continue on user code with received message
-        callback(msg_queue.call(tag, src_pid)) # O(1)
+        callback(msg_queue.call(tag, src_pid)) # continue on user code with received message
     else:
-        # when the message arrives, it'll call my callback
-        receiver_queue.add(tag, src_pid, callback) # O(1)
+        recv_queue.add(tag, src_pid, callback) # when the message arrives, it'll call my callback
 
-``` -->
+```
 
 
-Our focus then shifts to making the queue as efficient as possible, since many messages can be waiting there. This would have been simple, if not for the tags and src_pids of the messages. MPI supports having users receive messages with only specific tags and from specific processes. If the number of messages in the queue is very high, the search through all of them to find the right message will be very slow. Our solution is to use a doubly indexed database. When a object is deposited into the queue, it is saved in memory, and we insert the object's tag and src_pid into two separate indices that point to the object. This way, no matter if the user requests according to tag or src_pid, all operations are `O(1)`.
+Our focus then shifts to making the queue as efficient as possible, since many messages can be waiting there. This would have been simple, if not for the tags and src_pids of the messages. MPI supports having users receive messages with only specific tags and from specific processes. If the number of messages in the queue is very high, the search through all of them to find the right message will be very slow. 
 
-### Real-time Dashboard
 
-One of the key features of our system is the real-time dashboard. The dashboard shows the number of messages sent and received by each worker process, and the proportion of time spent on each MPI operation. The dashboard is updated in real-time, so the user can see how their MPI program is performing, and use the animations to debug or optimize their code.
+ between worker processes in the same browser, much like a hardware interconnect. The best case is when the 
+
+
+One of the key structures we implemented to further our analogy of individual tabs acting as cores of a cpu were interconnects. Designed as a custom routing table, mpi.js supports a ring, tree, and crossbar interconnect for analysis. Our interconnects define the potential routes a node can use when sending messages across the local or global network of processes. The primary challenge when applying these interconnects to a highly distributed, parallel environment was setting a scheme where "node ids" required as little translation as possible to reduce any potential unnecessary overhead during sends and receives. Our "trick" to solve this is to have two sets of routers that help enable fast and efficient communication between nodes without burdening each tab to calculate the optimal route necessary for broadcast, reduce, or any other function. Our "Node Router" focuses on handling messages within a local network. This is how messages between tabs on the same browser are handled. If a message needs to be sent to another a machine and go across our global network we designed a "Global Router." The Global Router is connected to a GR network that on initialization does a handshake so that the centralized GR server knows all the routing information necessary. This allows the Global Routers to focus most of their computation on choosing how to forward incoming messages to the Node Router and leave most of the complex routing information to the central server. The "GR Server" has a modifiable routing table to ensure flexibility and fast forwarding. This server is also responsible for the designation of global identifiers that are essential in operations such as reduce and gather/scatter. This structure of routers allows for a divide-and-conquer break down of routing operations so that no one process is overburdened and our MPI worker tabs can remain primarily focused on strict computation unless specifically awaiting for a particular message.
+
+
+
+
+
 
 ![](./images/milestone-dashboard.png)
-
-<!-- One of the key structures we implemented to further our analogy of individual tabs acting as cores of a cpu were interconnects. Designed as a custom routing table, mpi.js supports a ring, tree, and crossbar interconnect for analysis. Our interconnects define the potential routes a node can use when sending messages across the local or global network of processes. The primary challenge when applying these interconnects to a highly distributed, parallel environment was setting a scheme where "node ids" required as little translation as possible to reduce any potential unnecessary overhead during sends and receives. Our "trick" to solve this is to have two sets of routers that help enable fast and efficient communication between nodes without burdening each tab to calculate the optimal route necessary for broadcast, reduce, or any other function. Our "Node Router" focuses on handling messages within a local network. This is how messages between tabs on the same browser are handled. If a message needs to be sent to another a machine and go across our global network we designed a "Global Router." The Global Router is connected to a GR network that on initialization does a handshake so that the centralized GR server knows all the routing information necessary. This allows the Global Routers to focus most of their computation on choosing how to forward incoming messages to the Node Router and leave most of the complex routing information to the central server. The "GR Server" has a modifiable routing table to ensure flexibility and fast forwarding. This server is also responsible for the designation of global identifiers that are essential in operations such as reduce and gather/scatter. This structure of routers allows for a divide-and-conquer break down of routing operations so that no one process is overburdened and our MPI worker tabs can remain primarily focused on strict computation unless specifically awaiting for a particular message. -->
-
-
-## OPTIMIZATION
-
-### Single Source Multiple Receive (SSMR)
-
-![](./images/ssmr.png)
-
-One of the key optimizations we implemented was Single Source Multiple Receive. We observed that during a bcast operation, the same message is sent to multiple workers. But since some messages are forwarded multiple times, the same message is sent multiple times. This is a waste of bandwidth.
-
-Thus, we propose to change the destination of the message to hold multiple destinations. This way, when a message is sent, it is sent to multiple destinations at once. Each forwarder along the way will first check if the message is meant for them, and if it is, they will first consume the message before forwarding it. Finally, the forwarding router will check if the message needs to be send along multiple paths to reach all the intended destinations. If it does, it will group the recipients to achieve the minimum number of duplications.
-
-This optimization is implemented at both the local level between the Node Routers and the global level between the Global Routers.
-This optimization is particularly useful when the local interconnect is a ring or a tree, as well as the global level where the resources are more scarce.
-
-### Local Allreduce Optimization
-
-
-
-### Global Optimization
-
 
 
 
@@ -227,71 +201,69 @@ been a better choice? Or vice versa.) -->
 
 ### Local Tests
 
+Feel free to write some explanation for each graph, if some speedup/time don't make sense (the global ones), skip them, I'll do them later.
+I'll expand on them later if needed
 
-
+You got it 8======D---<   xD
 #### Allreduce
 
 ring speedup, tree speedup, crossbar speedup
 
-![](./images/benchmarks/Speedup_Local_AllReduce_with_Crossbar_Interconnect_Optimization_Speedup.png){: style="display:block;width:75%;margin-left: auto;margin-right: auto;"}
+![](./images/benchmarks/Speedup_Local_AllReduce_with_Crossbar_Interconnect_Optimization_Speedup.png)
 
-![](./images/benchmarks/Speedup_Local_AllReduce_with_Ring_Interconnect_Optimization_Speedup.png){: style="display:block;width:75%;margin-left: auto;margin-right: auto;"}
+![](./images/benchmarks/Speedup_Local_AllReduce_with_Ring_Interconnect_Optimization_Speedup.png)
 
-![](./images/benchmarks/Speedup_Local_AllReduce_with_Tree_Interconnect_Optimization_Speedup.png){: style="display:block;width:75%;margin-left: auto;margin-right: auto;"}
+![](./images/benchmarks/Speedup_Local_AllReduce_with_Tree_Interconnect_Optimization_Speedup.png)
 
 
 
 #### Barrier
 ring speedup, tree speedup, crossbar speedup
 
-![](./images/benchmarks/Speedup_Local_Barrier_with_Crossbar_Interconnect_Optimization_Speedup.png){: style="display:block;width:75%;margin-left: auto;margin-right: auto;"}
+![](./images/benchmarks/Speedup_Local_Barrier_with_Crossbar_Interconnect_Optimization_Speedup.png)
 
-![](./images/benchmarks/Speedup_Local_Barrier_with_Ring_Interconnect_Optimization_Speedup.png){: style="display:block;width:75%;margin-left: auto;margin-right: auto;"}
+![](./images/benchmarks/Speedup_Local_Barrier_with_Ring_Interconnect_Optimization_Speedup.png)
 
-![](./images/benchmarks/Speedup_Local_Barrier_with_Tree_Interconnect_Optimization_Speedup.png){: style="display:block;width:75%;margin-left: auto;margin-right: auto;"}
+![](./images/benchmarks/Speedup_Local_Barrier_with_Tree_Interconnect_Optimization_Speedup.png)
 
 #### Bcast
 ring speedup, tree speedup, crossbar speedup
 
 
 
-![](./images/benchmarks/Speedup_Local_Broadcast_with_Crossbar_Interconnect_Optimization_Speedup.png){: style="display:block;width:75%;margin-left: auto;margin-right: auto;"}
+![](./images/benchmarks/Speedup_Local_Broadcast_with_Crossbar_Interconnect_Optimization_Speedup.png)
 
-![](./images/benchmarks/Speedup_Local_Broadcast_with_Ring_Interconnect_Optimization_Speedup.png){: style="display:block;width:75%;margin-left: auto;margin-right: auto;"}
+![](./images/benchmarks/Speedup_Local_Broadcast_with_Ring_Interconnect_Optimization_Speedup.png)
 
-![](./images/benchmarks/Speedup_Local_Broadcast_with_Tree_Interconnect_Optimization_Speedup.png){: style="display:block;width:75%;margin-left: auto;margin-right: auto;"}
+![](./images/benchmarks/Speedup_Local_Broadcast_with_Tree_Interconnect_Optimization_Speedup.png)
 ### Global Tests
 
 
 #### Broadcast
 
 
-![](./images/benchmarks/Time_(ms)_Global_Unoptimized_Broadcast_Time.png){: style="display:block;width:75%;margin-left: auto;margin-right: auto;"}
-
-
-![](./images/benchmarks/Time_(ms)_Global_Optimized_Broadcast_Time.png){: style="display:block;width:75%;margin-left: auto;margin-right: auto;"}
-
-
-#### Reduce
-
-![](./images/benchmarks/Time_(ms)_Global_Unoptimized_Reduce_Time.png){: style="display:block;width:75%;margin-left: auto;margin-right: auto;"}
-
-
-![](./images/benchmarks/Time_(ms)_Global_Optimized_Reduce_Time.png){: style="display:block;width:75%;margin-left: auto;margin-right: auto;"}
+![](./images/benchmarks/Time_(ms)_Global_Unoptimized_Broadcast_Time.png)![](./images/benchmarks/Time_(ms)_Global_Optimized_Broadcast_Time.png)#### Reduce
 
 
 
-### Barrier
-
-![](./images/benchmarks/Time_(ms)_Global_Unoptimized_Barrier_Time.png){: style="display:block;width:75%;margin-left: auto;margin-right: auto;"}
 
 
-![](./images/benchmarks/Time_(ms)_Global_Optimized_Barrier_Time.png){: style="display:block;width:75%;margin-left: auto;margin-right: auto;"}
 
 
-## Contribution
 
-### Sean (haoxians) - 50%
+
+
+
+
+
+
+### Barrier##
+At this moment, we are at 14 pages.
+oU/images/benchmarks/Time_(ms)_Global_Optimized_Broadcast_Time.png)
+![](./images/benchmarks/Time_(ms)_Global_Optimized_Barrier_Time.pn
+g)
+
+BarrierUno### Sean (haoxians) - 50%
 
 
 * [x] MPI front end
