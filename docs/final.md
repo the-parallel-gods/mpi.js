@@ -35,17 +35,45 @@ CAPTCHAS is effective. -->
 
 **We want to create an MPI library in the browser using JavaScript, implement some of the APIs (bcast, barrier, all\_reduce, ...), use them to run MPI programs, and optimize the MPI collective APIs given the browser environment.**
 
-![](./images/mpi_sys_arch.png)
-
-This project contains >3000 lines of code.
-
-We have created a 40-page long comprehensive documentation website for MPI developers here: 
+We have created a 40-page long documentation website for MPI developers here: 
 
 [https://the-parallel-gods.github.io/mpi.js/docs/](https://the-parallel-gods.github.io/mpi.js/docs/)
 
+![](./images/mpi_sys_arch.png)
+
+## Table of Contents
+
+- [BACKGROUND](#background)
+    - [Processes inside a browser are very isolated](#processes-inside-a-browser-are-very-isolated)
+    - [JavaScript is event-driven single-threaded language](#javascript-is-event-driven-single-threaded-language)
+    - [The browser cannot create a WebSocket server](#the-browser-cannot-create-a-websocket-server)
+    - [Browser comes with a UI](#browser-comes-with-a-ui)
+- [SYSTEM ARCHITECTURE](#system-architecture)
+    - [Address naming](#address-naming)
+    - [WebSocket Server](#websocket-server)
+    - [Static File Server](#static-file-server)
+    - [Global Router](#global-router)
+    - [Node Router](#node-router)
+    - [Doubly Indexed Database](#doubly-indexed-database)
+    - [Real-time Dashboard](#real-time-dashboard)
+- [OPTIMIZATION](#optimization)
+    - [Single Source Multiple Receive (SSMR)](#single-source-multiple-receive-ssmr)
+    - [Local Allreduce Optimization](#local-allreduce-optimization)
+    - [Global Optimization](#global-optimization)
+    - [Latency Hiding](#latency-hiding)
+- [RESULTS](#results)
+    - [Local Tests](#local-tests)
+        - [Local Allreduce](#local-allreduce)
+        - [Local Barrier](#local-barrier)
+        - [Local Bcast](#local-bcast)
+    - [Global Tests](#global-tests)
+        - [Global Broadcast](#global-broadcast)
+        - [Global Barrier](#global-barrier)
+        - [Global Reduce](#global-reduce)
+- [Conclusion](#conclusion)
+- [Contribution](#contribution)
 
 ## BACKGROUND
-
 
 <!-- BACKGROUND: Describe the algorithm, application, or system you parallelized in com-
 puter science terms. Figures would be really useful here.
